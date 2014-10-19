@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Shared.SharedConstants;
+import Othello.Game;
+
 
 public class AI {
 	private String GameType;
