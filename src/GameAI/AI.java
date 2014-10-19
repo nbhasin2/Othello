@@ -42,6 +42,7 @@ public class AI {
 		}	
 		else if(GameType == SharedConstants.Othello)
 		{
+
 			return othelloRandom(this.othelloValidMoves);
 		}else
 		{
