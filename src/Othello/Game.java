@@ -1,13 +1,17 @@
 package Othello;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import GameAI.AI;
+import Shared.SharedConstants;
 
 public class Game {
 private gameBoard board;
 private gameStatus currentState;
 private playableItem currentPlayer;
 private AI aiPlayer;
+
+private int countNO;
 
 private int  globalCounter; 
 private static Scanner playerMove= new Scanner(System.in); 
@@ -16,7 +20,8 @@ private static Scanner playerMove= new Scanner(System.in);
 public Game(){
 
 	globalCounter = 0;
-	
+	countNO = 0;
+	aiPlayer = new AI(SharedConstants.Othello,SharedConstants.AIRandom);
 	board = new gameBoard();
 	gameSetup();
 	board.printBoard();
@@ -27,7 +32,7 @@ public Game(){
 		currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 	} while(currentState == gameStatus.PLAYING);
 	
-
+	
 }
 
 
@@ -42,6 +47,8 @@ public void playerMove(playableItem move){
 	boolean isValidInput = false;
 	int row;
     int col;
+    int validity;
+    
     String coor;
     ArrayList<String> availableSolutions;
 	do {
@@ -59,7 +66,18 @@ public void playerMove(playableItem move){
 			row = Integer.parseInt(coor.split("-")[0]);
 			col = Integer.parseInt(coor.split("-")[1]);
 		}
-	        if(validMove(row,col,move)){
+		validity = validMove(row,col,availableSolutions);
+		if(validity == -1)
+		{
+			System.out.print("No avaible moves switch to other player");
+			isValidInput = true;
+			countNO++;
+			if(countNO ==2) currentState = gameStatus.GAME_END;
+		}
+		else
+		{ 
+			countNO = 0;
+	        if(validity == 1){
 	        	board.playField[row][col].gamePiece = move;
 	        	board.currentRow = row;
 	        	board.currentCol = col;
@@ -67,20 +85,19 @@ public void playerMove(playableItem move){
 	         else {
 	        	System.out.println("Invalid move");
 	        }
+		}
 	
-		
-		
-		
-		
-		
 	} while (!isValidInput);
 }
 
-public int validMove(int row, int col, playableItem playerPiece){
+public int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
 	
-	ArrayList<String> validCoordinatesAndDirection = availableSoltuions(playerPiece);
 	ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
 	int resultValidMove = -1;
+	if(validCoordinatesAndDirection.size() == 0)
+	{
+		return resultValidMove;
+	}
 	System.out.println(validCoordinatesAndDirection);
 	for(String s : validCoordinatesAndDirection)
 	{
@@ -93,8 +110,73 @@ public int validMove(int row, int col, playableItem playerPiece){
 
 }
 
-public void tokenChange(int row,int col,ArrayList<String> changeSolution)
+public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution)
 {
+	int dir = -1;
+	int r;
+	int c;
+	String sRow = "" + row;
+	String sCol = "" + col;
+	for(String solution: changeSolution)
+	{
+		if(sRow.equals(solution.split("-")[0]) && sCol.equals(solution.split("-")[1]))
+		{
+			dir = Integer.parseInt(solution.split("-")[2]);
+		}
+	}
+	
+	if(dir == 0)
+	{
+		r= 1;
+		c= 1;
+	}
+	else if(dir == 1 )
+	{
+		r=1;
+		c=0;
+	}
+	else if(dir == 2 )
+	{
+		r=1; 
+		c=-1;
+	}
+	else if(dir == 3 )
+	{
+		r=0;
+		c=-1;
+	}
+	else if(dir == 4 )
+	{
+		r=-1;
+		c=-1;
+	}
+	else if(dir == 5 )
+	{
+		r=-1;
+		c=0;
+	}
+	else if(dir == 6)
+	{
+		r=-1;
+		c=+1;
+	}
+	else if(dir == 7)
+	{
+		r=0;
+		c=1;
+	}
+	else
+	{
+		return;
+	}
+	while(!(board.playField[row+r][col+c].gamePiece.equals(player)))
+	{
+		
+		board.playField[row+r][col+c].gamePiece = player;
+		row +=r;
+		col +=c;
+	}
+
 	
 }
 
