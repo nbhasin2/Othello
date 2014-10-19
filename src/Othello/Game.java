@@ -64,12 +64,8 @@ public void playerMove(playableItem move){
 
 public boolean validMove(int row, int col, playableItem playerPiece){
 	
-	//ArrayList<int[]> solutions = availableSoltuions(playerPiece);
 	ArrayList<String> tempSolution = availableSoltuions(playerPiece);
-	int[] move = {row,col};
-    
 	String tempMove = row +"-"+col;
-	System.out.println(tempSolution);
 
     return(tempSolution.contains(tempMove));
 
@@ -78,10 +74,6 @@ public boolean validMove(int row, int col, playableItem playerPiece){
 
 
 public ArrayList<String> availableSoltuions(playableItem playerPiece) {
-	
-	
-	//ArrayList<String> freeSpaces = new ArrayList<String>();
-//	System.out.println("freespaces 1" +freeSpaces);
 	ArrayList<int[]> freeSpaces = new ArrayList<int[]>();
 	ArrayList<String> temp = new ArrayList<String>();
 	int row = gameBoard.ROWS;
