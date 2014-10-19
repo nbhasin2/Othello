@@ -177,7 +177,11 @@ public class TicTacToeConsole {
 	/** Return true if the player with "theSeed" has won after placing at
    (currentRow, currentCol) */
 	public boolean hasWon(int theSeed, int currentRow, int currentCol) {
-		return (board[currentRow][0] == theSeed         
+		if(AImove)
+		{
+			theSeed = AIplayer;
+		}
+		boolean checkWon = board[currentRow][0] == theSeed         
 				&& board[currentRow][1] == theSeed
 				&& board[currentRow][2] == theSeed
 				|| board[0][currentCol] == theSeed      
@@ -190,7 +194,12 @@ public class TicTacToeConsole {
 				|| currentRow + currentCol == 2  
 				&& board[0][2] == theSeed
 				&& board[1][1] == theSeed
-				&& board[2][0] == theSeed);
+				&& board[2][0] == theSeed;
+		if(checkWon)
+		{
+			System.out.println("Won player - " + theSeed);
+		}
+		return checkWon;
 	}
 
 	/** Print the game board */
