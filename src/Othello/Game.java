@@ -1,16 +1,21 @@
 package Othello;
 import java.util.ArrayList;
 import java.util.Scanner;
+import GameAI.AI;
 
 public class Game {
 private gameBoard board;
 private gameStatus currentState;
 private playableItem currentPlayer;
-	
+private AI aiPlayer;
+
+private int  globalCounter; 
 private static Scanner playerMove= new Scanner(System.in); 
 	
 
 public Game(){
+
+	globalCounter = 0;
 	
 	board = new gameBoard();
 	gameSetup();
@@ -29,22 +34,31 @@ public Game(){
 private void gameSetup() {
 	board.boardSetup();
 	currentPlayer = playableItem.BLACK;//Black goes first
+	
 	currentState = gameStatus.PLAYING;
 }
 
 public void playerMove(playableItem move){
 	boolean isValidInput = false;
-	
+	int row;
+    int col;
+    String coor;
+    ArrayList<String> availableSolutions;
 	do {
 		if(move == playableItem.BLACK) {
-			System.out.print("Enter your move player Black"); }
-			else {
-				System.out.print("Enter your move player White");
-			}
+			availableSolutions = availableSoltuions(move);
+			System.out.print("Enter your move player Black"); 
+			row = playerMove.nextInt() - 1;
+			col = playerMove.nextInt() - 1;
+		}
+		else
+		{
+			availableSolutions = availableSoltuions(move);
+			coor = aiPlayer.othelloRandom(availableSolutions);
 			
-			int row = playerMove.nextInt() - 1;
-	        int col = playerMove.nextInt() - 1;
-	      
+			row = Integer.parseInt(coor.split("-")[0]);
+			col = Integer.parseInt(coor.split("-")[1]);
+		}
 	        if(validMove(row,col,move)){
 	        	board.playField[row][col].gamePiece = move;
 	        	board.currentRow = row;
@@ -83,16 +97,18 @@ public int validMove(int row, int col, playableItem playerPiece){
 public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 	
 	
-	//ArrayList<String> freeSpaces = new ArrayList<String>();
 //	System.out.println("freespaces 1" +freeSpaces);
 	ArrayList<int[]> freeSpaces = new ArrayList<int[]>();
 	ArrayList<String> temp = new ArrayList<String>();
 	int maxRow = gameBoard.ROWS -1;
 	int maxCol = gameBoard.COLS -1;
 	
+	
 	int validRow = -1;
 	int validCol= -1;
 	boolean valid =false;
+
+	globalCounter = 0;
 	
 	for (int row = 0; row < maxRow+1; ++row) {
 		for (int col = 0; col < maxCol; ++col) {
@@ -111,57 +127,57 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 					if(c == 0 && !(row <= 0 || col <=0))
 					{
 						valid = isValid(row-1,col-1,c,playerPiece);
-						validRow = row-2;
-						validCol = col-2;
+						validRow = row-globalCounter;
+						validCol = col-globalCounter;
 					}
 					else if(c == 1 && !(row <= 0))
 					{
 						valid = isValid(row-1,col,c,playerPiece);
-						validRow = row-2;
+						validRow = row-globalCounter;
 						validCol = col;
 					}
 					else if(c == 2 && !(row <= 0 || col >= maxCol))
 					{
 						valid = isValid(row-1,col+1,c,playerPiece);
-						validRow = row-2;
-						validCol = col+2;
+						validRow = row-globalCounter;
+						validCol = col+globalCounter;
 					}
 					else if(c == 3 && !(col >= maxCol))
 					{
 						valid = isValid(row,col+1,c,playerPiece);
 						validRow = row;
-						validCol = col+2;
+						validCol = col+globalCounter;
 					}
 					else if(c == 4 && !(row >= maxRow || col >= maxCol))
 					{
 						valid = isValid(row+1,col+1,c,playerPiece);
-						validRow = row+2;
-						validCol = col+2;
+						validRow = row+globalCounter;
+						validCol = col+globalCounter;
 					}
 					else if(c == 5 && !(row >= maxRow))
 					{
 						valid = isValid(row+1,col,c,playerPiece);
-						validRow = row+2;
+						validRow = row+globalCounter;
 						validCol = col;
 					}
 					else if(c == 6 && !(row >= maxRow || col <= 0))
 					{
 						valid = isValid(row+1,col-1,c,playerPiece);
-						validRow = row+2;
-						validCol = col-2;
+						validRow = row+globalCounter;
+						validCol = col-globalCounter;
 					}
 					else if(c == 7 && !(col <= 0))
 					{
 						valid = isValid(row,col-1,c,playerPiece);
 						validRow = row;
-						validCol = col-2;
+						validCol = col-globalCounter;
 					}
 					if(valid)
 					{
 						int[] newAdd = {validRow,validCol};
 						//System.out.println("Valid Row - "+ validRow + " Valid col - " + validCol);
 						freeSpaces.add(newAdd);
-						temp.add(validRow +"-" + validCol);
+						temp.add(validRow +"-"+ validCol + "-" + c);
 					}
 					
 					
@@ -192,6 +208,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row-1,col-1,c,playerPiece);
 			}
 			else
@@ -203,6 +220,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row-1,col,c,playerPiece);
 			}
 			else
@@ -214,6 +232,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row-1,col+1,c,playerPiece);
 			}
 			else
@@ -225,6 +244,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row,col+1,c,playerPiece);
 			}
 			else
@@ -236,6 +256,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row+1,col+1,c,playerPiece);
 			}
 			else
@@ -247,6 +268,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row+1,col,c,playerPiece);
 			}
 			else
@@ -258,6 +280,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row+1,col-1,c,playerPiece);
 			}
 			else
@@ -269,6 +292,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
+				globalCounter++;
 				return isValid(row,col-1,c,playerPiece);
 			}
 			else
