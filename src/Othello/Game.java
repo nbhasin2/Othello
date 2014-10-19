@@ -81,7 +81,7 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 	int validRow = -1;
 	int validCol= -1;
 	boolean valid =false;
-	
+	//test for git
 	for (row = 0; row < gameBoard.ROWS; ++row) {
 		for (col = 0; col < gameBoard.COLS; ++col) {
 			if(board.playField[row][col].gamePiece.equals(playerPiece))
