@@ -93,6 +93,12 @@ public int validMove(int row, int col, playableItem playerPiece){
 
 }
 
+public void tokenChange(int row,int col,ArrayList<String> changeSolution)
+{
+	
+}
+
+
 
 public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 	
