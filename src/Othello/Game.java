@@ -74,16 +74,21 @@ public boolean validMove(int row, int col, playableItem playerPiece){
 
 
 public ArrayList<String> availableSoltuions(playableItem playerPiece) {
+	
+	
+	//ArrayList<String> freeSpaces = new ArrayList<String>();
+//	System.out.println("freespaces 1" +freeSpaces);
 	ArrayList<int[]> freeSpaces = new ArrayList<int[]>();
 	ArrayList<String> temp = new ArrayList<String>();
-	int row = gameBoard.ROWS;
-	int col = gameBoard.COLS;
+	int maxRow = gameBoard.ROWS -1;
+	int maxCol = gameBoard.COLS -1;
+	
 	int validRow = -1;
 	int validCol= -1;
 	boolean valid =false;
-
-	for (row = 0; row < gameBoard.ROWS; ++row) {
-		for (col = 0; col < gameBoard.COLS; ++col) {
+	
+	for (int row = 0; row < maxRow+1; ++row) {
+		for (int col = 0; col < maxCol; ++col) {
 			if(board.playField[row][col].gamePiece.equals(playerPiece))
 			{
 				/**
@@ -96,49 +101,49 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 				for(int c = 0; c < 8; c++)
 				{
 					
-					if(c == 0 && !(row == 0 || col ==0))
+					if(c == 0 && !(row <= 0 || col <=0))
 					{
 						valid = isValid(row-1,col-1,c,playerPiece);
 						validRow = row-2;
 						validCol = col-2;
 					}
-					else if(c == 1 && !(row == 0))
+					else if(c == 1 && !(row <= 0))
 					{
 						valid = isValid(row-1,col,c,playerPiece);
 						validRow = row-2;
 						validCol = col;
 					}
-					else if(c == 2 && !(row == 0 || col == gameBoard.COLS))
+					else if(c == 2 && !(row <= 0 || col >= maxCol))
 					{
 						valid = isValid(row-1,col+1,c,playerPiece);
 						validRow = row-2;
 						validCol = col+2;
 					}
-					else if(c == 3 && !(col == gameBoard.COLS))
+					else if(c == 3 && !(col >= maxCol))
 					{
 						valid = isValid(row,col+1,c,playerPiece);
 						validRow = row;
 						validCol = col+2;
 					}
-					else if(c == 4 && !(row == gameBoard.ROWS || col == gameBoard.COLS))
+					else if(c == 4 && !(row >= maxRow || col >= maxCol))
 					{
 						valid = isValid(row+1,col+1,c,playerPiece);
 						validRow = row+2;
 						validCol = col+2;
 					}
-					else if(c == 5 && !(row == gameBoard.ROWS))
+					else if(c == 5 && !(row >= maxRow))
 					{
 						valid = isValid(row+1,col,c,playerPiece);
 						validRow = row+2;
 						validCol = col;
 					}
-					else if(c == 6 && !(row == gameBoard.ROWS || col == 0))
+					else if(c == 6 && !(row >= maxRow || col <= 0))
 					{
 						valid = isValid(row+1,col-1,c,playerPiece);
 						validRow = row+2;
 						validCol = col-2;
 					}
-					else if(c == 7 && !(col == 0))
+					else if(c == 7 && !(col <= 0))
 					{
 						valid = isValid(row,col-1,c,playerPiece);
 						validRow = row;
@@ -147,7 +152,7 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 					if(valid)
 					{
 						int[] newAdd = {validRow,validCol};
-						System.out.println("Valid Row - "+ validRow + " Valid col - " + validCol);
+						//System.out.println("Valid Row - "+ validRow + " Valid col - " + validCol);
 						freeSpaces.add(newAdd);
 						temp.add(validRow +"-" + validCol);
 					}
@@ -162,6 +167,9 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 }
 public boolean isValid(int row,int col,int c,playableItem playerPiece)
 {
+	int maxRow = gameBoard.ROWS -1;
+	int maxCol = gameBoard.COLS -1;
+	
 	if(board.playField[row][col].gamePiece.equals(playableItem.EMPTY))
 	{
 		return false;
@@ -173,7 +181,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 	}
 	else
 	{
-		if(c == 0 && !(row == 0 || col ==0))
+		if(c == 0 && !(row <= 0 || col <=0))
 		{
 			if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -184,7 +192,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 1 && !(row == 0))
+		else if(c == 1 && !(row <= 0))
 		{
 			if(!(board.playField[row-1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -195,7 +203,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 2 && !(row == 0 || col == gameBoard.COLS))
+		else if(c == 2 && !(row <= 0 || col >= maxCol))
 		{
 			if(!(board.playField[row-1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -206,7 +214,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 3 && !(col == gameBoard.COLS))
+		else if(c == 3 && !(col >= maxCol))
 		{
 			if(!(board.playField[row][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -217,7 +225,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 4 && !(row == gameBoard.ROWS || col == gameBoard.COLS))
+		else if(c == 4 && !(row >= maxRow || col >= maxCol))
 		{
 			if(!(board.playField[row+1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -228,7 +236,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 5 && !(row == gameBoard.ROWS))
+		else if(c == 5 && !(row >= maxRow))
 		{
 			if(!(board.playField[row+1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -239,7 +247,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 6 && !(row == gameBoard.ROWS || col == 0))
+		else if(c == 6 && !(row >= maxRow || col <= 0))
 		{
 			if(!(board.playField[row+1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -250,7 +258,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 				return true;
 			}
 		}
-		else if(c == 7 && !(col == 0))
+		else if(c == 7 && !(col <= 0))
 		{
 			if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
@@ -267,7 +275,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		}
 	}
 }
-
 
 
 
