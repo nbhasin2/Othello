@@ -1,6 +1,10 @@
 package Othello;
 import java.util.ArrayList;
 import java.util.Scanner;
+import GameAI.AI;
+
+import GameAI.AI;
+import Shared.SharedConstants;
 
 import GameAI.AI;
 import Shared.SharedConstants;
@@ -10,9 +14,7 @@ private gameBoard board;
 private gameStatus currentState;
 private playableItem currentPlayer;
 private AI aiPlayer;
-
 private int countNO;
-
 private int  globalCounter; 
 private static Scanner playerMove= new Scanner(System.in); 
 	
@@ -78,6 +80,7 @@ public void playerMove(playableItem move){
 				row = Integer.parseInt(coor.split("-")[0]);
 				col = Integer.parseInt(coor.split("-")[1]);
 			}
+
 			validity = validMove(row,col,availableSolutions);
 			
 			{ 
@@ -334,6 +337,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 			if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
 				//globalCounter++;
+
 				return isValid(row-1,col-1,c,playerPiece);
 			}
 			else
@@ -345,7 +349,9 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
+
 				//globalCounter++;
+
 				return isValid(row-1,col,c,playerPiece);
 			}
 			else
@@ -418,6 +424,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 			if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
 				//globalCounter++;
+
 				return isValid(row,col-1,c,playerPiece);
 			}
 			else
