@@ -70,9 +70,10 @@ public class AI {
 	 * for Othello game.
 	 * 
 	 */
-	public String othelloRandom(int [][]board)
+	public String othelloRandom(ArrayList<String> validMoves)
 	{
-		return "";
+		int index = randomGenerator.nextInt(validMoves.size());
+		return validMoves.get(index);
 	}
 
 	/**
