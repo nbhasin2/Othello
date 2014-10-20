@@ -9,25 +9,38 @@ public class AI {
 	private String GameType;
 	private Random randomGenerator;
 	private String AIType;
+	private int [][] TicTacToeBoard;
+	private ArrayList<String> othelloValidMoves;
 	/*
 	 * constructor for AI using strategy
 	 */
 	public AI(String GameType, String AIType)
 	{
+		othelloValidMoves = new ArrayList<String>();
 		this.GameType = GameType;
 		this.setAIType(AIType);
 		randomGenerator = new Random();
 	}
 	
-	public String randomAI(int [][]board)
+	public void setTicTacToeBoard(int [][]board)
+	{
+		this.TicTacToeBoard = board;
+	}
+	
+	public void setOthelloValidMoves(ArrayList<String> validMoves)
+	{
+		this.othelloValidMoves = validMoves;
+	}
+	
+	public String randomAI(String GameType)
 	{
 		if(GameType == SharedConstants.TicTacToe)
 		{
-			return ticTacToeRandom(board);
+			return ticTacToeRandom(this.TicTacToeBoard);
 		}	
 		else if(GameType == SharedConstants.Othello)
 		{
-			return othelloRandom(board);
+			return othelloRandom(this.othelloValidMoves);
 		}else
 		{
 			return SharedConstants.ErrorMessage;
