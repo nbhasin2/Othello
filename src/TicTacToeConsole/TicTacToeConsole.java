@@ -161,21 +161,20 @@ public class TicTacToeConsole {
 		}
 	}
 
-	/** Return true if it is a draw (no more empty cell) */
-	// TODO: Shall declare draw if no player can "possibly" win
 	public boolean isDraw() {
 		for (int row = 0; row < SharedConstants.ROWS; ++row) {
 			for (int col = 0; col < SharedConstants.COLS; ++col) {
 				if (board[row][col] == SharedConstants.EMPTY) {
-					return false;  // an empty cell found, not draw, exit
+					return false; 
 				}
 			}
 		}
-		return true;  // no empty cell, it's a draw
+		return true;  
 	}
 
-	/** Return true if the player with "theSeed" has won after placing at
-   (currentRow, currentCol) */
+	/*
+	 * check who won whether AI or The player
+	 */
 	public boolean hasWon(int theSeed, int currentRow, int currentCol) {
 		if(AImove)
 		{
@@ -206,26 +205,21 @@ public class TicTacToeConsole {
 	public void printBoard() {
 		for (int row = 0; row < SharedConstants.ROWS; ++row) {
 			for (int col = 0; col < SharedConstants.COLS; ++col) {
-				printCell(board[row][col]); // print each of the cells
+				switch (board[row][col]) {
+				case SharedConstants.EMPTY:  System.out.print("   "); break;
+				case SharedConstants.NOUGHT: System.out.print(" O "); break;
+				case SharedConstants.CROSS:  System.out.print(" X "); break;
+				}
 				if (col != SharedConstants.COLS - 1) {
-					System.out.print("|");   // print vertical partition
+					System.out.print("|");   
 				}
 			}
 			System.out.println();
 			if (row != SharedConstants.ROWS - 1) {
-				System.out.println("-----------"); // print horizontal partition
+				System.out.println("-----------"); 
 			}
 		}
 		System.out.println();
-	}
-
-	/** Print a cell with the specified "content" */
-	public static void printCell(int content) {
-		switch (content) {
-		case SharedConstants.EMPTY:  System.out.print("   "); break;
-		case SharedConstants.NOUGHT: System.out.print(" O "); break;
-		case SharedConstants.CROSS:  System.out.print(" X "); break;
-		}
 	}
 
 	public AI getTicTacToeAIRandom() {
