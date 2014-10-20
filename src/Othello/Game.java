@@ -62,13 +62,20 @@ public void playerMove(playableItem move){
 	} while (!isValidInput);
 }
 
-public boolean validMove(int row, int col, playableItem playerPiece){
+public int validMove(int row, int col, playableItem playerPiece){
 	
-	ArrayList<String> tempSolution = availableSoltuions(playerPiece);
-	String tempMove = row +"-"+col;
-
-    return(tempSolution.contains(tempMove));
-
+	ArrayList<String> validCoordinatesAndDirection = availableSoltuions(playerPiece);
+	ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
+	int resultValidMove = -1;
+	System.out.println(validCoordinatesAndDirection);
+	for(String s : validCoordinatesAndDirection)
+	{
+		validCoordinatesOnly.add(s.split("-")[0]+"-"+s.split("-")[1]);
+	}
+	String playerMove = row +"-"+col;
+	resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
+	
+    return resultValidMove;
 
 }
 
