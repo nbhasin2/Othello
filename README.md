@@ -1,8 +1,7 @@
-Kernelpanic
+**Kernelpanic**
 ===========
 
-Milestone 1 
------------
+## Milestone 1
 
 1. Known Issues
 
@@ -16,7 +15,7 @@ an example fot this bug is given as an attachment in a .txt file
 .txt File contents 
 {
 For example
-
+```
    |   | * |   |
 ----------------
  * | * | * | O |
@@ -25,11 +24,12 @@ For example
 ----------------
    | O | * | O |
 ----------------
+```
  with this board if I place a black token on spot 4-1 
 
  
  then this is what the board should be outputted 
-
+```
    |   | * |   |
 ----------------
  * | * | * | O |
@@ -38,9 +38,10 @@ For example
 ----------------
  * | * | * | O |
 ----------------
-
+```
 
 How ever the game will output something like this
+```
    |   | * |   |
 ----------------
  * | * | * | O |
@@ -48,7 +49,7 @@ How ever the game will output something like this
  O | O | O | O |
 ----------------
  * | * | * | O |
- 
+ ```
  You see the difference is that it only changed one row 
  this happens because there are three possible solutions that share the same coordinates
  the game has to then go through and change the token in a different way,
