@@ -2,11 +2,6 @@ package Othello;
 import java.util.ArrayList;
 import java.util.Scanner;
 import GameAI.AI;
-
-import GameAI.AI;
-import Shared.SharedConstants;
-
-import GameAI.AI;
 import Shared.SharedConstants;
 
 public class Game {
