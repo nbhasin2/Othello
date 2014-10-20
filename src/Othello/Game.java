@@ -74,7 +74,7 @@ public void playerMove(playableItem move){
 			{
 				
 				coor = aiPlayer.othelloRandom(availableSolutions);
-				
+				System.out.println("White ai turn");
 				row = Integer.parseInt(coor.split("-")[0]);
 				col = Integer.parseInt(coor.split("-")[1]);
 			}
