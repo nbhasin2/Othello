@@ -88,6 +88,8 @@ public class AI {
 	 */
 	public String othelloRandom(ArrayList<String> validMoves)
 	{
+		/*if(validMoves.size()==0)
+			return "-1";*/
 		int index = randomGenerator.nextInt(validMoves.size());
 		return validMoves.get(index);
 	}
