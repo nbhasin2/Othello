@@ -45,7 +45,7 @@ public void playerMove(playableItem move){
 			int row = playerMove.nextInt() - 1;
 	        int col = playerMove.nextInt() - 1;
 	      
-	        if(validMove(row,col,move) == true){
+	        if(validMove(row,col,move)){
 	        	board.playField[row][col].gamePiece = move;
 	        	board.currentRow = row;
 	        	board.currentCol = col;
@@ -64,24 +64,18 @@ public void playerMove(playableItem move){
 
 public boolean validMove(int row, int col, playableItem playerPiece){
 	
-	
-	ArrayList<int[]> solutions = availableSoltuions(playerPiece);
-
-	int[] move = {row,col};
-    
-
-    return(solutions.contains(move));
+	ArrayList<String> tempSolution = availableSoltuions(playerPiece);
+	String tempMove = row +"-"+col;
+    return(tempSolution.contains(tempMove));
 
 
 }
 
 
-public ArrayList<int[]> availableSoltuions(playableItem playerPiece) {
-	
-	
-	//ArrayList<String> freeSpaces = new ArrayList<String>();
-//	System.out.println("freespaces 1" +freeSpaces);
+public ArrayList<String> availableSoltuions(playableItem playerPiece) {
+
 	ArrayList<int[]> freeSpaces = new ArrayList<int[]>();
+	ArrayList<String> temp = new ArrayList<String>();
 	int row = gameBoard.ROWS;
 	int col = gameBoard.COLS;
 	int validRow = -1;
@@ -153,7 +147,9 @@ public ArrayList<int[]> availableSoltuions(playableItem playerPiece) {
 					if(valid)
 					{
 						int[] newAdd = {validRow,validCol};
+						System.out.println("Valid Row - "+ validRow + " Valid col - " + validCol);
 						freeSpaces.add(newAdd);
+						temp.add(validRow +"-" + validCol);
 					}
 					
 					
@@ -162,7 +158,7 @@ public ArrayList<int[]> availableSoltuions(playableItem playerPiece) {
 		}
 	}
 	
-	return freeSpaces;
+	return temp;
 }
 public boolean isValid(int row,int col,int c,playableItem playerPiece)
 {
