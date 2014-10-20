@@ -14,10 +14,10 @@ public class TicTacToeConsole {
 	private int currentPlayer; 
 	private int AIplayer;
 	private int tempCurrentPlayer;
-	private int currntRow, currentCol; // current seed's row and column
+	private int currntRow, currentCol;
 	private boolean switchPlayer = false;
 	private AI ticTacToeAIRandom;
-	public static Scanner in; // the input Scanner
+	public static Scanner in; 
 	private String playerType;
 	private boolean AImove;
 
@@ -85,7 +85,9 @@ public class TicTacToeConsole {
 	}
 
 
-	/** Initialize the game-board contents and the current states */
+	/*
+	 * Instantiates the game
+	 */
 	public void initGame(String crossOrNought) {
 		if(crossOrNought.equals("X")||crossOrNought.equals("x"))
 		{
@@ -115,8 +117,8 @@ public class TicTacToeConsole {
 	}
 
 	public void playerMove(int theSeed, boolean AImove) {
-		boolean validInput = false;  // for input validation
-		int row;  // array index starts at 0 instead of 1
+		boolean validInput = false;  
+		int row;  
 		int col;
 		String AICoordinates;
 		do {
@@ -138,8 +140,8 @@ public class TicTacToeConsole {
 				{
 					theSeed = AIplayer;
 				}
-				board[currntRow][currentCol] = theSeed;  // update game-board content
-				validInput = true;  // input okay, exit loop
+				board[currntRow][currentCol] = theSeed;  
+				validInput = true;  
 			} else {
 				System.out.println("This move at (" + (row + 1) + "," + (col + 1)
 						+ ") is not valid. Try again...");
@@ -147,20 +149,23 @@ public class TicTacToeConsole {
 		} while (!validInput);  
 	}
 
-	public void updateGame(int theSeed, int currentRow, int currentCol) {
-		if (hasWon(theSeed, currentRow, currentCol)) {  // check if winning move
-			if((theSeed == SharedConstants.CROSS || theSeed == SharedConstants.NOUGHT )&& AImove==false)
+	public void updateGame(int playerType, int currentRow, int currentCol) {
+		if (hasWon(playerType, currentRow, currentCol)) {  // check if winning move
+			if((playerType == SharedConstants.CROSS || playerType == SharedConstants.NOUGHT )&& AImove==false)
 			{
 				currentState = SharedConstants.PLAYER_WON;
-			}else if ((theSeed == SharedConstants.CROSS || theSeed == SharedConstants.NOUGHT )&& AImove==true)
+			}else if ((playerType == SharedConstants.CROSS || playerType == SharedConstants.NOUGHT )&& AImove==true)
 			{
 				currentState = SharedConstants.AI_WON;
 			}
-		} else if (isDraw()) {  // check for draw
+		} else if (isDraw()) {  
 			currentState = SharedConstants.DRAW;
 		}
 	}
 
+	/*
+	 * Check whether its a draw and all.
+	 */
 	public boolean isDraw() {
 		for (int row = 0; row < SharedConstants.ROWS; ++row) {
 			for (int col = 0; col < SharedConstants.COLS; ++col) {
@@ -175,33 +180,35 @@ public class TicTacToeConsole {
 	/*
 	 * check who won whether AI or The player
 	 */
-	public boolean hasWon(int theSeed, int currentRow, int currentCol) {
+	public boolean hasWon(int playerType, int currentRow, int currentCol) {
 		if(AImove)
 		{
-			theSeed = AIplayer;
+			playerType = AIplayer;
 		}
-		boolean checkWon = board[currentRow][0] == theSeed         
-				&& board[currentRow][1] == theSeed
-				&& board[currentRow][2] == theSeed
-				|| board[0][currentCol] == theSeed      
-				&& board[1][currentCol] == theSeed
-				&& board[2][currentCol] == theSeed
+		boolean checkWon = board[currentRow][0] == playerType         
+				&& board[currentRow][1] == playerType
+				&& board[currentRow][2] == playerType
+				|| board[0][currentCol] == playerType      
+				&& board[1][currentCol] == playerType
+				&& board[2][currentCol] == playerType
 				|| currentRow == currentCol            
-				&& board[0][0] == theSeed
-				&& board[1][1] == theSeed
-				&& board[2][2] == theSeed
+				&& board[0][0] == playerType
+				&& board[1][1] == playerType
+				&& board[2][2] == playerType
 				|| currentRow + currentCol == 2  
-				&& board[0][2] == theSeed
-				&& board[1][1] == theSeed
-				&& board[2][0] == theSeed;
+				&& board[0][2] == playerType
+				&& board[1][1] == playerType
+				&& board[2][0] == playerType;
 		if(checkWon)
 		{
-			System.out.println("Won player - " + theSeed);
+			System.out.println("Won player - " + playerType);
 		}
 		return checkWon;
 	}
 
-	/** Print the game board */
+	/*
+	 * Prints game board
+	 */
 	public void printBoard() {
 		for (int row = 0; row < SharedConstants.ROWS; ++row) {
 			for (int col = 0; col < SharedConstants.COLS; ++col) {
