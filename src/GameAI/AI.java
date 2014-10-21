@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Shared.SharedConstants;
-import Othello.Game;
+import Othello.OthelloConsole;
 
 
 public class AI {

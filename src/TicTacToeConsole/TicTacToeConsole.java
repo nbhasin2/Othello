@@ -1,9 +1,12 @@
 package TicTacToeConsole;
-
+/**
+ * @author Nishant Bhasin
+ * Base console based tictactoe 
+ * game class. 
+ */
 import java.util.Scanner;
 
-import sun.net.www.content.audio.aiff;
-
+import sun.security.mscapi.PRNG;
 import GameAI.AI;
 import Shared.SharedConstants;
 
@@ -31,6 +34,9 @@ public class TicTacToeConsole {
 
 	}
 
+	/*
+	 * Method that is called for playing tictactoe
+	 */
 	public void playTicTacToe()
 	{
 		
@@ -43,6 +49,8 @@ public class TicTacToeConsole {
 		playerType = user_input.next();
 		
 		initGame(playerType);
+		System.out.println("Game Started ... ");
+		printBoard();
 		do {
 			playerMove(currentPlayer,this.AImove);  
 			updateGame(currentPlayer, currntRow, currentCol); 
@@ -52,6 +60,9 @@ public class TicTacToeConsole {
 		} while (currentState == SharedConstants.PLAYING); // repeat if not game-over
 	}
 
+	/*
+	 * changes AI vs Human
+	 */
 	public void togglePlayer()
 	{
 		if(AImove == false)
@@ -65,6 +76,9 @@ public class TicTacToeConsole {
 		}
 	}
 
+	/*
+	 * checks whether the game is over or not
+	 */
 	public void checkGameOver()
 	{
 		if (currentState == SharedConstants.PLAYER_WON) {
@@ -76,6 +90,9 @@ public class TicTacToeConsole {
 		}
 	}
 	
+	/*
+	 * player switch for multiplayer
+	 */
 	public void toggleSwitch()
 	{
 		if(switchPlayer == false)
@@ -86,7 +103,7 @@ public class TicTacToeConsole {
 
 
 	/*
-	 * Instantiates the game
+	 * Instantiates the game board 
 	 */
 	public void initGame(String crossOrNought) {
 		if(crossOrNought.equals("X")||crossOrNought.equals("x"))
@@ -116,13 +133,16 @@ public class TicTacToeConsole {
 		}
 	}
 
-	public void playerMove(int theSeed, boolean AImove) {
+	/*
+	 * Checks player and AI move
+	 */
+	public void playerMove(int checkplayerMove, boolean AImove) {
 		boolean validInput = false;  
 		int row;  
 		int col;
 		String AICoordinates;
 		do {
-			if ((theSeed == SharedConstants.CROSS || theSeed == SharedConstants.NOUGHT) && AImove==false) {
+			if ((checkplayerMove == SharedConstants.CROSS || checkplayerMove == SharedConstants.NOUGHT) && AImove==false) {
 				System.out.print("Player " + playerType + " enter your move :");
 				row = in.nextInt() - 1;  
 				col = in.nextInt() - 1;
@@ -138,9 +158,9 @@ public class TicTacToeConsole {
 				currentCol = col;
 				if(this.AImove)
 				{
-					theSeed = AIplayer;
+					checkplayerMove = AIplayer;
 				}
-				board[currntRow][currentCol] = theSeed;  
+				board[currntRow][currentCol] = checkplayerMove;  
 				validInput = true;  
 			} else {
 				System.out.println("This move at (" + (row + 1) + "," + (col + 1)
@@ -149,6 +169,10 @@ public class TicTacToeConsole {
 		} while (!validInput);  
 	}
 
+	/*
+	 * Updates the game if there is a win
+	 * draw or lose situation
+	 */
 	public void updateGame(int playerType, int currentRow, int currentCol) {
 		if (hasWon(playerType, currentRow, currentCol)) {  // check if winning move
 			if((playerType == SharedConstants.CROSS || playerType == SharedConstants.NOUGHT )&& AImove==false)

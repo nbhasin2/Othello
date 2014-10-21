@@ -1,8 +1,11 @@
 package Play;
-
+/**
+ * @author Nishant Bhasin
+ * Base launcher class for playing games.
+ */
 import java.util.Scanner;
 
-import Othello.Game;
+import Othello.OthelloConsole;
 import TicTacToeConsole.TicTacToeConsole;
 
 
@@ -29,7 +32,7 @@ public class Launcher {
 		}
 		else if(ans == 2)
 		{
-			Game othello = new Game();
+			OthelloConsole othello = new OthelloConsole();
 		}
 		else if(ans ==3)
 		{

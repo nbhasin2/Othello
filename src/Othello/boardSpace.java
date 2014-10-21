@@ -13,11 +13,17 @@ public boardSpace(int row, int col){
 	
 }
 
+/*
+ * This method clears the board spot.
+ */
 public void clear() {
 	gamePiece = playableItem.EMPTY;//this will make the board spot contain no game piece 
 	
 }
 
+/*
+ * This method adds an item of type WHite black or empty.
+ */
 public void putItem() {
 	switch(gamePiece) {
 	case WHITE: System.out.print(" O "); break;

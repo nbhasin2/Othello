@@ -39,13 +39,11 @@ public  class MinMaxStrategy implements AIStrategy{
 		return new int[] {bestScore,bestRow,bestCol};
 	}
 
-	@Override
 	public int getRow() {
 		
 		return this.row;
 	}
 
-	@Override
 	public int getCol() {
 		
 		return this.col;

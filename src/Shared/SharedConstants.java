@@ -1,5 +1,8 @@
 package Shared;
-
+/**
+ * @author Nishant Bhasin
+ * Shared constants class is used to store
+ */
 import java.util.EnumSet;
 
 public abstract class SharedConstants {

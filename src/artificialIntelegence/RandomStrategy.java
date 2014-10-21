@@ -43,7 +43,6 @@ public class RandomStrategy implements AIStrategy{
 	 * return the row that the Strategy picked from makeMove()
 	 * @return int return this row;
 	 */
-	@Override
 	public int getRow() {
 		return this.row;
 	}
@@ -52,7 +51,6 @@ public class RandomStrategy implements AIStrategy{
 	 * return the column that the Strategy picked from makeMove()
 	 * @return int return this column;
 	 */
-	@Override
 	public int getCol() {
 		// TODO Auto-generated method stub
 		return this.col;
