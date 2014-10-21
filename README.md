@@ -3,9 +3,55 @@
 
 ## Milestone 1
 
-1. Known Issues
+### How to play
 
-1.1 These are the bugs in Othello:
+1. Go to Play package 
+2. Launch the game from main method in Launcher.java.
+
+```
+Enter the game you want to play,
+ 1- Tic Tac Toe
+ 2- Othello
+ 3- quit
+1
+Welcome to TicTacToc Console Game !!
+To start playing please enter your cell cordinate between [1-3]
+like 1 1, 2 2. Make sure there is space between the numbers.Enjoy your game.
+
+What player would you like to be X or O :
+o
+Game Started ... 
+
+   |   |   
+-----------
+   |   |   
+-----------
+   |   |   
+```
+
+3. To play othello simply enter 2 instead of 1.
+
+```
+Enter the game you want to play,
+ 1- Tic Tac Toe
+ 2- Othello
+ 3- quit
+2
+   |   |   |   |
+----------------
+   | O | * |   |
+----------------
+   | * | O |   |
+----------------
+   |   |   |   |
+----------------
+Enter your move player Black
+```
+
+
+## Known Issues
+
+- These are the bugs in Othello:
 - Sometimes the tokenChange method will try to look out of the array bounds 
 - The availableSolutions method does not know the exact coordinates of the token it needs to change, 
 (See validRow = row - globalCounter) right now the counter is set as a default value it will need to be changed for the next itteration
