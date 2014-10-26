@@ -1,6 +1,27 @@
 **Kernelpanic**
 ===========
 
+## Milestone 2
+
+### FUTURE SAVE XML
+
+```XML
+  <GAME>
+      <GAMETYPE>Othello</GAMETYPE>
+      <ID>1</ID>
+      <PLAYERMOVE>1-1</PLAYERMOVE>
+      <AIMOVE>1-1</AIMOVE>
+      <GRID>
+          <ROW>
+              <cell>value1</cell>
+          </ROW>
+          <COL>
+              <cell>value1</cell>
+          </COL>
+      </GRID>
+  </GAME>
+```
+
 ## Milestone 1
 
 ### How to play
