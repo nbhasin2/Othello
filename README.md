@@ -71,12 +71,8 @@ For example
    | O | * | O |
 ----------------
 ```
- with this board if I place a black token on spot 4-1 
-
- 
  then this is what the board should be outputted 
-```
-   |   | * |   |
+```   |   | * |   |
 ----------------
  * | * | * | O |
 ----------------
@@ -85,7 +81,6 @@ For example
  * | * | * | O |
 ----------------
 ```
-
 How ever the game will output something like this
 ```
    |   | * |   |
