@@ -20,7 +20,7 @@ public OthelloConsole(){
 
 	globalCounter = 0;
 	countNO = 0;
-	aiPlayer = new AI(SharedConstants.Othello,SharedConstants.AIRandom);
+	aiPlayer = new AI(SharedConstants.AIRandom);
 	board = new gameBoard();
 	gameSetup();
 	board.printBoard();
@@ -77,8 +77,8 @@ public void playerMove(playableItem move){
 			else
 			{
 				
-				coor = aiPlayer.othelloRandom(availableSolutions);
-				System.out.println("White ai turn");
+				coor = aiPlayer.makeMove(availableSolutions);
+				System.out.println("White ai turn:");
 				row = Integer.parseInt(coor.split("-")[0]);
 				col = Integer.parseInt(coor.split("-")[1]);
 			}
@@ -159,21 +159,10 @@ public int validMove(int row, int col, ArrayList<String> validCoordinatesAndDire
     return resultValidMove;
 
 }
-
-public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution)
+public void tokenChangeWithDirection(int row,int col,int dir,playableItem player)
 {
-	int dir = -1;
 	int r;
 	int c;
-	String sRow = "" + row;
-	String sCol = "" + col;
-	for(String solution: changeSolution)
-	{
-		if(sRow.equals(solution.split("-")[0]) && sCol.equals(solution.split("-")[1]))
-		{
-			dir = Integer.parseInt(solution.split("-")[2]);
-		}
-	}
 	
 	if(dir == 0)
 	{
@@ -226,8 +215,21 @@ public void tokenChange(int row,int col,playableItem player,ArrayList<String> ch
 		row +=r;
 		col +=c;
 	}
+}
+public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution)
+{
+	int dir = -1;
+	String sRow = "" + row;
+	String sCol = "" + col;
+	for(String solution: changeSolution)
+	{
+		if(sRow.equals(solution.split("-")[0]) && sCol.equals(solution.split("-")[1]))
+		{
+			dir = Integer.parseInt(solution.split("-")[2]);
+			tokenChangeWithDirection(row,col,dir,player);
+		}
+	}
 
-	
 }
 
 
@@ -237,8 +239,6 @@ public void tokenChange(int row,int col,playableItem player,ArrayList<String> ch
 public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 	
 	
-//	System.out.println("freespaces 1" +freeSpaces);
-	ArrayList<int[]> freeSpaces = new ArrayList<int[]>();
 	ArrayList<String> temp = new ArrayList<String>();
 	int maxRow = gameBoard.ROWS -1;
 	int maxCol = gameBoard.COLS -1;
@@ -251,9 +251,10 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 	
 	
 	for (int row = 0; row < maxRow+1; ++row) {
-		for (int col = 0; col < maxCol; ++col) {
+		for (int col = 0; col < maxCol+1; ++col) {
 			if(board.playField[row][col].gamePiece.equals(playerPiece))
 			{
+				
 				/**
 				 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
 				 *    7|s|3 //if the col is == 0 it should not check spots 0,6,7
@@ -263,7 +264,8 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 				 */
 				for(int c = 0; c < 8; c++)
 				{
-					globalCounter = 2;
+					valid =false;
+					globalCounter = 1;
 					if(c == 0 && !(row <= 0 || col <=0))
 					{
 						valid = isValid(row-1,col-1,c,playerPiece);
@@ -314,9 +316,7 @@ public ArrayList<String> availableSoltuions(playableItem playerPiece) {
 					}
 					if(valid)
 					{
-						int[] newAdd = {validRow,validCol};
-						//System.out.println("Valid Row - "+ validRow + " Valid col - " + validCol);
-						freeSpaces.add(newAdd);
+						//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
 						temp.add(validRow +"-"+ validCol + "-" + c);
 					}
 					
@@ -337,6 +337,7 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 	int maxRow = gameBoard.ROWS -1;
 	int maxCol = gameBoard.COLS -1;
 	
+	globalCounter++;
 	if(board.playField[row][col].gamePiece.equals(playableItem.EMPTY))
 	{
 		return false;
@@ -352,8 +353,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
-
 				return isValid(row-1,col-1,c,playerPiece);
 			}
 			else
@@ -365,9 +364,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
-
-				//globalCounter++;
-
 				return isValid(row-1,col,c,playerPiece);
 			}
 			else
@@ -379,7 +375,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row-1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
 				return isValid(row-1,col+1,c,playerPiece);
 			}
 			else
@@ -391,7 +386,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
 				return isValid(row,col+1,c,playerPiece);
 			}
 			else
@@ -403,7 +397,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col+1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
 				return isValid(row+1,col+1,c,playerPiece);
 			}
 			else
@@ -415,7 +408,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
 				return isValid(row+1,col,c,playerPiece);
 			}
 			else
@@ -427,7 +419,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row+1][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
 				return isValid(row+1,col-1,c,playerPiece);
 			}
 			else
@@ -439,8 +430,6 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 		{
 			if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY)))
 			{
-				//globalCounter++;
-
 				return isValid(row,col-1,c,playerPiece);
 			}
 			else

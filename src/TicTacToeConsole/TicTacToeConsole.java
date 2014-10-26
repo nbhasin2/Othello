@@ -4,6 +4,7 @@ package TicTacToeConsole;
  * Base console based tictactoe 
  * game class. 
  */
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import sun.security.mscapi.PRNG;
@@ -29,7 +30,7 @@ public class TicTacToeConsole {
 	 */
 	public TicTacToeConsole()
 	{
-		setTicTacToeAIRandom(new AI(SharedConstants.TicTacToe, SharedConstants.AIRandom));
+		setTicTacToeAIRandom(new AI( SharedConstants.AIRandom));
 		in = new Scanner(System.in);
 
 	}
@@ -140,20 +141,26 @@ public class TicTacToeConsole {
 		boolean validInput = false;  
 		int row;  
 		int col;
+		ArrayList<String> solutions;
 		String AICoordinates;
+		int validity;
 		do {
+			solutions = availableSolutions();
+			
 			if ((checkplayerMove == SharedConstants.CROSS || checkplayerMove == SharedConstants.NOUGHT) && AImove==false) {
 				System.out.print("Player " + playerType + " enter your move :");
 				row = in.nextInt() - 1;  
 				col = in.nextInt() - 1;
-			} else {
+			} 
+			else {
 				System.out.print("AI " + ticTacToeAIRandom.getAIType() + " move \n");
-				AICoordinates = ticTacToeAIRandom.ticTacToeRandom(board);
+				AICoordinates = ticTacToeAIRandom.makeMove(solutions);
 				row = Integer.parseInt(AICoordinates.split("-")[0]);
 				col = Integer.parseInt(AICoordinates.split("-")[1]);	
 			}
+			validity = validMove(row,col,solutions);
 
-			if (row >= 0 && row < SharedConstants.ROWS && col >= 0 && col < SharedConstants.COLS && board[row][col] == SharedConstants.EMPTY) {
+			if (validity == 1) {
 				currntRow = row;
 				currentCol = col;
 				if(this.AImove)
@@ -167,6 +174,31 @@ public class TicTacToeConsole {
 						+ ") is not valid. Try again...");
 			}
 		} while (!validInput);  
+	}
+	
+	public int validMove(int row, int col, ArrayList<String> validCoordinates)
+	{
+		int resultValidMove= -1;
+		String playerMove = row+"-"+col;
+		resultValidMove = validCoordinates.contains(playerMove) ? 1:0;
+		return resultValidMove;
+		
+	}
+	public ArrayList<String> availableSolutions()
+	{
+		ArrayList<String> freeSpaces = new ArrayList<String>();
+		int row = SharedConstants.ROWS;
+		int col = SharedConstants.COLS;
+		for (row = 0; row < SharedConstants.ROWS; ++row) {
+			for (col = 0; col < SharedConstants.COLS; ++col) {
+				if(board[row][col] == SharedConstants.EMPTY)
+				{
+					freeSpaces.add(row+"-"+col);
+				}
+			}
+			
+		}
+		return freeSpaces;
 	}
 
 	/*
@@ -260,4 +292,6 @@ public class TicTacToeConsole {
 	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
 		this.ticTacToeAIRandom = ticTacToeAIRandom;
 	}
+	
+	
 }
