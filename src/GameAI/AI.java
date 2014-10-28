@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Shared.SharedConstants;
+import GameModel.GameConsoleInterface;
 import Othello.OthelloConsole;
 
 
@@ -42,20 +43,16 @@ public class AI {
 		int index = randomGenerator.nextInt(validMoves.size());
 		return validMoves.get(index);
 	}
-	
-	/*
-	 * Random coordinate generator games;
-	 * 
-	 */
-	public String makeMove(ArrayList<String> validMoves)
+
+	public String makeMove(GameConsoleInterface game ) 
 	{
 		if(AIType.equals(SharedConstants.AIRandom))
 		{
-			return randomStrategy(validMoves);
+			return randomStrategy(game.getAvailableSolutions());
 		}
 		else if(AIType.equals(SharedConstants.AIMinimax))
 		{
-			return minimaxStrategy(validMoves);
+			return minimaxStrategy(game);
 		}
 		else
 		{
@@ -64,8 +61,8 @@ public class AI {
 	}
 	
 	
-	private String minimaxStrategy(ArrayList<String> validMoves) {
-		// TODO Auto-generated method stub
+	private String minimaxStrategy(GameConsoleInterface game) {
+		
 		return null;
 	}
 

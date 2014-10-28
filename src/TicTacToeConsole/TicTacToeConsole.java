@@ -9,9 +9,10 @@ import java.util.Scanner;
 
 import sun.security.mscapi.PRNG;
 import GameAI.AI;
+import GameModel.GameConsoleInterface;
 import Shared.SharedConstants;
 
-public class TicTacToeConsole {
+public class TicTacToeConsole extends GameConsoleInterface{
 
 	private int[][] board = new int[SharedConstants.ROWS][SharedConstants.COLS]; // game board in 2D array
 	private int currentState;  
@@ -154,7 +155,7 @@ public class TicTacToeConsole {
 			} 
 			else {
 				System.out.print("AI " + ticTacToeAIRandom.getAIType() + " move \n");
-				AICoordinates = ticTacToeAIRandom.makeMove(solutions);
+				AICoordinates = ticTacToeAIRandom.makeMove(this);
 				row = Integer.parseInt(AICoordinates.split("-")[0]);
 				col = Integer.parseInt(AICoordinates.split("-")[1]);	
 			}
@@ -261,7 +262,17 @@ public class TicTacToeConsole {
 		}
 		return checkWon;
 	}
-
+	
+	public int evaluate()
+	{
+		
+		
+		
+		
+		return 0;
+	}
+	
+	
 	/*
 	 * Prints game board
 	 */
@@ -284,13 +295,19 @@ public class TicTacToeConsole {
 		}
 		System.out.println();
 	}
-
+	
 	public AI getTicTacToeAIRandom() {
 		return ticTacToeAIRandom;
 	}
 
 	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
 		this.ticTacToeAIRandom = ticTacToeAIRandom;
+	}
+
+	@Override
+	public ArrayList<String> getAvailableSolutions() {
+		
+		return availableSolutions();
 	}
 	
 	
