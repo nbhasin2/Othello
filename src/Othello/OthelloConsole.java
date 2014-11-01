@@ -1,6 +1,9 @@
 package Othello;
+import gameui.Gameui;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import GameAI.AI;
 import Shared.SharedConstants;
 
@@ -12,21 +15,23 @@ private AI aiPlayer;
 private int countNO;
 private int  globalCounter; 
 private static Scanner playerMove= new Scanner(System.in); 
-	
+private Gameui gameui;
+private static int gridSize = 16; // Total number of 	
 /*
  * Constructor for othello console game
  */
 public OthelloConsole(){
-
+	gameui = new Gameui();
+	gameui.initializeGrid(16);
 	globalCounter = 0;
 	countNO = 0;
 	aiPlayer = new AI(SharedConstants.Othello,SharedConstants.AIRandom);
 	board = new gameBoard();
 	gameSetup();
-	board.printBoard();
+	board.printBoard(gameui);
 	do{ 
 		playerMove(currentPlayer);
-		board.printBoard();
+		board.printBoard(gameui);
 		
 		currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 	} while(currentState == gameStatus.PLAYING);
