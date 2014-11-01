@@ -7,10 +7,14 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
+
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import Othello.OthelloConsole;
 import Othello.boardSpace;
+import Othello.playableItem;
 
 public class Gameui {
 	
@@ -20,11 +24,12 @@ public class Gameui {
 	private ArrayList<ButtonWithCoordinates> guiButtons;
 	private boardSpace[][] playField;	
 	private ActionListener listener;
-
+	private OthelloConsole othelloconsole;
 	
 	//Constructor 
-	public Gameui()
+	public Gameui(OthelloConsole othelloconsole)
 	{
+		this.othelloconsole = othelloconsole;
 		listener = new MyListener();
 		guiButtons = new ArrayList<ButtonWithCoordinates>();
 		this.playField = playField;
@@ -63,15 +68,21 @@ public class Gameui {
 	{
 	    for(int i=0;i<listPLayableItems.size();i++)
 	    {
-	    	guiButtons.get(i).setText(listPLayableItems.get(i)+"");
+	    	String temp = listPLayableItems.get(i).toString();
+	    	temp = temp.equals(playableItem.EMPTY.toString()) ? "" : temp;
+	    	guiButtons.get(i).setText(temp);
 	    }
 	}
 	
 	private class MyListener implements ActionListener {
 		  public void actionPerformed(ActionEvent e) {
 		     System.out.println("Button pressed: " + e.getActionCommand());
-		     System.out.println("Source - " + ((ButtonWithCoordinates)e.getSource()).getCoordX() + "  -- " + ((ButtonWithCoordinates)e.getSource()).getCoordY());
-//		     ((JButton)e.getSource()).setEnabled(false);
+		     int row = ((ButtonWithCoordinates)e.getSource()).getCoordX();
+		     int col = ((ButtonWithCoordinates)e.getSource()).getCoordY();
+		     othelloconsole.setGameuiMoveX(row);
+		     othelloconsole.setGameuiMoveY(col);
+		     othelloconsole.setGameuiMove(true);
+		     //System.out.println("Source - " + ((ButtonWithCoordinates)e.getSource()).getCoordX() + "  -- " + ((ButtonWithCoordinates)e.getSource()).getCoordY());
 		  }
 		}
 
