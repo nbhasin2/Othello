@@ -2,13 +2,21 @@ package gameui;
 
 import java.awt.GridLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 
 
+
+
+
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -60,17 +68,36 @@ public class Gameui {
 		    	k++;
 				}
 		    }
-		    frame.setSize(500, 500);;
+		    frame.setSize(1000,980);;
 		    frame.setVisible(true);
 	}
 	
 	public void updateGrid(ArrayList<String> listPLayableItems)
 	{
+
+	    
 	    for(int i=0;i<listPLayableItems.size();i++)
 	    {
+	    	Image img = null;
+	    	try {
 	    	String temp = listPLayableItems.get(i).toString();
-	    	temp = temp.equals(playableItem.EMPTY.toString()) ? "" : temp;
-	    	guiButtons.get(i).setText(temp);
+	    	if(temp.equals(playableItem.EMPTY.toString()))
+	    	{		    		  
+	    		img = ImageIO.read(getClass().getResource("/GameIcons/empty.png"));  	  
+	    	}
+	    	else if(temp.equals(playableItem.WHITE.toString()))
+	    	{
+	    		img = ImageIO.read(getClass().getResource("/GameIcons/white-green.png"));
+	    		
+	    		
+	    	}else if(temp.equals(playableItem.BLACK.toString()))
+	    	{
+	    		img = ImageIO.read(getClass().getResource("/GameIcons/black-green.png"));
+	    	}
+    		img.getScaledInstance(img.getWidth(null)/2, img.getHeight(null)/2, Image.SCALE_AREA_AVERAGING);
+	    	guiButtons.get(i).setIcon(new ImageIcon(img));  
+	    	} catch (IOException ex) {
+	    	  }
 	    }
 	}
 	
