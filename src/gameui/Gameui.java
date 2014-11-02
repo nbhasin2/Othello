@@ -8,19 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-
-
-
-
-
-
-
-
-
-
-
-
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -63,13 +50,14 @@ public class Gameui {
 	 */
 	public void initializeGrid(int size)
 	{
-		 JFrame.setDefaultLookAndFeelDecorated(true);
+		 
 		    JFrame frame = new JFrame("GridLayout Test");
 		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    frame.setLayout(new GridLayout(Row, Col));
 
 	        JMenuBar menuBar = new JMenuBar();
 	        JMenu menu = new JMenu("Menu");
+
 	        menuBar.add(menu);
 	        JMenuItem item = new JMenuItem("Exit");
 	        
@@ -94,6 +82,7 @@ public class Gameui {
 		    }
 		    frame.setSize(1000,980);;
 		    frame.setVisible(true);
+		    frame.setResizable(false);
 	}
 	
 	public void updateGrid(ArrayList<String> listPLayableItems)
