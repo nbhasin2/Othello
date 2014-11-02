@@ -1,5 +1,6 @@
 package gameui;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Font;
 import java.awt.Image;
@@ -15,10 +16,19 @@ import java.util.ArrayList;
 
 
 
+
+
+
+
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import Othello.OthelloConsole;
 import Othello.boardSpace;
@@ -57,6 +67,20 @@ public class Gameui {
 		    JFrame frame = new JFrame("GridLayout Test");
 		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    frame.setLayout(new GridLayout(Row, Col));
+
+	        JMenuBar menuBar = new JMenuBar();
+	        JMenu menu = new JMenu("Menu");
+	        menuBar.add(menu);
+	        JMenuItem item = new JMenuItem("Exit");
+	        
+	        item.addActionListener(new ActionListener(){
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                System.exit(0);
+	            }
+	        });
+	        menu.add(item);
+	        frame.setJMenuBar(menuBar);
 		    int k = 0;
 			for (int i=0; i < Row; ++i) {
 				for (int j=0; j < Col; ++j) {
