@@ -31,7 +31,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	 */
 	public TicTacToeConsole()
 	{
-		setTicTacToeAIRandom(new AI( SharedConstants.AIRandom));
+		setTicTacToeAIRandom(new AI( SharedConstants.AIMinimax));
 		in = new Scanner(System.in);
 
 	}
@@ -39,7 +39,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	/*
 	 * Method that is called for playing tictactoe
 	 */
-	public void playTicTacToe()
+	public void playTicTacToe()  
 	{
 		
 		System.out.println("Welcome to TicTacToc Console Game !!" +
@@ -138,7 +138,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	/*
 	 * Checks player and AI move
 	 */
-	public void playerMove(int checkplayerMove, boolean AImove) {
+	public void playerMove(int checkplayerMove, boolean AImove)   {
 		boolean validInput = false;  
 		int row;  
 		int col;
@@ -156,8 +156,8 @@ public class TicTacToeConsole extends GameConsoleInterface{
 			else {
 				System.out.print("AI " + ticTacToeAIRandom.getAIType() + " move \n");
 				AICoordinates = ticTacToeAIRandom.makeMove(this);
-				row = Integer.parseInt(AICoordinates.split("-")[0]);
-				col = Integer.parseInt(AICoordinates.split("-")[1]);	
+				row = Integer.parseInt(AICoordinates.split(",")[0]);
+				col = Integer.parseInt(AICoordinates.split(",")[1]);	
 			}
 			validity = validMove(row,col,solutions);
 
@@ -180,7 +180,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	public int validMove(int row, int col, ArrayList<String> validCoordinates)
 	{
 		int resultValidMove= -1;
-		String playerMove = row+"-"+col;
+		String playerMove = row+","+col;
 		resultValidMove = validCoordinates.contains(playerMove) ? 1:0;
 		return resultValidMove;
 		
@@ -194,7 +194,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 			for (col = 0; col < SharedConstants.COLS; ++col) {
 				if(board[row][col] == SharedConstants.EMPTY)
 				{
-					freeSpaces.add(row+"-"+col);
+					freeSpaces.add(row+","+col);
 				}
 			}
 			
@@ -218,6 +218,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		} else if (isDraw()) {  
 			currentState = SharedConstants.DRAW;
 		}
+		evaluate();
 	}
 
 	/*
@@ -266,12 +267,163 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	public int evaluate()
 	{
 		
-		
-		
-		
-		return 0;
+		int score = 0;
+		for(int line = 1; line<=8;line++)
+		{
+			score += evaluateLine(line);
+			//System.out.println(score);
+		}
+		System.out.println(score);
+		printBoard();
+		return score;
 	}
 	
+	
+	public int evaluateLine(int line)
+	{
+		int score = 0;
+		int row = 0;
+		int col = 0;
+		int c1 = 0;
+		int r1 = 0;
+		int r2 = 0;
+		int c2 = 0;
+		
+		/**
+		 *    147|15|168 
+		 *    ----------
+		 *    24|2578|26
+		 *    -----------
+		 *    348|35|367
+		 *    
+		 *    this map shows which number the line it is looking at 
+		 *    for example line 1 will check all the places there is a 1;	
+		 *    this is the set up for the score calculator;	
+		 */
+		if(line == 1)
+		{
+			c1 = 1;
+			c2 = 2;
+			
+		}
+		else if(line == 2)
+		{
+			row = 1;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 3)
+		{
+			row = 2;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 4)
+		{
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 5)
+		{
+			col = 1;
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 6)
+		{
+			col = 2;
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 7)
+		{
+			r1 = 1;
+			r2 = 2;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 8)
+		{
+			row = 2;
+			r1 = -1;
+			r2 = -2;
+			c1 = 1;
+			c2 = 2;
+		}
+		
+		// this means that the beginning of the line is empty
+		if(board[row][col] == SharedConstants.EMPTY)
+		{
+		
+			if(board[row+r1][col+c1] == SharedConstants.EMPTY)
+			{
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY)
+				{
+					score = 1;
+				}
+				else
+				{
+					
+					score = (board[row+r2][col+c2] == AIplayer ? 10 :-10);
+				}
+			}
+			else
+			{
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY)
+				{
+					score = (board[row+r1][col+c1]== AIplayer ? 10:-10);
+				}
+				else if(board[row+r1][col+c1] == board[row+r2][col+c2])
+				{
+					score = (board[row+r1][col+c1]== AIplayer ? 100:-100);
+				}
+				else
+				{
+					score = 0;
+				}
+			}
+		}
+		else
+		{
+			if(board[row][col] == board[row+r1][col+c1])
+			{
+					if(board[row+r1][col+c1] == board[row+r2][col+c2])
+					{
+						score = (board[row][col]== AIplayer ? 1000:-1000);
+					}
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY)
+					{
+							score = (board[row][col]== AIplayer ? 100:-100);
+					}
+					else
+					{
+							score = 0;
+					}
+					
+			}
+			else if(board[row+r1][col+c1] == SharedConstants.EMPTY)
+			{	
+					if(board[row][col]  == board[row+r2][col+c2])
+					{
+						score = (board[row][col]== AIplayer ? 100:-100);
+					}
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY)
+					{
+							score = (board[row][col]== AIplayer ? 10:-10);
+					}
+					else
+					{
+							score = 0;
+					}
+			}
+			else
+			{
+				score = 0;
+			}	
+		}
+			
+		return score;
+	}
 	
 	/*
 	 * Prints game board
@@ -308,6 +460,23 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	public ArrayList<String> getAvailableSolutions() {
 		
 		return availableSolutions();
+	}
+
+	
+
+	@Override
+	public void moveSet(int row, int col, int player) {
+		
+		currntRow = row;
+		currentCol = col;
+		int checkplayerMove = (player == 0 ? currentPlayer : AIplayer);
+		board[currntRow][currentCol] = checkplayerMove;  
+	}
+
+	@Override
+	public void undoMove(int row, int col, int player) {
+		
+		board[row][col] = SharedConstants.EMPTY;
 	}
 	
 	

@@ -11,7 +11,7 @@ import TicTacToeConsole.TicTacToeConsole;
 
 public class Launcher {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)   {
 		boolean quit;
 		Scanner scan = new Scanner(System.in);
 		int ans;

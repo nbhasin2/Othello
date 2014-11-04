@@ -1,5 +1,6 @@
 package Othello;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 import GameAI.AI;
@@ -26,12 +27,12 @@ public class OthelloConsole extends GameConsoleInterface {
 	/*
 	 * Constructor for othello console game
 	 */
-	public OthelloConsole(){
+	public OthelloConsole()  {
 	
 		super();
 		globalCounter = 0;
 		countNO = 0;
-		aiPlayer = new AI(SharedConstants.AIRandom);
+		aiPlayer = new AI(SharedConstants.AIMinimax);
 		board = new gameBoard();
 		gameSetup();
 		board.printBoard();
@@ -58,7 +59,7 @@ public class OthelloConsole extends GameConsoleInterface {
 	/*
 	 * This method is used to move the player item
 	 */
-	public void playerMove(playableItem move){
+	public void playerMove(playableItem move)  {
 		boolean isValidInput = false;
 		int row;
 	    int col;
@@ -89,8 +90,8 @@ public class OthelloConsole extends GameConsoleInterface {
 				
 				coor = aiPlayer.makeMove(this);
 				System.out.println("White ai turn:");
-				row = Integer.parseInt(coor.split("-")[0]);
-				col = Integer.parseInt(coor.split("-")[1]);
+				row = Integer.parseInt(coor.split(",")[0]);
+				col = Integer.parseInt(coor.split(",")[1]);
 			}
 	
 			validity = validMove(row,col,availableSolutions);
@@ -160,21 +161,23 @@ public class OthelloConsole extends GameConsoleInterface {
 	 * This method is used to checking whether the player move is valid or not.
 	 */
 	public int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
-		
+		ArrayList<String> splitStr = new ArrayList<>();
 		ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
 		int resultValidMove = -1;
 		if(validCoordinatesAndDirection.size() == 0)
 		{
 			return resultValidMove;
 		}
-		//System.out.println(validCoordinatesAndDirection);
+		System.out.println(validCoordinatesAndDirection);
 	
 	for(String s : validCoordinatesAndDirection)
 	{
-		validCoordinatesOnly.add(s.split("-")[0]+"-"+s.split("-")[1]);
+		validCoordinatesOnly.add(s.split(",")[0]+","+s.split(",")[1]);
+		
+		
 	}
-	//System.out.println(validCoordinatesOnly);
-	String playerMove = row+"-"+col;
+	System.out.println(validCoordinatesOnly);
+	String playerMove = row+","+col;
 	
 	resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
 	//System.out.println(playerMove + "--" + validCoordinatesOnly.contains(playerMove)+"--"+resultValidMove);
@@ -245,9 +248,9 @@ public class OthelloConsole extends GameConsoleInterface {
 	String sCol = "" + col;
 	for(String solution: changeSolution)
 	{
-		if(sRow.equals(solution.split("-")[0]) && sCol.equals(solution.split("-")[1]))
+		if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1]))
 		{
-			dir = Integer.parseInt(solution.split("-")[2]);
+			dir = Integer.parseInt(solution.split(",")[2]);
 				tokenChangeWithDirection(row,col,dir,player);
 			}
 		}
@@ -278,7 +281,7 @@ public class OthelloConsole extends GameConsoleInterface {
 				if(board.playField[row][col].gamePiece.equals(playerPiece))
 				{
 					
-					/**
+				/**
 				 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
 				 *    7|s|3 //if the col is == 0 it should not check spots 0,6,7
 				 *    6|5|4 //if the row is == max it should not check spots 4,5,6
@@ -340,9 +343,8 @@ public class OthelloConsole extends GameConsoleInterface {
 					if(valid)
 					{
 						//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
-						temp.add(validRow +"-"+ validCol + "-" + c);
+						temp.add(validRow +","+ validCol + "," + c);
 						}
-						
 						
 					}
 				}
@@ -478,5 +480,24 @@ public class OthelloConsole extends GameConsoleInterface {
 	
 	public void setAvailableSolutions(ArrayList<String> availableSolutions) {
 		this.availableSolutions = availableSolutions;
+	}
+
+	
+
+	@Override
+	public void moveSet(int row, int col, int player) {
+		// TODO Auto-generated method stub
+		playableItem move;
+		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
+		board.playField[row][col].gamePiece = move;
+    	board.currentRow = row;
+    	board.currentCol = col;
+    	tokenChange(row,col,move,availableSolutions);
+	}
+
+	@Override
+	public void undoMove(int row, int col, int player) {
+		
+		
 	}
 }
