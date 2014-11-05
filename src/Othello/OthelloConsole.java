@@ -76,61 +76,67 @@ public OthelloConsole(){
 	    String coor;
 		do {
 			
-			availableSolutions = availableSoltuions(move);
+			availableSolutions = availableSolutions(move);
+			System.out.println(availableSolutions);
 			validity = validMove(-1,-1,availableSolutions);
 			if(validity == -1)
 			{
 				System.out.print("No avaible moves switch to other player\n");
-			isValidInput = true;
-			countNO++;
-			if(countNO ==2) currentState = gameStatus.GAME_END;
-		}
-		else
-		{
-			if(move == playableItem.BLACK) {
-				
-				System.out.print("Enter your move player Black\n"); 
-				do{
-					if(gameuiMove)
-					{
-						System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
-						row = getGameuiMoveX();
-						col = getGameuiMoveY();
-					}
-					else
-					{
-//						System.out.println("Skipping --");
-//						row = playerMove.nextInt() -1;
-//						col = playerMove.nextInt() -1;
-					}
-				}while(!gameuiMove);
-				gameuiMove = false;
-					
+				isValidInput = true;
+				countNO++;
+				if(countNO ==2) currentState = gameStatus.GAME_END;
 			}
 			else
 			{
-				
-				coor = aiPlayer.makeMove(this);
-				System.out.println("White ai turn:");
-				row = Integer.parseInt(coor.split(",")[0]);
-				col = Integer.parseInt(coor.split(",")[1]);
-			}
-	
-			validity = validMove(row,col,availableSoltuions(move));
-			
-			{ 
-				countNO = 0;
-		        if(validity == 1){
-		        	board.playField[row][col].gamePiece = move;
-		        	board.currentRow = row;
-		        	board.currentCol = col;
-		        	tokenChange(row,col,move,availableSolutions,-1);
-		        	isValidInput = true; }
-		         else {
-		        	System.out.println("Invalid move");
-			        }
+				if(move == playableItem.BLACK) {
+					int item = 0;
+					System.out.print("Enter your move player Black\n"); 
+					do{
+						item++;
+						if(item >= Integer.MAX_VALUE-10000){
+							item = 0;
+							System.out.print(gameuiMove +"\n"); 
+						}
+						if(gameuiMove)
+						{
+							
+							System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
+							row = getGameuiMoveX();
+							col = getGameuiMoveY();
+						}
+						else
+						{
+	//						System.out.println("Skipping --");
+	//						row = playerMove.nextInt() -1;
+	//						col = playerMove.nextInt() -1;
+						}
+					}while(!gameuiMove);
+					gameuiMove = false;
+						
 				}
-			}
+				else
+				{
+					coor = aiPlayer.makeMove(this);
+					System.out.println("White ai turn:");
+					row = Integer.parseInt(coor.split(",")[0]);
+					col = Integer.parseInt(coor.split(",")[1]);
+				}
+				availableSolutions = availableSolutions(move);
+				validity = validMove(row,col,availableSolutions);
+				
+				{ 
+					countNO = 0;
+			        if(validity == 1){
+			        	board.playField[row][col].gamePiece = move;
+			        	board.currentRow = row;
+			        	board.currentCol = col;
+			        	tokenChange(row,col,move,availableSolutions,-1);
+			        	isValidInput = true; }
+			         else {
+			        	System.out.println("Invalid move");
+				        }
+					}
+				}
 		} while (!isValidInput);
 		
 	}
@@ -293,7 +299,7 @@ public OthelloConsole(){
 	 * The method checks total number of available moves a player / AI has.
 	 */
 	
-	public ArrayList<String> availableSoltuions(playableItem playerPiece) {
+	public ArrayList<String> availableSolutions(playableItem playerPiece) {
 		
 		
 		ArrayList<String> temp = new ArrayList<String>();
@@ -312,69 +318,70 @@ public OthelloConsole(){
 				if(board.playField[row][col].gamePiece.equals(playerPiece))
 				{
 					
-				/**
-				 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
-				 *    7|s|3 //if the col is == 0 it should not check spots 0,6,7
-				 *    6|5|4 //if the row is == max it should not check spots 4,5,6
-				 *    		//if the col is == max it should not check spots 2,3,4			
-				 *    where s is the currently selected space on the board
-				 */
-				for(int c = 0; c < 8; c++)
-				{
-					valid =false;
-					globalCounter = 1;
-					if(c == 0 && !(row <= 0 || col <=0))
+					/**
+					 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
+					 *    7|s|3 //if the col is == 0 it should not check spots 0,6,7
+					 *    6|5|4 //if the row is == max it should not check spots 4,5,6
+					 *    		//if the col is == max it should not check spots 2,3,4			
+					 *    where s is the currently selected space on the board
+					 */
+					for(int c = 0; c < 8; c++)
 					{
-						valid = isValid(row-1,col-1,c,playerPiece);
-						validRow = row-globalCounter;
-						validCol = col-globalCounter;
-					}
-					else if(c == 1 && !(row <= 0))
-					{
-						valid = isValid(row-1,col,c,playerPiece);
-						validRow = row-globalCounter;
-						validCol = col;
-					}
-					else if(c == 2 && !(row <= 0 || col >= maxCol))
-					{
-						valid = isValid(row-1,col+1,c,playerPiece);
-						validRow = row-globalCounter;
-						validCol = col+globalCounter;
-					}
-					else if(c == 3 && !(col >= maxCol))
-					{
-						valid = isValid(row,col+1,c,playerPiece);
-						validRow = row;
-						validCol = col+globalCounter;
-					}
-					else if(c == 4 && !(row >= maxRow || col >= maxCol))
-					{
-						valid = isValid(row+1,col+1,c,playerPiece);
-						validRow = row+globalCounter;
-						validCol = col+globalCounter;
-					}
-					else if(c == 5 && !(row >= maxRow))
-					{
-						valid = isValid(row+1,col,c,playerPiece);
-						validRow = row+globalCounter;
-						validCol = col;
-					}
-					else if(c == 6 && !(row >= maxRow || col <= 0))
-					{
-						valid = isValid(row+1,col-1,c,playerPiece);
-						validRow = row+globalCounter;
-						validCol = col-globalCounter;
-					}
-					else if(c == 7 && !(col <= 0))
-					{
-						valid = isValid(row,col-1,c,playerPiece);
-						validRow = row;
-						validCol = col-globalCounter;
-					}
-					if(valid)
-					{
-						//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
-						temp.add(validRow +","+ validCol + "," + c);
+						valid =false;
+						globalCounter = 1;
+						if(c == 0 && !(row <= 0 || col <=0))
+						{
+							valid = isValid(row-1,col-1,c,playerPiece);
+							validRow = row-globalCounter;
+							validCol = col-globalCounter;
+						}
+						else if(c == 1 && !(row <= 0))
+						{
+							valid = isValid(row-1,col,c,playerPiece);
+							validRow = row-globalCounter;
+							validCol = col;
+						}
+						else if(c == 2 && !(row <= 0 || col >= maxCol))
+						{
+							valid = isValid(row-1,col+1,c,playerPiece);
+							validRow = row-globalCounter;
+							validCol = col+globalCounter;
+						}
+						else if(c == 3 && !(col >= maxCol))
+						{
+							valid = isValid(row,col+1,c,playerPiece);
+							validRow = row;
+							validCol = col+globalCounter;
+						}
+						else if(c == 4 && !(row >= maxRow || col >= maxCol))
+						{
+							valid = isValid(row+1,col+1,c,playerPiece);
+							validRow = row+globalCounter;
+							validCol = col+globalCounter;
+						}
+						else if(c == 5 && !(row >= maxRow))
+						{
+							valid = isValid(row+1,col,c,playerPiece);
+							validRow = row+globalCounter;
+							validCol = col;
+						}
+						else if(c == 6 && !(row >= maxRow || col <= 0))
+						{
+							valid = isValid(row+1,col-1,c,playerPiece);
+							validRow = row+globalCounter;
+							validCol = col-globalCounter;
+						}
+						else if(c == 7 && !(col <= 0))
+						{
+							valid = isValid(row,col-1,c,playerPiece);
+							validRow = row;
+							validCol = col-globalCounter;
+						}
+						if(valid)
+						{
+							//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
+							temp.add(validRow +","+ validCol + "," + c);
+							c = c;
 						}
 						
 					}
@@ -505,7 +512,7 @@ public OthelloConsole(){
 		
 		playableItem move;
 		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
-		return availableSolutions = availableSoltuions(move);
+		return availableSolutions = availableSolutions(move);
 	}
 	
 	public void setAvailableSolutions(ArrayList<String> availableSolutions) {

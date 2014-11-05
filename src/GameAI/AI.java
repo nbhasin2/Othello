@@ -48,7 +48,7 @@ public class AI {
 	{
 		if(AIType.equals(SharedConstants.AIRandom))
 		{
-			return randomStrategy(game.getAvailableSolutions(1));
+			return randomStrategy(game.getAvailableSolutions(-1));
 		}
 		else if(AIType.equals(SharedConstants.AIMinimax))
 		{
