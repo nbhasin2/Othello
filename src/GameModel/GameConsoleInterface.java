@@ -10,5 +10,5 @@ public abstract class GameConsoleInterface {
 	public abstract  int evaluate();
 	public abstract void moveSet(int row, int col,int player);
 	public abstract void undoMove(int row,int col,int player);
-	public abstract boolean gameOver();
+	//public abstract boolean gameOver();
 }

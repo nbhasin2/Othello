@@ -14,10 +14,10 @@ public class OthelloConsole extends GameConsoleInterface {
 	private gameBoard board;
 	private gameStatus currentState;
 	private playableItem currentPlayer;
-    ArrayList<String> availableSolutions = null;
+    private ArrayList<String> availableSolutions = null;
 	
 	
-
+    private ArrayList<String> tokensChanged = null;
 	private AI aiPlayer;
 	private int countNO;
 	private int  globalCounter; 
@@ -30,6 +30,7 @@ public class OthelloConsole extends GameConsoleInterface {
 	public OthelloConsole()  {
 	
 		super();
+		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
 		countNO = 0;
 		aiPlayer = new AI(SharedConstants.AIMinimax);
@@ -154,6 +155,7 @@ public class OthelloConsole extends GameConsoleInterface {
 					whiteToken++;
 			}
 		}
+		System.out.println(whiteToken);
 		return whiteToken;
 	}
 	
@@ -235,8 +237,9 @@ public class OthelloConsole extends GameConsoleInterface {
 		}
 		while(!((board.playField[row+r][col+c].gamePiece.equals(player))))
 		{
-			
+			tokensChanged.add((row+r)+","+(col+c));
 			board.playField[row+r][col+c].gamePiece = player;
+			
 			row +=r;
 			col +=c;
 		}
@@ -245,18 +248,19 @@ public class OthelloConsole extends GameConsoleInterface {
 	{
 		int dir = -1;
 		String sRow = "" + row;
-	String sCol = "" + col;
-	for(String solution: changeSolution)
-	{
-		if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1]))
+		String sCol = "" + col;
+		tokensChanged = new ArrayList<String>();
+		for(String solution: changeSolution)
 		{
-			dir = Integer.parseInt(solution.split(",")[2]);
-				tokenChangeWithDirection(row,col,dir,player);
+			if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1]))
+			{
+				dir = Integer.parseInt(solution.split(",")[2]);
+					tokenChangeWithDirection(row,col,dir,player);
 			}
 		}
-	
+		
 	}
-	
+
 	
 	/*
 	 * The method checks total number of available moves a player / AI has.
@@ -487,17 +491,41 @@ public class OthelloConsole extends GameConsoleInterface {
 	@Override
 	public void moveSet(int row, int col, int player) {
 		// TODO Auto-generated method stub
+		
 		playableItem move;
 		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
+		
+		
 		board.playField[row][col].gamePiece = move;
     	board.currentRow = row;
     	board.currentCol = col;
     	tokenChange(row,col,move,availableSolutions);
+    	board.printBoard();
+    	System.out.println("\n");
+    	setAvailableSolutions(availableSoltuions(move));
 	}
+
 
 	@Override
 	public void undoMove(int row, int col, int player) {
-		
+		playableItem move;
+		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
+		board.playField[row][col].gamePiece = playableItem.EMPTY;
+		for(String token:tokensChanged)
+		{
+			int currRow = Integer.parseInt(token.split(",")[0]);
+        	int currCol = Integer.parseInt(token.split(",")[1]);
+        	if(move == playableItem.BLACK)
+        	{
+        		board.playField[row][col].gamePiece = playableItem.WHITE;
+        	}
+        	else
+        	{
+        		board.playField[row][col].gamePiece = playableItem.BLACK;
+        	
+        	}
+		}
+	//	setAvailableSolutions(availableSoltuions(move));
 		
 	}
 }
