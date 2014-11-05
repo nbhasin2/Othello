@@ -32,6 +32,7 @@ public void putItem() {
 	}
 	
 }
+
  public playableItem getGamePiece(){
 	 return this.gamePiece;
 	 

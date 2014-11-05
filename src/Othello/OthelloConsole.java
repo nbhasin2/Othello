@@ -1,4 +1,6 @@
 package Othello;
+import gameui.Gameui;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -9,42 +11,44 @@ import GameModel.GameConsoleInterface;
 
 
 public class OthelloConsole extends GameConsoleInterface {
-	
-	
-	private gameBoard board;
-	private gameStatus currentState;
-	private playableItem currentPlayer;
-    ArrayList<String> availableSolutions = null;
-	
-	
 
-	private AI aiPlayer;
-	private int countNO;
-	private int  globalCounter; 
-	private static Scanner playerMove= new Scanner(System.in); 
-		
-	
-	/*
-	 * Constructor for othello console game
-	 */
-	public OthelloConsole()  {
-	
+private ArrayList<String> availableSolutions = null;
+private gameBoard board;
+private gameStatus currentState;
+private playableItem currentPlayer;
+private AI aiPlayer;
+private int countNO;
+private int  globalCounter; 
+private static Scanner playerMove= new Scanner(System.in); 
+private Gameui gameui;
+private static int gridSize = 16; // Total number of 	
+private boolean gameuiMove = false;
+private int gameuiMoveX = -1;
+private int gameuiMoveY = -1;
+
+/*
+ * Constructor for othello console game
+ */
+public OthelloConsole(){
+
 		super();
+		gameui = new Gameui(this);
+		gameui.initializeGrid(16);
 		globalCounter = 0;
 		countNO = 0;
-		aiPlayer = new AI(SharedConstants.AIMinimax);
+		aiPlayer = new AI(SharedConstants.AIRandom);
 		board = new gameBoard();
 		gameSetup();
-		board.printBoard();
+		board.printBoard(gameui);
 		do{ 
 			playerMove(currentPlayer);
-			board.printBoard();
+			board.printBoard(gameui);
 			
 			currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 		} while(currentState == gameStatus.PLAYING);
 		winner();
-		
-	}
+	currentState = gameStatus.PLAYING;
+}
 	
 	/*
 	 * Method to setup the initial game with basic item on the board.
@@ -61,8 +65,8 @@ public class OthelloConsole extends GameConsoleInterface {
 	 */
 	public void playerMove(playableItem move)  {
 		boolean isValidInput = false;
-		int row;
-	    int col;
+		int row=-1;
+	    int col=-1;
 	    int validity;
 	    
 	    String coor;
@@ -82,8 +86,22 @@ public class OthelloConsole extends GameConsoleInterface {
 			if(move == playableItem.BLACK) {
 				
 				System.out.print("Enter your move player Black\n"); 
-				row = playerMove.nextInt() -1;
-				col = playerMove.nextInt() -1;
+				do{
+					if(gameuiMove)
+					{
+						System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
+						row = getGameuiMoveX();
+						col = getGameuiMoveY();
+					}
+					else
+					{
+//						System.out.println("Skipping --");
+//						row = playerMove.nextInt() -1;
+//						col = playerMove.nextInt() -1;
+					}
+				}while(!gameuiMove);
+				gameuiMove = false;
+					
 			}
 			else
 			{
@@ -468,6 +486,7 @@ public class OthelloConsole extends GameConsoleInterface {
 			}
 		}
 	}
+	
 	@Override
 	public ArrayList<String> getAvailableSolutions() {
 		if(this.availableSolutions == null)
@@ -481,6 +500,40 @@ public class OthelloConsole extends GameConsoleInterface {
 	public void setAvailableSolutions(ArrayList<String> availableSolutions) {
 		this.availableSolutions = availableSolutions;
 	}
+
+
+public Gameui getGameui() {
+	return gameui;
+}
+
+public void setGameui(Gameui gameui) {
+	this.gameui = gameui;
+}
+
+public boolean isGameuiMove() {
+	return gameuiMove;
+}
+
+public void setGameuiMove(boolean gameuiMove) {
+	this.gameuiMove = gameuiMove;
+}
+
+public int getGameuiMoveX() {
+	return gameuiMoveX;
+}
+
+public void setGameuiMoveX(int gameuiMoveX) {
+	this.gameuiMoveX = gameuiMoveX;
+}
+
+public int getGameuiMoveY() {
+	return gameuiMoveY;
+}
+
+public void setGameuiMoveY(int gameuiMoveY) {
+	this.gameuiMoveY = gameuiMoveY;
+}
+
 
 	
 
