@@ -1,6 +1,9 @@
 package Othello;
+import gameui.Gameui;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import GameAI.AI;
 import Shared.SharedConstants;
 
@@ -12,25 +15,31 @@ private AI aiPlayer;
 private int countNO;
 private int  globalCounter; 
 private static Scanner playerMove= new Scanner(System.in); 
-	
+private Gameui gameui;
+private static int gridSize = 16; // Total number of 	
+private boolean gameuiMove = false;
+private int gameuiMoveX = -1;
+private int gameuiMoveY = -1;
+
 /*
  * Constructor for othello console game
  */
 public OthelloConsole(){
-
+	gameui = new Gameui(this);
+	gameui.initializeGrid(16);
 	globalCounter = 0;
 	countNO = 0;
 	aiPlayer = new AI(SharedConstants.AIRandom);
 	board = new gameBoard();
 	gameSetup();
-	board.printBoard();
+	board.printBoard(gameui);
 	do{ 
+		
 		playerMove(currentPlayer);
-		board.printBoard();
+		board.printBoard(gameui);
 		
 		currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 	} while(currentState == gameStatus.PLAYING);
-	winner();
 	
 }
 
@@ -49,8 +58,8 @@ private void gameSetup() {
  */
 public void playerMove(playableItem move){
 	boolean isValidInput = false;
-	int row;
-    int col;
+	int row = -1;
+    int col = -1;
     int validity;
     
     String coor;
@@ -71,8 +80,22 @@ public void playerMove(playableItem move){
 			if(move == playableItem.BLACK) {
 				
 				System.out.print("Enter your move player Black\n"); 
-				row = playerMove.nextInt() -1;
-				col = playerMove.nextInt() -1;
+				do{
+					if(gameuiMove)
+					{
+						System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
+						row = getGameuiMoveX();
+						col = getGameuiMoveY();
+					}
+					else
+					{
+//						System.out.println("Skipping --");
+//						row = playerMove.nextInt() -1;
+//						col = playerMove.nextInt() -1;
+					}
+				}while(!gameuiMove);
+				gameuiMove = false;
+					
 			}
 			else
 			{
@@ -442,6 +465,38 @@ public boolean isValid(int row,int col,int c,playableItem playerPiece)
 			return false;
 		}
 	}
+}
+
+public Gameui getGameui() {
+	return gameui;
+}
+
+public void setGameui(Gameui gameui) {
+	this.gameui = gameui;
+}
+
+public boolean isGameuiMove() {
+	return gameuiMove;
+}
+
+public void setGameuiMove(boolean gameuiMove) {
+	this.gameuiMove = gameuiMove;
+}
+
+public int getGameuiMoveX() {
+	return gameuiMoveX;
+}
+
+public void setGameuiMoveX(int gameuiMoveX) {
+	this.gameuiMoveX = gameuiMoveX;
+}
+
+public int getGameuiMoveY() {
+	return gameuiMoveY;
+}
+
+public void setGameuiMoveY(int gameuiMoveY) {
+	this.gameuiMoveY = gameuiMoveY;
 }
 
 
