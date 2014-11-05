@@ -48,7 +48,7 @@ public class AI {
 	{
 		if(AIType.equals(SharedConstants.AIRandom))
 		{
-			return randomStrategy(game.getAvailableSolutions());
+			return randomStrategy(game.getAvailableSolutions(1));
 		}
 		else if(AIType.equals(SharedConstants.AIMinimax))
 		{
@@ -74,7 +74,7 @@ public class AI {
 	    int bestCol = -1;
 	    int currRow = -1;
 	    int currCol = -1;
-	    ArrayList<String> nextMoves = game.getAvailableSolutions();
+	    ArrayList<String> nextMoves = game.getAvailableSolutions(level%2);
 	    if (nextMoves.isEmpty() || level == 0) {
 	    	// Game over or depth reached, evaluate score
 	        currentScore = game.evaluate(); 
@@ -86,8 +86,9 @@ public class AI {
 	        	currRow = Integer.parseInt(move.split(",")[0]);
 	        	currCol = Integer.parseInt(move.split(",")[1]);
 	        	tempGame = (GameConsoleInterface)game;
-	        	tempGame.moveSet(currRow, currCol, level%2);
-	            if (level%2 != 0) {  // mySeed (computer) is maximizing player
+	        	tempGame.moveSet(currRow, currCol, level);
+	        	
+	        	if (level%2 != 0) {  // mySeed (computer) is maximizing player
 	               currentScoreStr = minimaxStrategy(tempGame,level - 1,alpha,beta);
 	               currentScore = Integer.parseInt(currentScoreStr.split(",")[2]);
 	               if (currentScore > alpha) 
@@ -105,7 +106,7 @@ public class AI {
 	            	   bestCol = currCol;
 	               }
 	            }
-	           tempGame.undoMove(currRow, currCol, level%2);
+	           tempGame.undoMove(currRow, currCol, level);
 	           if (alpha >= beta) break;
 	         }
 	     }

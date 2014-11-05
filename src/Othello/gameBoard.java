@@ -1,12 +1,16 @@
 package Othello;
 
+import gameui.Gameui;
+
+import java.util.ArrayList;
+
 /*
  * This class is mainly deals with initialization of the game board for othellogame.
  */
 public class gameBoard {
 
-public static final int ROWS = 4;
-public static final int COLS = 4;
+public static final int ROWS = 8;
+public static final int COLS = 8;
 	
 boardSpace[][] playField;	
 int currentRow,currentCol;	
@@ -44,16 +48,20 @@ playField[ROWS / 2][COLS / 2].gamePiece = playableItem.WHITE;
 /*
  * This method is used to print the board for the user.
  */
-public void printBoard(){
+public void printBoard(Gameui ui){
+	ArrayList<String> listOfItems = new ArrayList<>();
 	for(int i = 0; i < ROWS; i++){
 		for(int j = 0; j < COLS; j++){
 			playField[i][j].putItem();
+			listOfItems.add(playField[i][j].gamePiece+"");
 			if(j < COLS ) System.out.print("|");
 		}
 	System.out.println();
 	if(i < ROWS  )
 		System.out.println("----------------");
 	}
+	
+	ui.updateGrid(listOfItems);
 }
 
 

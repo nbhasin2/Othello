@@ -10,6 +10,7 @@ import java.util.Scanner;
 import sun.security.mscapi.PRNG;
 import GameAI.AI;
 import GameModel.GameConsoleInterface;
+import Othello.gameBoard;
 import Shared.SharedConstants;
 
 public class TicTacToeConsole extends GameConsoleInterface{
@@ -457,7 +458,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	}
 
 	@Override
-	public ArrayList<String> getAvailableSolutions() {
+	public ArrayList<String> getAvailableSolutions(int player) {
 		
 		return availableSolutions();
 	}
@@ -465,18 +466,24 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	
 
 	@Override
-	public void moveSet(int row, int col, int player) {
+	public void moveSet(int row, int col, int level) {
 		
 		currntRow = row;
 		currentCol = col;
-		int checkplayerMove = (player == 0 ? currentPlayer : AIplayer);
+		int checkplayerMove = (level%2 == 0 ? currentPlayer : AIplayer);
 		board[currntRow][currentCol] = checkplayerMove;  
 	}
 
 	@Override
-	public void undoMove(int row, int col, int player) {
+	public void undoMove(int row, int col, int level) {
 		
 		board[row][col] = SharedConstants.EMPTY;
+	}
+
+	@Override
+	public void moveSet(int row, int col, int player, String var, gameBoard brd) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
