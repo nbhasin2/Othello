@@ -574,23 +574,7 @@ public void setGameuiMoveY(int gameuiMoveY) {
 	}
 
 
-	public void moveSet(int row, int col, int player,String var, gameBoard brd) {
-		// TODO Auto-generated method stub
-		
-		playableItem move;
-		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
-		
-		if(var.equals("board"))
-			board = brd;
-		
-		board.playField[row][col].gamePiece = move;
-    	board.currentRow = row;
-    	board.currentCol = col;
-    	tokenChange(row,col,move,availableSolutions,player);
-    	//board.printBoard(gameui);
-    	//System.out.println("\n");
-    	
-	}
+	
 	@Override
 	public void undoMove(int row, int col, int level) {
 		playableItem move;
@@ -624,5 +608,11 @@ public void setGameuiMoveY(int gameuiMoveY) {
 		}
 	//	setAvailableSolutions(availableSoltuions(move));
 		
+	}
+
+	@Override
+	public boolean isGameOver() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

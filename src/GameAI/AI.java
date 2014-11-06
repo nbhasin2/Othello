@@ -75,7 +75,7 @@ public class AI {
 	    int currRow = -1;
 	    int currCol = -1;
 	    ArrayList<String> nextMoves = game.getAvailableSolutions(level%2);
-	    if (nextMoves.isEmpty() || level == 0) {
+	    if (nextMoves.isEmpty() || level == 0 || game.isGameOver()) {
 	    	// Game over or depth reached, evaluate score
 	        currentScore = game.evaluate(); 
 	        return bestRow + "," + bestCol + "," + currentScore;

@@ -274,8 +274,8 @@ public class TicTacToeConsole extends GameConsoleInterface{
 			score += evaluateLine(line);
 			//System.out.println(score);
 		}
-		System.out.println(score);
-		printBoard();
+		//System.out.println(score);
+		
 		return score;
 	}
 	
@@ -480,10 +480,22 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		board[row][col] = SharedConstants.EMPTY;
 	}
 
+	
+	
+
 	@Override
-	public void moveSet(int row, int col, int player, String var, gameBoard brd) {
-		// TODO Auto-generated method stub
+	public boolean isGameOver() {
+		int score = 0;
+		for(int line = 1; line<=8;line++)
+		{
+			score = evaluateLine(line);
+			if(score == 1000 || score == -1000)
+				return true;
+		}
+		//System.out.println(score);
 		
+		
+		return false;
 	}
 	
 	
