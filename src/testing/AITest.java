@@ -1,4 +1,4 @@
-package GameAI;
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import GameAI.AI;
 import GameModel.DummyConsole;
 import GameModel.GameConsoleInterface;
 import Shared.SharedConstants;
