@@ -430,6 +430,10 @@ public OthelloConsole(AI AIType){
 		}
 	}
 	
+	/*
+	 * int player = 0 (User)
+	 * @see GameModel.GameConsoleInterface#getAvailableSolutions(int)
+	 */
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
 		playableItem move;
