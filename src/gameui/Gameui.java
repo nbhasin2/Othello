@@ -1,14 +1,18 @@
 package gameui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -72,15 +76,16 @@ public class Gameui {
 		    int k = 0;
 			for (int i=0; i < Row; ++i) {
 				for (int j=0; j < Col; ++j) {
-		    	ButtonWithCoordinates button = new ButtonWithCoordinates(" ",i, j);
-		    	button.setFont(button.getFont().deriveFont(Font.BOLD, 20));
+		    	ButtonWithCoordinates button = new ButtonWithCoordinates("",i, j);
+//		    	button.setFont(button.getFont().deriveFont(Font.BOLD, 20));
 		    	button.addActionListener(listener);
 		    	guiButtons.add(button);
 		    	frame.add(guiButtons.get(k));
 		    	k++;
 				}
 		    }
-		    frame.setSize(1000,980);;
+//		    frame.setSize(1000,980);
+			frame.pack();
 		    frame.setVisible(true);
 		    frame.setResizable(true);
 	}
@@ -91,24 +96,43 @@ public class Gameui {
 	    
 	    for(int i=0;i<listPLayableItems.size();i++)
 	    {
+	    	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    	double width = screenSize.getWidth();
+	    	double height = screenSize.getHeight();
+	    	String emptyImage;
+	    	String whiteImage; 
+	        String blackImage;
+	    	if(width < 1440)
+	    	{
+	    		emptyImage = "/GameIcons/resized-images/empty.png";
+	    		whiteImage = "/GameIcons/resized-images/white-green.png";
+	    		blackImage = "/GameIcons/resized-images/black-green.png";
+	    	}else
+	    	{
+		    	 emptyImage = "/GameIcons/empty.png";
+		    	 whiteImage = "/GameIcons/white-green.png";
+		         blackImage = "/GameIcons/black-green.png";
+	    	}
 	    	Image img = null;
 	    	try {
 	    	String temp = listPLayableItems.get(i).toString();
 	    	if(temp.equals(playableItem.EMPTY.toString()))
 	    	{		    		  
-	    		img = ImageIO.read(getClass().getResource("/GameIcons/empty.png"));  	  
+	    		img = ImageIO.read(getClass().getResource(emptyImage));  	  
 	    	}
 	    	else if(temp.equals(playableItem.WHITE.toString()))
 	    	{
-	    		img = ImageIO.read(getClass().getResource("/GameIcons/white-green.png"));
+	    		img = ImageIO.read(getClass().getResource(whiteImage));
 	    		
 	    		
 	    	}else if(temp.equals(playableItem.BLACK.toString()))
 	    	{
-	    		img = ImageIO.read(getClass().getResource("/GameIcons/black-green.png"));
+	    		img = ImageIO.read(getClass().getResource(blackImage));
 	    	}
-    		img.getScaledInstance(img.getWidth(null)/2, img.getHeight(null)/2, Image.SCALE_AREA_AVERAGING);
-	    	guiButtons.get(i).setIcon(new ImageIcon(img));  
+ 
+//	    	guiButtons.get(i).setBorder(BorderFactory.createEmptyBorder());
+	    	guiButtons.get(i).setContentAreaFilled(true);
+	    	guiButtons.get(i).setIcon(new ImageIcon(img)); 
 	    	} catch (IOException ex) {
 	    	  }
 	    }
