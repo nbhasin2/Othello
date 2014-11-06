@@ -6,7 +6,11 @@ import java.util.Random;
 import Shared.SharedConstants;
 import GameModel.GameConsoleInterface;
 import Othello.OthelloConsole;
-
+/**
+ * 
+ * @author Zacharie
+ * AI funcitons that game will use, depending on the strategies called.
+ */
 
 public class AI {
 	private String GameType;
@@ -22,28 +26,16 @@ public class AI {
 	 */
 	public AI( String AIType)
 	{
-		othelloValidMoves = new ArrayList<String>();
 		
-		this.setAIType(AIType);
-		randomGenerator = new Random();
-	}
-	/*
-	public void setTicTacToeBoard(int [][]board)
-	{
-		this.TicTacToeBoard = board;
-	}
-	
-	public void setOthelloValidMoves(ArrayList<String> validMoves)
-	{
-		this.othelloValidMoves = validMoves;
-	}*/
-	
-	private String randomStrategy(ArrayList<String> validMoves)
-	{
-		int index = randomGenerator.nextInt(validMoves.size());
-		return validMoves.get(index);
-	}
+		if(AIType == SharedConstants.AIRandom)
+		{
+			long ranSeed = System.nanoTime();
+			randomGenerator = new Random(ranSeed);
+		}
 
+		this.setAIType(AIType);
+		
+	}
 	public String makeMove(GameConsoleInterface game )   
 	{
 		if(AIType.equals(SharedConstants.AIRandom))
@@ -60,6 +52,11 @@ public class AI {
 		}
 	}
 	
+	private String randomStrategy(ArrayList<String> validMoves)
+	{
+		int index = randomGenerator.nextInt(validMoves.size());
+		return validMoves.get(index);
+	}
 	
 	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta)   
 	{
@@ -88,7 +85,8 @@ public class AI {
 	        	tempGame = (GameConsoleInterface)game;
 	        	tempGame.moveSet(currRow, currCol, level);
 	        	
-	        	if (level%2 != 0) {  // mySeed (computer) is maximizing player
+	        	if (level%2 != 0) { // since AI starts on 3 if the modulus is not even then it is AI's Turn
+	        						//AI is maximizing player
 	               currentScoreStr = minimaxStrategy(tempGame,level - 1,alpha,beta);
 	               currentScore = Integer.parseInt(currentScoreStr.split(",")[2]);
 	               if (currentScore > alpha) 
@@ -98,7 +96,7 @@ public class AI {
 	  				  bestCol = currCol;
 	                  
 	               }
-	            } else {  // oppSeed is minimizing player
+	            } else {  //If level is even it is  human's is minimizing player
 	            	currentScore = Integer.parseInt(minimaxStrategy(tempGame,level - 1,alpha,beta).split(",")[2]);
 	               if (currentScore < beta) {
 	            	   beta = currentScore;

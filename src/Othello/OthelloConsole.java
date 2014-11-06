@@ -57,17 +57,16 @@ public OthelloConsole(){
 	/*
 	 * Method to setup the initial game with basic item on the board.
 	 */
-	private void gameSetup() {
+	private void gameSetup(){
 		board.boardSetup();
 		currentPlayer = playableItem.BLACK;//Black goes first
-		
 		currentState = gameStatus.PLAYING;
 	}
 	
 	/*
 	 * This method is used to move the player item
 	 */
-	public void playerMove(playableItem move)  {
+	public void playerMove(playableItem move){
 		boolean isValidInput = false;
 		int row=-1;
 	    int col=-1;
@@ -79,15 +78,13 @@ public OthelloConsole(){
 			availableSolutions = availableSolutions(move);
 			System.out.println(availableSolutions);
 			validity = validMove(-1,-1,availableSolutions);
-			if(validity == -1)
-			{
+			if(validity == -1){
 				System.out.print("No avaible moves switch to other player\n");
 				isValidInput = true;
 				countNO++;
 				if(countNO ==2) currentState = gameStatus.GAME_END;
 			}
-			else
-			{
+			else{
 				if(move == playableItem.BLACK) {
 					int item = 0;
 					System.out.print("Enter your move player Black\n"); 
@@ -97,15 +94,13 @@ public OthelloConsole(){
 							item = 0;
 							System.out.print(gameuiMove +"\n"); 
 						}
-						if(gameuiMove)
-						{
+						if(gameuiMove){
 							
 							System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
 							row = getGameuiMoveX();
 							col = getGameuiMoveY();
 						}
-						else
-						{
+						else{
 	//						System.out.println("Skipping --");
 	//						row = playerMove.nextInt() -1;
 	//						col = playerMove.nextInt() -1;
@@ -114,8 +109,7 @@ public OthelloConsole(){
 					gameuiMove = false;
 						
 				}
-				else
-				{
+				else{
 					coor = aiPlayer.makeMove(this);
 					System.out.println("White ai turn:");
 					row = Integer.parseInt(coor.split(",")[0]);
@@ -123,7 +117,6 @@ public OthelloConsole(){
 				}
 				availableSolutions = availableSolutions(move);
 				validity = validMove(row,col,availableSolutions);
-				
 				{ 
 					countNO = 0;
 			        if(validity == 1){
@@ -138,44 +131,31 @@ public OthelloConsole(){
 					}
 				}
 		} while (!isValidInput);
-		
 	}
-	
 	/*
 	 * The method checks who wins the game.
 	 */
-	public void winner()
-	{
-	
-		if(evaluate()== 0)
-		{
+	public void winner(){
+		if(evaluate()== 0){
 			System.out.println("DRAW!");
-	}
-	else if(evaluate() < 0)
-	{
-		System.out.println("Black Wins!");
-	}
-	else
-	{
-		System.out.println("White Wins!");
 		}
-	
+		else if(evaluate() < 0){
+			System.out.println("Black Wins!");
+		}
+		else{
+			System.out.println("White Wins!");
+		}
 	}
-	
-	
 	/*
 	 * Will return a number depending on the number of tokens a positive number means that there are more white tokens a black number 
 	 * 
-	 * return the "score of the board. "
+	 * return the "score of the board."
 	 */
 	@Override
-	public int evaluate()
-	{
+	public int evaluate(){
 		int whiteToken = 0;
-		for(int row = 0; row < gameBoard.ROWS ;row++)
-		{
-			for(int col = 0; col < gameBoard.COLS ;col++)
-			{
+		for(int row = 0; row < gameBoard.ROWS ;row++){
+			for(int col = 0; col < gameBoard.COLS ;col++){
 				if(board.playField[row][col].gamePiece.equals(playableItem.BLACK))
 					whiteToken--;
 				else if(board.playField[row][col].gamePiece.equals(playableItem.WHITE))
@@ -193,17 +173,13 @@ public OthelloConsole(){
 		ArrayList<String> splitStr = new ArrayList<>();
 		ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
 		int resultValidMove = -1;
-		if(validCoordinatesAndDirection.size() == 0)
-		{
+		if(validCoordinatesAndDirection.size() == 0){
 			return resultValidMove;
 		}
 		//System.out.println(validCoordinatesAndDirection);
 	
-	for(String s : validCoordinatesAndDirection)
-	{
+	for(String s : validCoordinatesAndDirection){
 		validCoordinatesOnly.add(s.split(",")[0]+","+s.split(",")[1]);
-		
-		
 	}
 	//System.out.println(validCoordinatesOnly);
 	String playerMove = row+","+col;
@@ -213,59 +189,47 @@ public OthelloConsole(){
 	    return resultValidMove;
 	
 	}
-	public void tokenChangeWithDirection(int row,int col,int dir,playableItem player,int level)
-	{
+	public void tokenChangeWithDirection(int row,int col,int dir,playableItem player,int level){
 		int r;
 		int c;
 		
-		if(dir == 0)
-		{
+		if(dir == 0){
 			r= 1;
 			c= 1;
 		}
-		else if(dir == 1 )
-		{
+		else if(dir == 1 ){
 			r=1;
 			c=0;
 		}
-		else if(dir == 2 )
-		{
+		else if(dir == 2 ){
 			r=1; 
 			c=-1;
 		}
-		else if(dir == 3 )
-		{
+		else if(dir == 3 ){
 			r=0;
 			c=-1;
 		}
-		else if(dir == 4 )
-		{
+		else if(dir == 4 ){
 			r=-1;
 			c=-1;
 		}
-		else if(dir == 5 )
-		{
+		else if(dir == 5 ){
 			r=-1;
 			c=0;
 		}
-		else if(dir == 6)
-		{
+		else if(dir == 6){
 			r=-1;
 			c=+1;
 		}
-		else if(dir == 7)
-		{
+		else if(dir == 7){
 			r=0;
 			c=1;
 		}
-		else
-		{
+		else{
 			return;
 		}
-		while(!((board.playField[row+r][col+c].gamePiece.equals(player))))
-		{
-			if(level != -1)
-			{
+		while(!((board.playField[row+r][col+c].gamePiece.equals(player)))){
+			if(level > 0){
 				tokensChanged.add((row+r)+","+(col+c)+","+level);
 			}
 			board.playField[row+r][col+c].gamePiece = player;
@@ -274,17 +238,13 @@ public OthelloConsole(){
 			col +=c;
 		}
 	}
-	public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution,int level)
-	{
+	public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution,int level){
 		int dir = -1;
 		String sRow = "" + row;
 		String sCol = "" + col;
 		
-		for(String solution: changeSolution)
-		{
-			if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1]))
-			{
-				
+		for(String solution: changeSolution){
+			if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1])){
 				dir = Integer.parseInt(solution.split(",")[2]);
 				tokenChangeWithDirection(row,col,dir,player,level);
 				//System.out.println("Tokens: " +tokensChanged);
@@ -293,30 +253,20 @@ public OthelloConsole(){
 		}
 		
 	}
-
-	
 	/*
 	 * The method checks total number of available moves a player / AI has.
 	 */
 	
 	public ArrayList<String> availableSolutions(playableItem playerPiece) {
-		
-		
 		ArrayList<String> temp = new ArrayList<String>();
 		int maxRow = gameBoard.ROWS -1;
-		int maxCol = gameBoard.COLS -1;
-		
-		
+		int maxCol = gameBoard.COLS -1;	
 		int validRow = -1;
 		int validCol= -1;
 		boolean valid =false;
-	
-		
-		
 		for (int row = 0; row < maxRow+1; ++row) {
 			for (int col = 0; col < maxCol+1; ++col) {
-				if(board.playField[row][col].gamePiece.equals(playerPiece))
-				{
+				if(board.playField[row][col].gamePiece.equals(playerPiece)){
 					
 					/**
 					 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
@@ -325,183 +275,142 @@ public OthelloConsole(){
 					 *    		//if the col is == max it should not check spots 2,3,4			
 					 *    where s is the currently selected space on the board
 					 */
-					for(int c = 0; c < 8; c++)
-					{
+					for(int c = 0; c < 8; c++){
 						valid =false;
 						globalCounter = 1;
-						if(c == 0 && !(row <= 0 || col <=0))
-						{
+						if(c == 0 && !(row <= 0 || col <=0)){
 							valid = isValid(row-1,col-1,c,playerPiece);
 							validRow = row-globalCounter;
 							validCol = col-globalCounter;
 						}
-						else if(c == 1 && !(row <= 0))
-						{
+						else if(c == 1 && !(row <= 0)){
 							valid = isValid(row-1,col,c,playerPiece);
 							validRow = row-globalCounter;
 							validCol = col;
 						}
-						else if(c == 2 && !(row <= 0 || col >= maxCol))
-						{
+						else if(c == 2 && !(row <= 0 || col >= maxCol)){
 							valid = isValid(row-1,col+1,c,playerPiece);
 							validRow = row-globalCounter;
 							validCol = col+globalCounter;
 						}
-						else if(c == 3 && !(col >= maxCol))
-						{
+						else if(c == 3 && !(col >= maxCol)){
 							valid = isValid(row,col+1,c,playerPiece);
 							validRow = row;
 							validCol = col+globalCounter;
 						}
-						else if(c == 4 && !(row >= maxRow || col >= maxCol))
-						{
+						else if(c == 4 && !(row >= maxRow || col >= maxCol)){
 							valid = isValid(row+1,col+1,c,playerPiece);
 							validRow = row+globalCounter;
 							validCol = col+globalCounter;
 						}
-						else if(c == 5 && !(row >= maxRow))
-						{
+						else if(c == 5 && !(row >= maxRow)){
 							valid = isValid(row+1,col,c,playerPiece);
 							validRow = row+globalCounter;
 							validCol = col;
 						}
-						else if(c == 6 && !(row >= maxRow || col <= 0))
-						{
+						else if(c == 6 && !(row >= maxRow || col <= 0)){
 							valid = isValid(row+1,col-1,c,playerPiece);
 							validRow = row+globalCounter;
 							validCol = col-globalCounter;
 						}
-						else if(c == 7 && !(col <= 0))
-						{
+						else if(c == 7 && !(col <= 0)){
 							valid = isValid(row,col-1,c,playerPiece);
 							validRow = row;
 							validCol = col-globalCounter;
 						}
-						if(valid)
-						{
+						if(valid){
 							//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
 							temp.add(validRow +","+ validCol + "," + c);
-							c = c;
 						}
 						
 					}
 				}
 			}
 		}
-		
 		return temp;
 	}
 	
 	/*
 	 * The method checks whether the move is valid along with the direction of the move.
 	 */
-	public boolean isValid(int row,int col,int c,playableItem playerPiece)
-	{
+	public boolean isValid(int row,int col,int c,playableItem playerPiece){
 		int maxRow = gameBoard.ROWS -1;
 		int maxCol = gameBoard.COLS -1;
 		
 		globalCounter++;
-		if(board.playField[row][col].gamePiece.equals(playableItem.EMPTY))
-		{
+		if(board.playField[row][col].gamePiece.equals(playableItem.EMPTY)){
 			return false;
 		}
-		else if(board.playField[row][col].gamePiece.equals(playerPiece))
-		{
-			
+		else if(board.playField[row][col].gamePiece.equals(playerPiece)){
 			return false;
 		}
-		else
-		{
-			if(c == 0 && !(row <= 0 || col <=0))
-			{
-				if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY)))
-				{
+		else{
+			if(c == 0 && !(row <= 0 || col <=0)){
+				if(!(board.playField[row-1][col-1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row-1,col-1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 1 && !(row <= 0))
-			{
+			else if(c == 1 && !(row <= 0)){
 				if(!(board.playField[row-1][col].gamePiece.equals(playableItem.EMPTY)))
 				{
 					return isValid(row-1,col,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 2 && !(row <= 0 || col >= maxCol))
-			{
-				if(!(board.playField[row-1][col+1].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 2 && !(row <= 0 || col >= maxCol)){
+				if(!(board.playField[row-1][col+1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row-1,col+1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 3 && !(col >= maxCol))
-			{
-				if(!(board.playField[row][col+1].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 3 && !(col >= maxCol)){
+				if(!(board.playField[row][col+1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row,col+1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 4 && !(row >= maxRow || col >= maxCol))
-			{
-				if(!(board.playField[row+1][col+1].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 4 && !(row >= maxRow || col >= maxCol)){
+				if(!(board.playField[row+1][col+1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row+1,col+1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 5 && !(row >= maxRow))
-			{
-				if(!(board.playField[row+1][col].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 5 && !(row >= maxRow)){
+				if(!(board.playField[row+1][col].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row+1,col,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 6 && !(row >= maxRow || col <= 0))
-			{
-				if(!(board.playField[row+1][col-1].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 6 && !(row >= maxRow || col <= 0)){
+				if(!(board.playField[row+1][col-1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row+1,col-1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else if(c == 7 && !(col <= 0))
-			{
-				if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY)))
-				{
+			else if(c == 7 && !(col <= 0)){
+				if(!(board.playField[row][col-1].gamePiece.equals(playableItem.EMPTY))){
 					return isValid(row,col-1,c,playerPiece);
 				}
-				else
-				{
+				else{
 					return true;
 				}
 			}
-			else
-			{
+			else{
 				return false;
 			}
 		}
@@ -509,52 +418,47 @@ public OthelloConsole(){
 	
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
-		
 		playableItem move;
 		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
 		return availableSolutions = availableSolutions(move);
 	}
-	
 	public void setAvailableSolutions(ArrayList<String> availableSolutions) {
 		this.availableSolutions = availableSolutions;
 	}
 
-
-public Gameui getGameui() {
-	return gameui;
-}
-
-public void setGameui(Gameui gameui) {
-	this.gameui = gameui;
-}
-
-public boolean isGameuiMove() {
-	return gameuiMove;
-}
-
-public void setGameuiMove(boolean gameuiMove) {
-	this.gameuiMove = gameuiMove;
-}
-
-public int getGameuiMoveX() {
-	return gameuiMoveX;
-}
-
-public void setGameuiMoveX(int gameuiMoveX) {
-	this.gameuiMoveX = gameuiMoveX;
-}
-
-public int getGameuiMoveY() {
-	return gameuiMoveY;
-}
-
-public void setGameuiMoveY(int gameuiMoveY) {
-	this.gameuiMoveY = gameuiMoveY;
-}
-
-
 	
-
+	public Gameui getGameui() {
+		return gameui;
+	}
+	
+	public void setGameui(Gameui gameui) {
+		this.gameui = gameui;
+	}
+	
+	public boolean isGameuiMove() {
+		return gameuiMove;
+	}
+	
+	public void setGameuiMove(boolean gameuiMove) {
+		this.gameuiMove = gameuiMove;
+	}
+	
+	public int getGameuiMoveX() {
+		return gameuiMoveX;
+	}
+	
+	public void setGameuiMoveX(int gameuiMoveX) {
+		this.gameuiMoveX = gameuiMoveX;
+	}
+	
+	public int getGameuiMoveY() {
+		return gameuiMoveY;
+	}
+	
+	public void setGameuiMoveY(int gameuiMoveY) {
+		this.gameuiMoveY = gameuiMoveY;
+	}
+	
 	@Override
 	public void moveSet(int row, int col, int level) {
 		// TODO Auto-generated method stub
@@ -571,10 +475,7 @@ public void setGameuiMoveY(int gameuiMoveY) {
     	//board.printBoard(gameui);
     	//System.out.println("\n");
     	
-	}
-
-
-	
+	}	
 	@Override
 	public void undoMove(int row, int col, int level) {
 		playableItem move;
@@ -582,37 +483,26 @@ public void setGameuiMoveY(int gameuiMoveY) {
 		board.playField[row][col].gamePiece = playableItem.EMPTY;
 		//board.printBoard(gameui);
 		ArrayList<String> tempChange = new ArrayList<String>(((ArrayList<String>)tokensChanged.clone()));
-		
-		
-		
-		for(String token:tempChange)
-		{
+				
+		for(String token:tempChange){
 			int currRow = Integer.parseInt(token.split(",")[0]);
 	    	int currCol = Integer.parseInt(token.split(",")[1]);
 	    	int currLevel = Integer.parseInt(token.split(",")[2]);
 	    	if(currLevel == level){
-	    		if(move == playableItem.BLACK)
-		    	{
+	    		if(move == playableItem.BLACK){
 		    		board.playField[currRow][currCol].gamePiece = playableItem.WHITE;
-		    		
 		    	}
-		    	else
-		    	{
+		    	else{
 		    		board.playField[currRow][currCol].gamePiece = playableItem.BLACK;
-		    		
 		    	}
 	    		//board.printBoard(gameui);
 		    	tokensChanged.remove(token);
 		    }
-	    	
 		}
-	//	setAvailableSolutions(availableSoltuions(move));
-		
 	}
 
 	@Override
 	public boolean isGameOver() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

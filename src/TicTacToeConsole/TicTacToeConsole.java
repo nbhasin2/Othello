@@ -22,7 +22,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	private int tempCurrentPlayer;
 	private int currntRow, currentCol;
 	private boolean switchPlayer = false;
-	private AI ticTacToeAIRandom;
+	private AI ticTacToeAI;
 	public static Scanner in; 
 	private String playerType;
 	private boolean AImove;
@@ -155,8 +155,8 @@ public class TicTacToeConsole extends GameConsoleInterface{
 				col = in.nextInt() - 1;
 			} 
 			else {
-				System.out.print("AI " + ticTacToeAIRandom.getAIType() + " move \n");
-				AICoordinates = ticTacToeAIRandom.makeMove(this);
+				System.out.print("AI " + ticTacToeAI.getAIType() + " move \n");
+				AICoordinates = ticTacToeAI.makeMove(this);
 				row = Integer.parseInt(AICoordinates.split(",")[0]);
 				col = Integer.parseInt(AICoordinates.split(",")[1]);	
 			}
@@ -178,27 +178,23 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		} while (!validInput);  
 	}
 	
-	public int validMove(int row, int col, ArrayList<String> validCoordinates)
-	{
+	public int validMove(int row, int col, ArrayList<String> validCoordinates){
 		int resultValidMove= -1;
 		String playerMove = row+","+col;
 		resultValidMove = validCoordinates.contains(playerMove) ? 1:0;
 		return resultValidMove;
 		
 	}
-	public ArrayList<String> availableSolutions()
-	{
+	public ArrayList<String> availableSolutions(){
 		ArrayList<String> freeSpaces = new ArrayList<String>();
 		int row = SharedConstants.ROWS;
 		int col = SharedConstants.COLS;
-		for (row = 0; row < SharedConstants.ROWS; ++row) {
-			for (col = 0; col < SharedConstants.COLS; ++col) {
-				if(board[row][col] == SharedConstants.EMPTY)
-				{
+		for (row = 0; row < SharedConstants.ROWS; ++row){
+			for (col = 0; col < SharedConstants.COLS; ++col){
+				if(board[row][col] == SharedConstants.EMPTY){
 					freeSpaces.add(row+","+col);
 				}
 			}
-			
 		}
 		return freeSpaces;
 	}
@@ -240,8 +236,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	 * check who won whether AI or The player
 	 */
 	public boolean hasWon(int playerType, int currentRow, int currentCol) {
-		if(AImove)
-		{
+		if(AImove){
 			playerType = AIplayer;
 		}
 		boolean checkWon = board[currentRow][0] == playerType         
@@ -258,15 +253,13 @@ public class TicTacToeConsole extends GameConsoleInterface{
 				&& board[0][2] == playerType
 				&& board[1][1] == playerType
 				&& board[2][0] == playerType;
-		if(checkWon)
-		{
+		if(checkWon){
 			System.out.println("Won player - " + playerType);
 		}
 		return checkWon;
 	}
 	
-	public int evaluate()
-	{
+	public int evaluate(){
 		
 		int score = 0;
 		for(int line = 1; line<=8;line++)
@@ -280,8 +273,7 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	}
 	
 	
-	public int evaluateLine(int line)
-	{
+	public int evaluateLine(int line){
 		int score = 0;
 		int row = 0;
 		int col = 0;
@@ -301,128 +293,97 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		 *    for example line 1 will check all the places there is a 1;	
 		 *    this is the set up for the score calculator;	
 		 */
-		if(line == 1)
-		{
+		if(line == 1){
 			c1 = 1;
 			c2 = 2;
 			
 		}
-		else if(line == 2)
-		{
+		else if(line == 2){
 			row = 1;
 			c1 = 1;
 			c2 = 2;
 		}
-		else if(line == 3)
-		{
+		else if(line == 3){
 			row = 2;
 			c1 = 1;
 			c2 = 2;
 		}
-		else if(line == 4)
-		{
+		else if(line == 4){
 			r1 = 1;
 			r2 = 2;
 		}
-		else if(line == 5)
-		{
+		else if(line == 5){
 			col = 1;
 			r1 = 1;
 			r2 = 2;
 		}
-		else if(line == 6)
-		{
+		else if(line == 6){
 			col = 2;
 			r1 = 1;
 			r2 = 2;
 		}
-		else if(line == 7)
-		{
+		else if(line == 7){
 			r1 = 1;
 			r2 = 2;
 			c1 = 1;
 			c2 = 2;
 		}
-		else if(line == 8)
-		{
+		else if(line == 8){
 			row = 2;
 			r1 = -1;
 			r2 = -2;
 			c1 = 1;
 			c2 = 2;
-		}
-		
+		}	
 		// this means that the beginning of the line is empty
-		if(board[row][col] == SharedConstants.EMPTY)
-		{
-		
-			if(board[row+r1][col+c1] == SharedConstants.EMPTY)
-			{
-				if(board[row+r2][col+c2] == SharedConstants.EMPTY)
-				{
+		if(board[row][col] == SharedConstants.EMPTY){
+			if(board[row+r1][col+c1] == SharedConstants.EMPTY){
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
 					score = 1;
 				}
-				else
-				{
-					
+				else{
 					score = (board[row+r2][col+c2] == AIplayer ? 10 :-10);
 				}
 			}
-			else
-			{
-				if(board[row+r2][col+c2] == SharedConstants.EMPTY)
-				{
+			else{
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
 					score = (board[row+r1][col+c1]== AIplayer ? 10:-10);
 				}
-				else if(board[row+r1][col+c1] == board[row+r2][col+c2])
-				{
+				else if(board[row+r1][col+c1] == board[row+r2][col+c2]){
 					score = (board[row+r1][col+c1]== AIplayer ? 100:-100);
 				}
-				else
-				{
+				else{
 					score = 0;
 				}
 			}
 		}
-		else
-		{
-			if(board[row][col] == board[row+r1][col+c1])
-			{
-					if(board[row+r1][col+c1] == board[row+r2][col+c2])
-					{
+		else{
+			if(board[row][col] == board[row+r1][col+c1]){
+					if(board[row+r1][col+c1] == board[row+r2][col+c2]){
 						score = (board[row][col]== AIplayer ? 1000:-1000);
 					}
-					else if(board[row+r2][col+c2] == SharedConstants.EMPTY)
-					{
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
 							score = (board[row][col]== AIplayer ? 100:-100);
 					}
-					else
-					{
+					else{
 							score = 0;
-					}
-					
+					}		
 			}
-			else if(board[row+r1][col+c1] == SharedConstants.EMPTY)
-			{	
-					if(board[row][col]  == board[row+r2][col+c2])
-					{
+			else if(board[row+r1][col+c1] == SharedConstants.EMPTY){	
+					if(board[row][col]  == board[row+r2][col+c2]){
 						score = (board[row][col]== AIplayer ? 100:-100);
 					}
-					else if(board[row+r2][col+c2] == SharedConstants.EMPTY)
-					{
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
 							score = (board[row][col]== AIplayer ? 10:-10);
 					}
-					else
-					{
+					else{
 							score = 0;
 					}
 			}
-			else
-			{
+			else{
 				score = 0;
 			}	
-		}
-			
+		}		
 		return score;
 	}
 	
@@ -448,15 +409,12 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		}
 		System.out.println();
 	}
-	
 	public AI getTicTacToeAIRandom() {
-		return ticTacToeAIRandom;
+		return ticTacToeAI;
 	}
-
 	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
-		this.ticTacToeAIRandom = ticTacToeAIRandom;
+		this.ticTacToeAI = ticTacToeAIRandom;
 	}
-
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
 		
