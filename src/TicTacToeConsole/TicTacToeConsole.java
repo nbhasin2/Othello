@@ -32,7 +32,12 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	 */
 	public TicTacToeConsole(String AIType)
 	{
-		setTicTacToeAIRandom(new AI(AIType));
+		this(new AI(AIType));
+	}
+	
+	public TicTacToeConsole(AI AIType)
+	{
+		setTicTacToeAIRandom(AIType);
 		in = new Scanner(System.in);
 
 	}

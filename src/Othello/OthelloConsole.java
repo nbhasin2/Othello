@@ -29,10 +29,15 @@ private boolean gameuiMove = false;
 private int gameuiMoveX = -1;
 private int gameuiMoveY = -1;
 
+public OthelloConsole(String AIType)
+{
+	this(new AI(AIType));
+}
+
 /*
  * Constructor for othello console game
  */
-public OthelloConsole(String AIType){
+public OthelloConsole(AI AIType){
 
 		super();
 		gameui = new Gameui(this);
@@ -40,7 +45,7 @@ public OthelloConsole(String AIType){
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
 		countNO = 0;
-		aiPlayer = new AI(AIType);
+		aiPlayer = AIType;
 		board = new gameBoard();
 		gameSetup();
 		board.printBoard(gameui);
