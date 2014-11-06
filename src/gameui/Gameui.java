@@ -84,8 +84,8 @@ public class Gameui {
 		    	k++;
 				}
 		    }
-//		    frame.setSize(1000,980);
-			frame.pack();
+		    frame.setSize(500,490);
+			//frame.pack();
 		    frame.setVisible(true);
 		    frame.setResizable(true);
 	}
