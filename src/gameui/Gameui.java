@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 import Othello.OthelloConsole;
 import Othello.boardSpace;
@@ -34,6 +35,16 @@ public class Gameui {
 	private boardSpace[][] playField;	
 	private ActionListener listener;
 	private OthelloConsole othelloconsole;
+	private Boolean aiRandomCheck, aiMinimaxCheck;
+	
+	//ui
+	private JFrame frame;
+	private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenu aiMenu;
+    private JMenuItem item;
+    private JRadioButtonMenuItem randomAI;
+    private JRadioButtonMenuItem minimaxAI;
 	
 	//Constructor 
 	public Gameui(OthelloConsole othelloconsole)
@@ -49,21 +60,31 @@ public class Gameui {
 		return guiButtons.get(index);
 	}
 	
+	private void aiCheckToggle()
+	{
+		
+	}
+	
 	/*
 	 * Here size is in terms of 4x4 i.e. square side
 	 */
 	public void initializeGrid(int size)
 	{
 		 
-		    JFrame frame = new JFrame("GridLayout Test");
+		    frame = new JFrame("GridLayout Test");
 		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    frame.setLayout(new GridLayout(Row, Col));
 
-	        JMenuBar menuBar = new JMenuBar();
-	        JMenu menu = new JMenu("Menu");
+	        menuBar = new JMenuBar();
+	        menu = new JMenu("Menu");
+	        aiMenu = new JMenu("AI");
 
 	        menuBar.add(menu);
-	        JMenuItem item = new JMenuItem("Exit");
+//	        menuBar.add(aiMenu);
+	        
+	        item = new JMenuItem("Exit");
+	        randomAI = new JRadioButtonMenuItem("Random", true);
+	        minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 	        
 	        item.addActionListener(new ActionListener(){
 	            @Override
@@ -71,13 +92,15 @@ public class Gameui {
 	                System.exit(0);
 	            }
 	        });
+	        
 	        menu.add(item);
+	        aiMenu.add(randomAI);
+	        aiMenu.add(minimaxAI);
 	        frame.setJMenuBar(menuBar);
 		    int k = 0;
 			for (int i=0; i < Row; ++i) {
 				for (int j=0; j < Col; ++j) {
 		    	ButtonWithCoordinates button = new ButtonWithCoordinates("",i, j);
-//		    	button.setFont(button.getFont().deriveFont(Font.BOLD, 20));
 		    	button.addActionListener(listener);
 		    	guiButtons.add(button);
 		    	frame.add(guiButtons.get(k));
@@ -85,9 +108,8 @@ public class Gameui {
 				}
 		    }
 		    frame.setSize(500,490);
-			//frame.pack();
 		    frame.setVisible(true);
-		    frame.setResizable(true);
+		    frame.setResizable(false);
 	}
 	
 	public void updateGrid(ArrayList<String> listPLayableItems)
@@ -102,17 +124,11 @@ public class Gameui {
 	    	String emptyImage;
 	    	String whiteImage; 
 	        String blackImage;
-	    	if(width < 1440)
-	    	{
-	    		emptyImage = "/GameIcons/resized-images/empty.png";
-	    		whiteImage = "/GameIcons/resized-images/white-green.png";
-	    		blackImage = "/GameIcons/resized-images/black-green.png";
-	    	}else
-	    	{
-		    	 emptyImage = "/GameIcons/empty.png";
-		    	 whiteImage = "/GameIcons/white-green.png";
-		         blackImage = "/GameIcons/black-green.png";
-	    	}
+	        String availableMoveImage;
+	        emptyImage = "/GameIcons/resized-images/empty.png";
+	        whiteImage = "/GameIcons/resized-images/white-green.png";
+	        blackImage = "/GameIcons/resized-images/black-green.png";
+	        availableMoveImage = "/GameIcons/resized-images/empty-available-green-yellow.png";
 	    	Image img = null;
 	    	try {
 	    	String temp = listPLayableItems.get(i).toString();
@@ -130,7 +146,23 @@ public class Gameui {
 	    		img = ImageIO.read(getClass().getResource(blackImage));
 	    	}
  
-//	    	guiButtons.get(i).setBorder(BorderFactory.createEmptyBorder());
+	    	ArrayList<String> tempAvailableSolutions = new ArrayList<String>();
+	    	
+    		for(int l=0; l<othelloconsole.getAvailableSolutions(0).size(); l++)
+	    	{
+	    			tempAvailableSolutions.add(othelloconsole.getAvailableSolutions(0).get(l).split(",")[0]+
+	    						","+othelloconsole.getAvailableSolutions(0).get(l).split(",")[1]);
+	    	}
+//    		System.out.println("Available Sol 0 - "+tempAvailableSolutions.toString());
+			for (int k=0; k < guiButtons.size(); k++) {
+				String tempVar = guiButtons.get(i).coordX+","+guiButtons.get(i).coordY;
+//				System.out.println(tempVar);
+				if(tempAvailableSolutions.contains(tempVar))
+				{
+					img = ImageIO.read(getClass().getResource(availableMoveImage));
+				}
+		    }
+
 	    	guiButtons.get(i).setContentAreaFilled(true);
 	    	guiButtons.get(i).setIcon(new ImageIcon(img)); 
 	    	} catch (IOException ex) {
@@ -140,13 +172,12 @@ public class Gameui {
 	
 	private class MyListener implements ActionListener {
 		  public void actionPerformed(ActionEvent e) {
-		     System.out.println("Button pressed: " + e.getActionCommand());
+//		     System.out.println("Button pressed: " + e.getActionCommand());
 		     int row = ((ButtonWithCoordinates)e.getSource()).getCoordX();
 		     int col = ((ButtonWithCoordinates)e.getSource()).getCoordY();
 		     othelloconsole.setGameuiMoveX(row);
 		     othelloconsole.setGameuiMoveY(col);
 		     othelloconsole.setGameuiMove(true);
-		     //System.out.println("Source - " + ((ButtonWithCoordinates)e.getSource()).getCoordX() + "  -- " + ((ButtonWithCoordinates)e.getSource()).getCoordY());
 		  }
 		}
 
