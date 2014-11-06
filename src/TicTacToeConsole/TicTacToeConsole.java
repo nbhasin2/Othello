@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 import sun.security.mscapi.PRNG;
 import GameAI.AI;
+import GameModel.GameConsoleInterface;
+import Othello.gameBoard;
 import Shared.SharedConstants;
 
-public class TicTacToeConsole {
+public class TicTacToeConsole extends GameConsoleInterface{
 
 	private int[][] board = new int[SharedConstants.ROWS][SharedConstants.COLS]; // game board in 2D array
 	private int currentState;  
@@ -20,7 +22,7 @@ public class TicTacToeConsole {
 	private int tempCurrentPlayer;
 	private int currntRow, currentCol;
 	private boolean switchPlayer = false;
-	private AI ticTacToeAIRandom;
+	private AI ticTacToeAI;
 	public static Scanner in; 
 	private String playerType;
 	private boolean AImove;
@@ -28,9 +30,14 @@ public class TicTacToeConsole {
 	/*
 	 * Constructor for ticTacToe
 	 */
-	public TicTacToeConsole()
+	public TicTacToeConsole(String AIType)
 	{
-		setTicTacToeAIRandom(new AI( SharedConstants.AIRandom));
+		this(new AI(AIType));
+	}
+	
+	public TicTacToeConsole(AI AIType)
+	{
+		setTicTacToeAIRandom(AIType);
 		in = new Scanner(System.in);
 
 	}
@@ -38,7 +45,7 @@ public class TicTacToeConsole {
 	/*
 	 * Method that is called for playing tictactoe
 	 */
-	public void playTicTacToe()
+	public void playTicTacToe()  
 	{
 		
 		System.out.println("Welcome to TicTacToc Console Game !!" +
@@ -137,7 +144,7 @@ public class TicTacToeConsole {
 	/*
 	 * Checks player and AI move
 	 */
-	public void playerMove(int checkplayerMove, boolean AImove) {
+	public void playerMove(int checkplayerMove, boolean AImove)   {
 		boolean validInput = false;  
 		int row;  
 		int col;
@@ -153,10 +160,10 @@ public class TicTacToeConsole {
 				col = in.nextInt() - 1;
 			} 
 			else {
-				System.out.print("AI " + ticTacToeAIRandom.getAIType() + " move \n");
-				AICoordinates = ticTacToeAIRandom.makeMove(solutions);
-				row = Integer.parseInt(AICoordinates.split("-")[0]);
-				col = Integer.parseInt(AICoordinates.split("-")[1]);	
+				System.out.print("AI " + ticTacToeAI.getAIType() + " move \n");
+				AICoordinates = ticTacToeAI.makeMove(this);
+				row = Integer.parseInt(AICoordinates.split(",")[0]);
+				col = Integer.parseInt(AICoordinates.split(",")[1]);	
 			}
 			validity = validMove(row,col,solutions);
 
@@ -176,27 +183,23 @@ public class TicTacToeConsole {
 		} while (!validInput);  
 	}
 	
-	public int validMove(int row, int col, ArrayList<String> validCoordinates)
-	{
+	public int validMove(int row, int col, ArrayList<String> validCoordinates){
 		int resultValidMove= -1;
-		String playerMove = row+"-"+col;
+		String playerMove = row+","+col;
 		resultValidMove = validCoordinates.contains(playerMove) ? 1:0;
 		return resultValidMove;
 		
 	}
-	public ArrayList<String> availableSolutions()
-	{
+	public ArrayList<String> availableSolutions(){
 		ArrayList<String> freeSpaces = new ArrayList<String>();
 		int row = SharedConstants.ROWS;
 		int col = SharedConstants.COLS;
-		for (row = 0; row < SharedConstants.ROWS; ++row) {
-			for (col = 0; col < SharedConstants.COLS; ++col) {
-				if(board[row][col] == SharedConstants.EMPTY)
-				{
-					freeSpaces.add(row+"-"+col);
+		for (row = 0; row < SharedConstants.ROWS; ++row){
+			for (col = 0; col < SharedConstants.COLS; ++col){
+				if(board[row][col] == SharedConstants.EMPTY){
+					freeSpaces.add(row+","+col);
 				}
 			}
-			
 		}
 		return freeSpaces;
 	}
@@ -217,6 +220,7 @@ public class TicTacToeConsole {
 		} else if (isDraw()) {  
 			currentState = SharedConstants.DRAW;
 		}
+		evaluate();
 	}
 
 	/*
@@ -237,8 +241,7 @@ public class TicTacToeConsole {
 	 * check who won whether AI or The player
 	 */
 	public boolean hasWon(int playerType, int currentRow, int currentCol) {
-		if(AImove)
-		{
+		if(AImove){
 			playerType = AIplayer;
 		}
 		boolean checkWon = board[currentRow][0] == playerType         
@@ -255,13 +258,143 @@ public class TicTacToeConsole {
 				&& board[0][2] == playerType
 				&& board[1][1] == playerType
 				&& board[2][0] == playerType;
-		if(checkWon)
-		{
+		if(checkWon){
 			System.out.println("Won player - " + playerType);
 		}
 		return checkWon;
 	}
-
+	
+	public int[] evaluate(){
+		
+		int score = 0;
+		int[] results = new int[1];
+		for(int line = 1; line<=8;line++)
+		{
+			score += evaluateLine(line);
+			//System.out.println(score);
+		}
+		//System.out.println(score);
+		
+		results[0]= score;
+		
+		return results;
+	}
+	
+	
+	public int evaluateLine(int line){
+		int score = 0;
+		int row = 0;
+		int col = 0;
+		int c1 = 0;
+		int r1 = 0;
+		int r2 = 0;
+		int c2 = 0;
+		
+		/**
+		 *    147|15|168 
+		 *    ----------
+		 *    24|2578|26
+		 *    -----------
+		 *    348|35|367
+		 *    
+		 *    this map shows which number the line it is looking at 
+		 *    for example line 1 will check all the places there is a 1;	
+		 *    this is the set up for the score calculator;	
+		 */
+		if(line == 1){
+			c1 = 1;
+			c2 = 2;
+			
+		}
+		else if(line == 2){
+			row = 1;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 3){
+			row = 2;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 4){
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 5){
+			col = 1;
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 6){
+			col = 2;
+			r1 = 1;
+			r2 = 2;
+		}
+		else if(line == 7){
+			r1 = 1;
+			r2 = 2;
+			c1 = 1;
+			c2 = 2;
+		}
+		else if(line == 8){
+			row = 2;
+			r1 = -1;
+			r2 = -2;
+			c1 = 1;
+			c2 = 2;
+		}	
+		// this means that the beginning of the line is empty
+		if(board[row][col] == SharedConstants.EMPTY){
+			if(board[row+r1][col+c1] == SharedConstants.EMPTY){
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
+					score = 1;
+				}
+				else{
+					score = (board[row+r2][col+c2] == AIplayer ? 10 :-10);
+				}
+			}
+			else{
+				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
+					score = (board[row+r1][col+c1]== AIplayer ? 10:-10);
+				}
+				else if(board[row+r1][col+c1] == board[row+r2][col+c2]){
+					score = (board[row+r1][col+c1]== AIplayer ? 100:-100);
+				}
+				else{
+					score = 0;
+				}
+			}
+		}
+		else{
+			if(board[row][col] == board[row+r1][col+c1]){
+					if(board[row+r1][col+c1] == board[row+r2][col+c2]){
+						score = (board[row][col]== AIplayer ? 1000:-1000);
+					}
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
+							score = (board[row][col]== AIplayer ? 100:-100);
+					}
+					else{
+							score = 0;
+					}		
+			}
+			else if(board[row+r1][col+c1] == SharedConstants.EMPTY){	
+					if(board[row][col]  == board[row+r2][col+c2]){
+						score = (board[row][col]== AIplayer ? 100:-100);
+					}
+					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
+							score = (board[row][col]== AIplayer ? 10:-10);
+					}
+					else{
+							score = 0;
+					}
+			}
+			else{
+				score = 0;
+			}	
+		}		
+		return score;
+	}
+	
 	/*
 	 * Prints game board
 	 */
@@ -284,13 +417,51 @@ public class TicTacToeConsole {
 		}
 		System.out.println();
 	}
-
 	public AI getTicTacToeAIRandom() {
-		return ticTacToeAIRandom;
+		return ticTacToeAI;
+	}
+	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
+		this.ticTacToeAI = ticTacToeAIRandom;
+	}
+	@Override
+	public ArrayList<String> getAvailableSolutions(int player) {
+		
+		return availableSolutions();
 	}
 
-	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
-		this.ticTacToeAIRandom = ticTacToeAIRandom;
+	
+
+	@Override
+	public void moveSet(int row, int col, int level) {
+		
+		currntRow = row;
+		currentCol = col;
+		int checkplayerMove = (level%2 == 0 ? currentPlayer : AIplayer);
+		board[currntRow][currentCol] = checkplayerMove;  
+	}
+
+	@Override
+	public void undoMove(int row, int col, int level) {
+		
+		board[row][col] = SharedConstants.EMPTY;
+	}
+
+	
+	
+
+	@Override
+	public boolean isGameOver() {
+		int score = 0;
+		for(int line = 1; line<=8;line++)
+		{
+			score = evaluateLine(line);
+			if(score == 1000 || score == -1000)
+				return true;
+		}
+		//System.out.println(score);
+		
+		
+		return false;
 	}
 	
 	

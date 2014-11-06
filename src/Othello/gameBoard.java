@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class gameBoard {
 
-public static final int ROWS = 4;
-public static final int COLS = 4;
+public static final int ROWS = 8;
+public static final int COLS = 8;
 	
 boardSpace[][] playField;	
 int currentRow,currentCol;	
