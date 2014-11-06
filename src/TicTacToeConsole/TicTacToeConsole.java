@@ -30,9 +30,9 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	/*
 	 * Constructor for ticTacToe
 	 */
-	public TicTacToeConsole()
+	public TicTacToeConsole(String AIType)
 	{
-		setTicTacToeAIRandom(new AI( SharedConstants.AIMinimax));
+		setTicTacToeAIRandom(new AI(AIType));
 		in = new Scanner(System.in);
 
 	}
@@ -259,9 +259,10 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		return checkWon;
 	}
 	
-	public int evaluate(){
+	public int[] evaluate(){
 		
 		int score = 0;
+		int[] results = new int[1];
 		for(int line = 1; line<=8;line++)
 		{
 			score += evaluateLine(line);
@@ -269,7 +270,9 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		}
 		//System.out.println(score);
 		
-		return score;
+		results[0]= score;
+		
+		return results;
 	}
 	
 	

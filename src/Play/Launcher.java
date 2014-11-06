@@ -16,14 +16,21 @@ public class Launcher {
 	
 	public Launcher(){
 		scan = new Scanner(System.in);
-		String game = getGameType();
-		String aiType = getAIType(); 
+		String aiType;
+		String game;
+		game = getGameType();
+		if(!(game.equals("Quit"))) 
+			aiType = getAIType(); 
+		else
+			aiType = "Cancel";
+		
 		playGame(game,aiType);
 		
 	}
 	public void playGame(String game,String aiType)
 	{
 		String thisGame = game;
+		String thisAIType  = aiType;
 		if(thisGame.equals("")||aiType.equals("")) System.out.println("Oops something went wrong");
 		else if(thisGame.equals("Quit")){
 			System.out.println("GoodBye");
@@ -36,13 +43,13 @@ public class Launcher {
 		}
 		else if(thisGame.equals("TicTacToe")) 
 		{
-			TicTacToeConsole ticTacToeGame = new TicTacToeConsole();
+			TicTacToeConsole ticTacToeGame = new TicTacToeConsole(thisAIType);
 			ticTacToeGame.playTicTacToe();
 			return;
 		}
 		else if(thisGame.equals("Othello"))
 		{
-			OthelloConsole othello = new OthelloConsole();
+			OthelloConsole othello = new OthelloConsole(thisAIType);
 		}
 	}
 	public String getGameType()
@@ -68,7 +75,7 @@ public class Launcher {
 			}
 			if(ans == 0){
 				String dummy = scan.nextLine();
-				System.out.println(dummy+" is not an integer therefore it is not an option");
+				System.out.println(dummy+ " is not an integer therefore it is not an option");
 			}
 			else if(ans == 1){
 				//TicTacToeConsole ticTacToeGame = new TicTacToeConsole();
@@ -121,7 +128,7 @@ public class Launcher {
 			}
 			else if(ans ==3){
 				cancel = true;
-				return "Canceled";
+				return "Cancel";
 			}
 			else{
 				System.out.print("Not an option\n");

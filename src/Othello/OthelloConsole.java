@@ -32,7 +32,7 @@ private int gameuiMoveY = -1;
 /*
  * Constructor for othello console game
  */
-public OthelloConsole(){
+public OthelloConsole(String AIType){
 
 		super();
 		gameui = new Gameui(this);
@@ -40,18 +40,16 @@ public OthelloConsole(){
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
 		countNO = 0;
-		aiPlayer = new AI(SharedConstants.AIMinimax);
+		aiPlayer = new AI(AIType);
 		board = new gameBoard();
 		gameSetup();
 		board.printBoard(gameui);
 		do{ 
 			playerMove(currentPlayer);
 			board.printBoard(gameui);
-			
 			currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 		} while(currentState == gameStatus.PLAYING);
 		winner();
-	currentState = gameStatus.PLAYING;
 }
 	
 	/*
@@ -136,10 +134,13 @@ public OthelloConsole(){
 	 * The method checks who wins the game.
 	 */
 	public void winner(){
-		if(evaluate()== 0){
+		
+		int[] results = evaluate();
+		System.out.print("Black Count: "+ results[2] + " White Count: " + results[1]+"\n");
+		if(results[0] == 0){
 			System.out.println("DRAW!");
 		}
-		else if(evaluate() < 0){
+		else if(results[0] < 0){
 			System.out.println("Black Wins!");
 		}
 		else{
@@ -152,18 +153,26 @@ public OthelloConsole(){
 	 * return the "score of the board."
 	 */
 	@Override
-	public int evaluate(){
+	public int[] evaluate(){
 		int whiteToken = 0;
+		int blackToken = 0;
+		int score;
+		int[]  results = new int[3];
 		for(int row = 0; row < gameBoard.ROWS ;row++){
 			for(int col = 0; col < gameBoard.COLS ;col++){
 				if(board.playField[row][col].gamePiece.equals(playableItem.BLACK))
-					whiteToken--;
+					blackToken++;
 				else if(board.playField[row][col].gamePiece.equals(playableItem.WHITE))
 					whiteToken++;
 			}
 		}
 		//System.out.println(whiteToken);
-		return whiteToken;
+		score = whiteToken - blackToken;
+		
+		results[0] = score;
+		results[1] = whiteToken;
+		results[2] = blackToken;
+		return results;
 	}
 	
 	/*
