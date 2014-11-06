@@ -79,10 +79,10 @@ public OthelloConsole(AI AIType){
 		do {
 			
 			availableSolutions = availableSolutions(move);
-			System.out.println(availableSolutions);
+			//System.out.println(availableSolutions);
 			validity = validMove(-1,-1,availableSolutions);
 			if(validity == -1){
-				System.out.print("No avaible moves switch to other player\n");
+				//System.out.print("No avaible moves switch to other player\n");
 				isValidInput = true;
 				countNO++;
 				if(countNO ==2) currentState = gameStatus.GAME_END;
@@ -90,7 +90,7 @@ public OthelloConsole(AI AIType){
 			else{
 				if(move == playableItem.BLACK) {
 					int item = 0;
-					System.out.print("Enter your move player Black\n"); 
+					//System.out.print("Enter your move player Black\n"); 
 					do{
 						item++;
 						if(item >= Integer.MAX_VALUE-10000){
@@ -114,7 +114,7 @@ public OthelloConsole(AI AIType){
 				}
 				else{
 					coor = aiPlayer.makeMove(this);
-					System.out.println("White ai turn:");
+					//System.out.println("White ai turn:");
 					row = Integer.parseInt(coor.split(",")[0]);
 					col = Integer.parseInt(coor.split(",")[1]);
 				}
