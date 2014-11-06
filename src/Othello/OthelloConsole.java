@@ -92,7 +92,7 @@ public OthelloConsole(){
 						item++;
 						if(item >= Integer.MAX_VALUE-10000){
 							item = 0;
-							System.out.print(gameuiMove +"\n"); 
+							//System.out.print(gameuiMove +"\n"); 
 						}
 						if(gameuiMove){
 							

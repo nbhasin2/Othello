@@ -24,42 +24,33 @@ public class AI {
 	/*
 	 * constructor for AI using strategy
 	 */
-	public AI( String AIType)
-	{
+	public AI( String AIType){
 		
-		if(AIType == SharedConstants.AIRandom)
-		{
+		if(AIType == SharedConstants.AIRandom){
 			long ranSeed = System.nanoTime();
 			randomGenerator = new Random(ranSeed);
 		}
-
 		this.setAIType(AIType);
-		
 	}
 	public String makeMove(GameConsoleInterface game )   
 	{
-		if(AIType.equals(SharedConstants.AIRandom))
-		{
+		if(AIType.equals(SharedConstants.AIRandom)){
 			return randomStrategy(game.getAvailableSolutions(-1));
 		}
-		else if(AIType.equals(SharedConstants.AIMinimax))
-		{
+		else if(AIType.equals(SharedConstants.AIMinimax)){
 			return minimaxStrategy(game,3,Integer.MIN_VALUE+1,Integer.MAX_VALUE-1);
 		}
-		else
-		{
+		else{
 			return "";
 		}
 	}
 	
-	private String randomStrategy(ArrayList<String> validMoves)
-	{
+	private String randomStrategy(ArrayList<String> validMoves){
 		int index = randomGenerator.nextInt(validMoves.size());
 		return validMoves.get(index);
 	}
 	
-	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta)   
-	{
+	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta){
 		
 		GameConsoleInterface tempGame;
 		
@@ -77,8 +68,7 @@ public class AI {
 	        currentScore = game.evaluate(); 
 	        return bestRow + "," + bestCol + "," + currentScore;
 	    } 
-	    else 
-	    {
+	    else {
 	         for (String move : nextMoves) {
 	        	currRow = Integer.parseInt(move.split(",")[0]);
 	        	currCol = Integer.parseInt(move.split(",")[1]);
@@ -109,7 +99,6 @@ public class AI {
 	         }
 	     }
 	     return bestRow + "," + bestCol + "," + ((level%2 != 0) ? alpha: beta);
-			
 	}
 
 	/**
