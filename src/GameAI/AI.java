@@ -19,21 +19,18 @@ public class AI {
 	private int [][] TicTacToeBoard;
 	private ArrayList<String> othelloValidMoves;
 	
-	
-	
-	/*
+	/**
 	 * constructor for AI using strategy
 	 */
 	public AI( String AIType){
-		
-		if(AIType == SharedConstants.AIRandom){
-			long ranSeed = System.nanoTime();
-			randomGenerator = new Random(ranSeed);
-		}
 		this.setAIType(AIType);
 	}
-	public String makeMove(GameConsoleInterface game )   
-	{
+	/**
+	 * 
+	 * @param game the game that the AI is playing
+	 * @return a string coordinate that return the move it chooses to make based on the set AI 
+	 */
+	public String makeMove(GameConsoleInterface game )  {
 		if(AIType.equals(SharedConstants.AIRandom)){
 			return randomStrategy(game.getAvailableSolutions(-1));
 		}
@@ -44,18 +41,30 @@ public class AI {
 			return "";
 		}
 	}
-	
+	/**
+	 * 
+	 * @param validMoves a array list of valid moves that it will choose from
+	 * @return a string coordinate picked randomly from the valid moves
+	 */
 	private String randomStrategy(ArrayList<String> validMoves){
+		long ranSeed = System.nanoTime();
+		randomGenerator = new Random(ranSeed);
 		int index = randomGenerator.nextInt(validMoves.size());
 		return validMoves.get(index);
 	}
-	
+	/**
+	 * A recursive function that checks for the best possible solutions based on a given depth to search through
+	 * most of the logic was found from this website:{@link https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html}
+	 * 
+	 * @param game the game the AI is playing
+	 * @param level the depth of which the AI is looking through a higher depth means a better result
+	 * @param alpha the best maximum score used for prunning
+	 * @param beta the best minimum score used for prunning
+	 * @returna string coordinate picked that will have minimal risk
+	 */
 	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta){
 		
 		GameConsoleInterface tempGame;
-		
-		// mySeed is maximizing; while oppSeed is minimizing
-	   
 	    int currentScore;
 	    String currentScoreStr;
 	    int bestRow = -1;
@@ -64,7 +73,6 @@ public class AI {
 	    int currCol = -1;
 	    ArrayList<String> nextMoves = game.getAvailableSolutions(level%2);
 	    if (nextMoves.isEmpty() || level == 0 || game.isGameOver()) {
-	    	// Game over or depth reached, evaluate score
 	        currentScore = game.evaluate()[0]; 
 	        return bestRow + "," + bestCol + "," + currentScore;
 	    } 

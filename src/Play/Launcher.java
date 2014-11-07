@@ -35,6 +35,7 @@ public class Launcher {
 		else if(thisGame.equals("Quit")){
 			System.out.println("GoodBye");
 			System.exit(0);
+			
 		}
 		else if(aiType.equals("Cancel"))
 		{
@@ -50,6 +51,7 @@ public class Launcher {
 		else if(thisGame.equals("Othello"))
 		{
 			OthelloConsole othello = new OthelloConsole(thisAIType);
+			othello.playOthello();
 		}
 	}
 	public String getGameType()

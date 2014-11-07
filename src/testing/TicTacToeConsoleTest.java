@@ -17,6 +17,9 @@ public class TicTacToeConsoleTest {
 	private TicTacToeConsole ticTacGame;
 	private String data;
 	private InputStream stdin;
+	private int testRow;
+	private int testCol;
+	private String testCoor;
 	@Before 
 	public void setUp()
 	{
@@ -39,7 +42,10 @@ public class TicTacToeConsoleTest {
 		assertFalse(ticTacGame.getAvailableSolutions(0).contains("0,0"));
 		ticTacGame.moveSet(1, 2, 1);
 		assertFalse((ticTacGame.getAvailableSolutions(0).contains("0,0") || ticTacGame.getAvailableSolutions(0).contains("1,2")));
-		
+		testCoor = ticTacGame.getAvailableSolutions(0).get(0);
+		testRow = Integer.parseInt(testCoor.split(",")[0]);
+		testCol = Integer.parseInt(testCoor.split(",")[1]);
+		assertTrue(ticTacGame.moveSet(testRow, testCol, 0));
 	}
 
 	@Test

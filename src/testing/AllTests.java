@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({AITest.class,TicTacToeConsoleTest.class})
+@SuiteClasses({AITest.class,TicTacToeConsoleTest.class,OthelloConsoleTest.class})
 public class AllTests {
        
 }

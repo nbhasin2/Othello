@@ -12,34 +12,33 @@ import GameModel.GameConsoleInterface;
 
 
 public class OthelloConsole extends GameConsoleInterface {
+	
+	
+	private ArrayList<String> tokensChanged = null;
+	private ArrayList<String> availableSolutions = null;
+	private gameBoard board;
+	private gameStatus currentState;
+	private playableItem currentPlayer;
+	private AI aiPlayer;
+	private int countNO;
+	private int  globalCounter; 
+	private static Scanner playerMove= new Scanner(System.in); 
+	private Gameui gameui;
+	private static int gridSize = 16; // Total number of 	
+	private boolean gameuiMove = false;
+	private int gameuiMoveX = -1;
+	private int gameuiMoveY = -1;
+	private String scoreString = "";
+	private int currentScore[];
 
+	public OthelloConsole(String AIType){
+		this(new AI(AIType));
+	}
 
-private ArrayList<String> tokensChanged = null;
-private ArrayList<String> availableSolutions = null;
-private gameBoard board;
-private gameStatus currentState;
-private playableItem currentPlayer;
-private AI aiPlayer;
-private int countNO;
-private int  globalCounter; 
-private static Scanner playerMove= new Scanner(System.in); 
-private Gameui gameui;
-private static int gridSize = 16; // Total number of 	
-private boolean gameuiMove = false;
-private int gameuiMoveX = -1;
-private int gameuiMoveY = -1;
-private String scoreString = "";
-private int currentScore[];
-
-public OthelloConsole(String AIType)
-{
-	this(new AI(AIType));
-}
-
-/*
- * Constructor for othello console game
- */
-public OthelloConsole(AI AIType){
+	/*
+	 * Constructor for othello console game
+	 */
+	public OthelloConsole(AI AIType){
 
 		super();
 		gameui = new Gameui(this);
@@ -50,6 +49,10 @@ public OthelloConsole(AI AIType){
 		aiPlayer = AIType;
 		board = new gameBoard();
 		gameSetup();
+		
+		
+	}
+	public void playOthello(){
 		board.printBoard(gameui);
 		do{ 
 			playerMove(currentPlayer);
@@ -57,7 +60,7 @@ public OthelloConsole(AI AIType){
 			currentPlayer = (currentPlayer == playableItem.BLACK) ? playableItem.WHITE : playableItem.BLACK;
 		} while(currentState == gameStatus.PLAYING);
 		winner();
-}
+	}
 	
 	/*
 	 * Method to setup the initial game with basic item on the board.
@@ -71,7 +74,7 @@ public OthelloConsole(AI AIType){
 	/*
 	 * This method is used to move the player item
 	 */
-	public void playerMove(playableItem move){
+	private void playerMove(playableItem move){
 		boolean isValidInput = false;
 		int row=-1;
 	    int col=-1;
@@ -137,10 +140,13 @@ public OthelloConsole(AI AIType){
 				}
 		} while (!isValidInput);
 	}
-	/*
-	 * The method checks who wins the game.
+	/**
+	 * @author Zacharie
+	 * 
+	 * will print to the console the winner of the game and the tokens 
+	 * that the black player and white player had when the game is over
 	 */
-	public void winner(){
+	private void winner(){
 		
 		int[] results = evaluate();
 		String scoreStr = "Black Count: "+ results[2] + " White Count: " + results[1]+"\n";
@@ -161,12 +167,14 @@ public OthelloConsole(AI AIType){
 		setScoreString(sb.toString());
 		gameui.showPopup(scoreString);
 	}
-	/*
+	/**
 	 * Will return a number depending on the number of tokens a positive number means that there are more white tokens a black number 
 	 * int score[0] - who wins 
 	 * int score[1] - white
 	 * int score[2] - black
 	 * return the "score of the board."
+	 *
+	 * @see GameModel.GameConsoleInterface#evaluate()
 	 */
 	@Override
 	public int[] evaluate(){
@@ -196,7 +204,7 @@ public OthelloConsole(AI AIType){
 	/*
 	 * This method is used to checking whether the player move is valid or not.
 	 */
-	public int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
+	private int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
 		ArrayList<String> splitStr = new ArrayList<>();
 		ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
 		int resultValidMove = -1;
@@ -205,18 +213,30 @@ public OthelloConsole(AI AIType){
 		}
 		//System.out.println(validCoordinatesAndDirection);
 	
-	for(String s : validCoordinatesAndDirection){
-		validCoordinatesOnly.add(s.split(",")[0]+","+s.split(",")[1]);
+		for(String s : validCoordinatesAndDirection){
+			validCoordinatesOnly.add(s.split(",")[0]+","+s.split(",")[1]);
+		}
+		//System.out.println(validCoordinatesOnly);
+		String playerMove = row+","+col;
+		
+		resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
+		//System.out.println(playerMove + "--" + validCoordinatesOnly.contains(playerMove)+"--"+resultValidMove);
+		return resultValidMove;
+		
 	}
-	//System.out.println(validCoordinatesOnly);
-	String playerMove = row+","+col;
-	
-	resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
-	//System.out.println(playerMove + "--" + validCoordinatesOnly.contains(playerMove)+"--"+resultValidMove);
-	    return resultValidMove;
-	
-	}
-	public void tokenChangeWithDirection(int row,int col,int dir,playableItem player,int level){
+	/**
+	 * @author Zacharie
+	 * depending on the value of the direction, it will go through the and reverse all the tokens
+	 * until it reachs a token of a thoken that has the same color othe player 
+	 * 
+	 * @param row the head of the line to be reversed
+	 * @param col 
+	 * @param dir cardinal direction of where the line will be changed 
+	 * @param player the color that the tokens will be flipped to
+	 * @param level the depth of the AI, used for the undoMove method
+	 * if level is -1 then the move was made by a player
+	 */
+	private void tokenChangeWithDirection(int row,int col,int dir,playableItem player,int level){
 		int r;
 		int c;
 		
@@ -265,7 +285,20 @@ public OthelloConsole(AI AIType){
 			col +=c;
 		}
 	}
-	public void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution,int level){
+	/**
+	 * @author Zacharie
+	 * iterates through the avaible moves, 
+	 * when it finds it's move in the array list of moves it will parse the direction of that move
+	 * the direction points to where the line should be reversed,
+	 * it is possible that a move has many lines to be reversed
+	 * 
+	 * @param row the value of where the a token has been added
+	 * @param col 
+	 * @param player the color of the token being placed
+	 * @param changeSolution the array list of all the players available moves
+	 * @param level the level of the AI used to save the tokens to be changed
+	 */
+	private void tokenChange(int row,int col,playableItem player,ArrayList<String> changeSolution,int level){
 		int dir = -1;
 		String sRow = "" + row;
 		String sCol = "" + col;
@@ -280,11 +313,19 @@ public OthelloConsole(AI AIType){
 		}
 		
 	}
-	/*
-	 * The method checks total number of available moves a player / AI has.
-	 */
 	
-	public ArrayList<String> availableSolutions(playableItem playerPiece) {
+	/**
+	 * @author Zacharie
+	 * 
+	 * @param playerPiece is the color of the player that wants to check for his available moves
+	 * @return an arrayList<String> of all the valid moves for the player of playerPiece color
+	 * the format of each string is has follows "row,col,dir"
+	 * where row is the row value of the avaible move
+	 * where col is the col value of the avaible move
+	 * where dir is the directions where the its source for reversing the line is coming from 
+	 * it is possible for having strings with the same row and col but the direction will be different
+	 */
+	private ArrayList<String> availableSolutions(playableItem playerPiece) {
 		ArrayList<String> temp = new ArrayList<String>();
 		int maxRow = gameBoard.ROWS -1;
 		int maxCol = gameBoard.COLS -1;	
@@ -349,7 +390,6 @@ public OthelloConsole(AI AIType){
 							//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
 							temp.add(validRow +","+ validCol + "," + c);
 						}
-						
 					}
 				}
 			}
@@ -357,10 +397,20 @@ public OthelloConsole(AI AIType){
 		return temp;
 	}
 	
-	/*
-	 * The method checks whether the move is valid along with the direction of the move.
+	/**
+	 * @author Zacharie
+	 * 
+	 * a recursive function that will go in a line on the board to find out if the line is 
+	 * reversible by the players moves
+	 * 
+	 * @see #availableSolutions(playableItem)
+	 * @param row of the adjacent space of the source token from availableSoltutions;
+	 * @param col "   "     "      "     "  "    "      "     "        "
+	 * @param c if the cardinal direction of where the line is pointing from the source token
+	 * @param if the color of the player piece
+	 * @return a boolean if the line is reversible
 	 */
-	public boolean isValid(int row,int col,int c,playableItem playerPiece){
+	private boolean isValid(int row,int col,int c,playableItem playerPiece){
 		int maxRow = gameBoard.ROWS -1;
 		int maxCol = gameBoard.COLS -1;
 		
@@ -443,21 +493,18 @@ public OthelloConsole(AI AIType){
 		}
 	}
 	
-	/*
-	 * int player = 0 (User)
+	
+	/**
 	 * @see GameModel.GameConsoleInterface#getAvailableSolutions(int)
 	 */
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
 		playableItem move;
 		move = (player == 0 ? playableItem.BLACK : playableItem.WHITE);
-		return availableSolutions = availableSolutions(move);
+		availableSolutions = availableSolutions(move);
+		return availableSolutions;
 	}
-	public void setAvailableSolutions(ArrayList<String> availableSolutions) {
-		this.availableSolutions = availableSolutions;
-	}
-
-	
+		
 	public Gameui getGameui() {
 		return gameui;
 	}
@@ -489,17 +536,20 @@ public OthelloConsole(AI AIType){
 	public void setGameuiMoveY(int gameuiMoveY) {
 		this.gameuiMoveY = gameuiMoveY;
 	}
-	
+	/**
+	 * @see GameModel.GameConsoleInterface#moveSet(int, int, int)
+	 */
 	@Override
 	public boolean moveSet(int row, int col, int level) {
-		// TODO Auto-generated method stub
 		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
 			return false;
 		}
 		playableItem move;
 		move = (level%2 == 0 ? playableItem.BLACK : playableItem.WHITE);
-		
-		ArrayList<String> solution = getAvailableSolutions(level%2);
+		ArrayList<String> solution = availableSolutions(move);
+		if(validMove(row,col,solution) != 1){
+			return false;
+		}
 		board.playField[row][col].gamePiece = move;
 		//board.printBoard(gameui);
 		board.currentRow = row;
@@ -509,17 +559,27 @@ public OthelloConsole(AI AIType){
     	//System.out.println("\n");
     	return true;
 	}	
+	/**
+	 * @see GameModel.GameConsoleInterface#undoMove(int, int, int)
+	 */
 	@Override
 	public boolean undoMove(int row, int col, int level) {
 		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
+			return false;
+		}
+		else if(board.playField[row][col].gamePiece == playableItem.EMPTY){
+			return false;
+		}
+		ArrayList<String> tempChange = new ArrayList<String>(((ArrayList<String>)tokensChanged.clone()));
+		if(tempChange.size() == 0){
 			return false;
 		}
 		playableItem move;
 		move = (level%2 == 0 ? playableItem.BLACK : playableItem.WHITE);
 		board.playField[row][col].gamePiece = playableItem.EMPTY;
 		//board.printBoard(gameui);
-		ArrayList<String> tempChange = new ArrayList<String>(((ArrayList<String>)tokensChanged.clone()));
-				
+		
+		
 		for(String token:tempChange){
 			int currRow = Integer.parseInt(token.split(",")[0]);
 	    	int currCol = Integer.parseInt(token.split(",")[1]);
@@ -537,10 +597,17 @@ public OthelloConsole(AI AIType){
 		}
 		return true;
 	}
-
+	/**
+	 * @see GameModel.GameConsoleInterface#isGameOver()
+	 */
 	@Override
 	public boolean isGameOver() {
-		return false;
+		
+		int totalSol = availableSolutions(playableItem.BLACK).size() + availableSolutions(playableItem.WHITE).size(); 
+		if(totalSol == 0)
+			return true;
+		else
+			return false;
 	}
 
 	public String getScoreString() {
