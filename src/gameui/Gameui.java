@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import Othello.OthelloConsole;
@@ -45,6 +46,7 @@ public class Gameui {
     private JMenuItem item;
     private JRadioButtonMenuItem randomAI;
     private JRadioButtonMenuItem minimaxAI;
+    private JLabel scoreLabel;
 	
 	//Constructor 
 	public Gameui(OthelloConsole othelloconsole)
@@ -80,12 +82,14 @@ public class Gameui {
 	        aiMenu = new JMenu("AI");
 
 	        menuBar.add(menu);
+
 //	        menuBar.add(aiMenu);
 	        
 	        item = new JMenuItem("Exit");
 	        randomAI = new JRadioButtonMenuItem("Random", true);
 	        minimaxAI = new JRadioButtonMenuItem("Minimax", true);
-	        
+	        scoreLabel = new JLabel();
+	        menuBar.add(scoreLabel);
 	        item.addActionListener(new ActionListener(){
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
@@ -165,6 +169,10 @@ public class Gameui {
 
 	    	guiButtons.get(i).setContentAreaFilled(true);
 	    	guiButtons.get(i).setIcon(new ImageIcon(img)); 
+	    	if(othelloconsole.getCurrentScore()!=null)
+	    	{
+	    		scoreLabel.setText("Score - "+"White : "+othelloconsole.getCurrentScore()[1]+" - Black :	 "+othelloconsole.getCurrentScore()[2]);
+	    	}
 	    	} catch (IOException ex) {
 	    	  }
 	    }
@@ -181,4 +189,9 @@ public class Gameui {
 		  }
 		}
 
+	public void showPopup(String message)
+	{
+		JOptionPane.showMessageDialog(frame,
+			    message);
+	}
 }
