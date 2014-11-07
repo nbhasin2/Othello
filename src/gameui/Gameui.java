@@ -189,7 +189,7 @@ public class Gameui {
 		  }
 		}
 
-	private void showPopup(String message)
+	public void showPopup(String message)
 	{
 		JOptionPane.showMessageDialog(frame,
 			    message);

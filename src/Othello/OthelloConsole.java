@@ -159,6 +159,7 @@ public OthelloConsole(AI AIType){
 			System.out.println("White Wins!");
 		}
 		setScoreString(sb.toString());
+		gameui.showPopup(scoreString);
 	}
 	/*
 	 * Will return a number depending on the number of tokens a positive number means that there are more white tokens a black number 
