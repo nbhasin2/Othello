@@ -23,30 +23,28 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	private int currntRow, currentCol;
 	private boolean switchPlayer = false;
 	private AI ticTacToeAI;
-	public static Scanner in; 
+	private static Scanner in; 
 	private String playerType;
 	private boolean AImove;
-
 	/*
 	 * Constructor for ticTacToe
 	 */
-	public TicTacToeConsole(String AIType)
-	{
-		this(new AI(AIType));
+	public TicTacToeConsole(String AIType){
+		this(new AI(AIType),null);
+	}
+	/*
+	 * Constructor for ticTacToe
+	 */
+	public TicTacToeConsole(String AIType,Scanner passedScanner){
+		this(new AI(AIType),passedScanner);
 	}
 	
-	public TicTacToeConsole(AI AIType)
-	{
-		setTicTacToeAIRandom(AIType);
-		in = new Scanner(System.in);
-
-	}
-
-	/*
-	 * Method that is called for playing tictactoe
-	 */
-	public void playTicTacToe()  
-	{
+	public TicTacToeConsole(AI AIType,Scanner passedScan){
+		setTicTacToeAI(AIType);
+		if(passedScan == null)
+			in = new Scanner(System.in);
+		else
+			in = passedScan;
 		
 		System.out.println("Welcome to TicTacToc Console Game !!" +
 				"\nTo start playing please enter your cell cordinate between [1-3]" +
@@ -59,6 +57,14 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		initGame(playerType);
 		System.out.println("Game Started ... ");
 		printBoard();
+	}
+
+	/*
+	 * Method that is called for playing tictactoe
+	 */
+	public void playTicTacToe()  
+	{
+		
 		do {
 			playerMove(currentPlayer,this.AImove);  
 			updateGame(currentPlayer, currntRow, currentCol); 
@@ -417,10 +423,10 @@ public class TicTacToeConsole extends GameConsoleInterface{
 		}
 		System.out.println();
 	}
-	public AI getTicTacToeAIRandom() {
+	public AI getTicTacToeAI() {
 		return ticTacToeAI;
 	}
-	public void setTicTacToeAIRandom(AI ticTacToeAIRandom) {
+	public void setTicTacToeAI(AI ticTacToeAIRandom) {
 		this.ticTacToeAI = ticTacToeAIRandom;
 	}
 	@Override
@@ -432,18 +438,32 @@ public class TicTacToeConsole extends GameConsoleInterface{
 	
 
 	@Override
-	public void moveSet(int row, int col, int level) {
+	public boolean moveSet(int row, int col, int level) {
 		
 		currntRow = row;
 		currentCol = col;
+		if((currntRow >= board.length || currntRow < 0)||( currentCol >= board[0].length || currentCol <0 )){
+			return false;
+		}
+		else if(!(validMove(currntRow,currentCol,availableSolutions()) == 1))
+			return false;
 		int checkplayerMove = (level%2 == 0 ? currentPlayer : AIplayer);
-		board[currntRow][currentCol] = checkplayerMove;  
+		board[currntRow][currentCol] = checkplayerMove;
+		return true;
 	}
 
 	@Override
-	public void undoMove(int row, int col, int level) {
+	public boolean undoMove(int row, int col, int level) {
 		
-		board[row][col] = SharedConstants.EMPTY;
+		currntRow = row;
+		currentCol = col;
+		if((currntRow >= board.length || currntRow < 0)||( currentCol >= board[0].length || currentCol <0 ))
+			return false;
+		else if(board[currntRow][currentCol] == SharedConstants.EMPTY){
+				return false;
+		}
+		board[currntRow][currentCol] = SharedConstants.EMPTY;
+		return true;
 	}
 
 	

@@ -491,9 +491,11 @@ public OthelloConsole(AI AIType){
 	}
 	
 	@Override
-	public void moveSet(int row, int col, int level) {
+	public boolean moveSet(int row, int col, int level) {
 		// TODO Auto-generated method stub
-		
+		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
+			return false;
+		}
 		playableItem move;
 		move = (level%2 == 0 ? playableItem.BLACK : playableItem.WHITE);
 		
@@ -505,10 +507,13 @@ public OthelloConsole(AI AIType){
     	tokenChange(row,col,move,solution,level);
     	//board.printBoard(gameui);
     	//System.out.println("\n");
-    	
+    	return true;
 	}	
 	@Override
-	public void undoMove(int row, int col, int level) {
+	public boolean undoMove(int row, int col, int level) {
+		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
+			return false;
+		}
 		playableItem move;
 		move = (level%2 == 0 ? playableItem.BLACK : playableItem.WHITE);
 		board.playField[row][col].gamePiece = playableItem.EMPTY;
@@ -530,6 +535,7 @@ public OthelloConsole(AI AIType){
 		    	tokensChanged.remove(token);
 		    }
 		}
+		return true;
 	}
 
 	@Override

@@ -24,13 +24,13 @@ public class DummyConsole extends GameConsoleInterface {
 	}
 
 	@Override
-	public void moveSet(int row, int col, int player) {
-		
+	public boolean moveSet(int row, int col, int player) {
+		return false;
 	}
 
 	@Override
-	public void undoMove(int row, int col, int player) {
-		
+	public boolean undoMove(int row, int col, int player) {
+		return false;
 	}
 
 	@Override
