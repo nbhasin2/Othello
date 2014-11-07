@@ -28,6 +28,8 @@ private static int gridSize = 16; // Total number of
 private boolean gameuiMove = false;
 private int gameuiMoveX = -1;
 private int gameuiMoveY = -1;
+private String scoreString = "";
+private int currentScore[];
 
 public OthelloConsole(String AIType)
 {
@@ -141,20 +143,28 @@ public OthelloConsole(AI AIType){
 	public void winner(){
 		
 		int[] results = evaluate();
-		System.out.print("Black Count: "+ results[2] + " White Count: " + results[1]+"\n");
+		String scoreStr = "Black Count: "+ results[2] + " White Count: " + results[1]+"\n";
+		StringBuilder sb = new StringBuilder(scoreStr);
+		System.out.print(scoreStr);
 		if(results[0] == 0){
+			sb.insert(0, "DRAW! - ");
 			System.out.println("DRAW!");
 		}
 		else if(results[0] < 0){
+			sb.insert(0, "Black Wins! - ");
 			System.out.println("Black Wins!");
 		}
 		else{
+			sb.insert(0, "White Wins! - ");
 			System.out.println("White Wins!");
 		}
+		setScoreString(sb.toString());
 	}
 	/*
 	 * Will return a number depending on the number of tokens a positive number means that there are more white tokens a black number 
-	 * 
+	 * int score[0] - who wins 
+	 * int score[1] - white
+	 * int score[2] - black
 	 * return the "score of the board."
 	 */
 	@Override
@@ -177,6 +187,8 @@ public OthelloConsole(AI AIType){
 		results[0] = score;
 		results[1] = whiteToken;
 		results[2] = blackToken;
+		
+		setCurrentScore(results);
 		return results;
 	}
 	
@@ -522,5 +534,27 @@ public OthelloConsole(AI AIType){
 	@Override
 	public boolean isGameOver() {
 		return false;
+	}
+
+	public String getScoreString() {
+		return scoreString;
+	}
+
+	public void setScoreString(String scoreString) {
+		this.scoreString = scoreString;
+	}
+
+	/**
+	 * @return the currentScore
+	 */
+	public int[] getCurrentScore() {
+		return currentScore;
+	}
+
+	/**
+	 * @param currentScore the currentScore to set
+	 */
+	public void setCurrentScore(int currentScore[]) {
+		this.currentScore = currentScore;
 	}
 }
