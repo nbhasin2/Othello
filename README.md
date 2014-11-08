@@ -2,7 +2,38 @@
 ===========
 ## Milestone 2
 
-#### DESIGN DECISIONS 1 - Othello 
+#### How to run the game
+There are two ways you can run the game. For this milestone the console based othello is disabled. But if necessary one can uncomment the code and play in console.
+
+- Console Play - Tictactoe
+1. Import the project.
+2. Go to package play->Launcher.java that contains the main method. Use this class to launch the commandline. 
+3. Once in command line you will get the following options 
+
+```
+Enter the game you want to play,
+ 1- Tic Tac Toe
+ 2- Othello
+ 3- quit
+1
+Enter the type of AI you want to play against,
+ 1- Random
+ 2- Minimax
+ 3- Cancel
+
+ ```
+ 
+#### How to run tests with JUnit 
+
+1. go to Run->Run Configurations
+
+2. Then find JUnit in the column on the left 
+
+3. In JUnit there should be a unit called AllTests. Click  on it.
+
+4. Now in the test tab on the right, the field Test Class should read: testing.AllTests click apply then Run
+
+#### DESIGN DECISIONS 
 Console based Othello was designed using five different classes. The basis of the game is created using the gameBoard class. Each gameboard object will be a 2D array made of up boardSpace objects. Each boardSpace object can contain one playableItem (black or white game token). 
 
 Othello uses two enum classes, gameStatus and playableItem. gameStatus is used to determine whether the game should end or not. playableItem is used to determine where on the board each player has placed a token. 
@@ -19,8 +50,6 @@ to port to the Android platform, or any other systems.
 
 Ultimatley the main idea behind the design style of Othello was to make a loosely coupled
 code base that has code which can be re-used in similar games. 
-
-#### DESIGN DECISIONS - AI | Game Console Interface
 
 The point of the AI was to make a player that can play by only knowing two things:
  -What moves are legal
@@ -58,7 +87,8 @@ These were implemented in GCI to help minimax based on our design decisions:
 -moveSet,  will make a test move and see what the result is 
 -undoMove, will undo the previous test move so the board is not crowded with test moves
 with these function implemented for every game the minimax becomes possible, 
-see the javaDoc for gameAI.AI#minimaxStrategy to see how it was implemented in details 
+see the javaDoc for gameAI.AI#minimaxStrategy to see how it was implemented in details
+
 ### FUTURE SAVE XML
 
 We are adding the basic design of our future XML save and reload strategy. This keeps track of column and row along with AIMOVE and Player and also the type of game we are playing. More information will be updated later as we progress through the assignment.
