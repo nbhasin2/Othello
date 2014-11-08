@@ -22,6 +22,10 @@ Enter the type of AI you want to play against,
  3- Cancel
 
  ```
+ Now you can chose 1 for tictactoe 2 for Othello and then once game is chosen you can select the strategy. 1 for random 2 for minimax. Othello will fire up a gui where you can play the game in GUI mode but we don't have gui for tictactoe as according to the guidelines we needed to make gui for only othello.
+ 
+ - GUI play without the hassle.
+ There is an executable java launcher for Othello Game. Its called Othello_executable.jar. Double click it and select the strategy you want to play the game in and same gui will pop up that will allow you to play othello.
  
 #### How to run tests with JUnit 
 
