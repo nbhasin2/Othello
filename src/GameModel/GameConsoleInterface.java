@@ -1,11 +1,11 @@
-package GameModel;
+package gamemodel;
 /**
  * @author Zacharie
  * The general game interface that AI works with, all the methods here are what each game needs to implement
  */
 import java.util.ArrayList;
 
-import Othello.gameBoard;
+import Othello.GameBoard;
 
 public abstract class GameConsoleInterface {
 

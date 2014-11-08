@@ -9,8 +9,8 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
-import Shared.SharedConstants;
-import TicTacToeConsole.TicTacToeConsole;
+import shared.SharedConstants;
+import tictactoe.TicTacToeConsole;
 
 public class TicTacToeConsoleTest {
 	

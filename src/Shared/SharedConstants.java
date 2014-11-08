@@ -1,4 +1,4 @@
-package Shared;
+package shared;
 /**
  * @author Nishant Bhasin
  * Shared constants class is used to store

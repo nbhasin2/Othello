@@ -1,17 +1,17 @@
 package testing;
 
 import static org.junit.Assert.*;
+import gameai.AI;
+import gamemodel.DummyConsole;
+import gamemodel.GameConsoleInterface;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import GameAI.AI;
-import GameModel.DummyConsole;
-import GameModel.GameConsoleInterface;
-import Shared.SharedConstants;
-import TicTacToeConsole.TicTacToeConsole;
+import shared.SharedConstants;
+import tictactoe.TicTacToeConsole;
 
 public class AITest {
 	private AI random; 

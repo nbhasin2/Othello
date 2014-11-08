@@ -7,23 +7,23 @@ import java.util.ArrayList;
 /*
  * This class is mainly deals with initialization of the game board for othellogame.
  */
-public class gameBoard {
+public class GameBoard {
 
 public static final int ROWS = 8;
 public static final int COLS = 8;
 	
-boardSpace[][] playField;	
+BoardSpace[][] playField;	
 int currentRow,currentCol;	
 
 /*
  * This method initializes a playing field for the user.
  */
-public gameBoard(){
-	playField = new boardSpace[ROWS][COLS];	//New board that is 4x4 
+public GameBoard(){
+	playField = new BoardSpace[ROWS][COLS];	//New board that is 4x4 
 
 	for(int i = 0; i < ROWS; i++){
 		for(int j = 0; j < COLS; j++){
-			playField[i][j] = new boardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
+			playField[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
 		}
 	}
 }
@@ -39,10 +39,10 @@ public void boardSetup(){
 		}
 	}
 
-playField[(ROWS / 2) - 1][(COLS / 2) - 1].gamePiece = playableItem.WHITE;
-playField[(ROWS / 2) - 1][COLS / 2].gamePiece = playableItem.BLACK; // No matter what size board is
-playField[ROWS / 2][(COLS / 2) - 1].gamePiece = playableItem.BLACK;
-playField[ROWS / 2][COLS / 2].gamePiece = playableItem.WHITE;
+playField[(ROWS / 2) - 1][(COLS / 2) - 1].gamePiece = PlayableItem.WHITE;
+playField[(ROWS / 2) - 1][COLS / 2].gamePiece = PlayableItem.BLACK; // No matter what size board is
+playField[ROWS / 2][(COLS / 2) - 1].gamePiece = PlayableItem.BLACK;
+playField[ROWS / 2][COLS / 2].gamePiece = PlayableItem.WHITE;
 }
 
 /*

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Othello.OthelloConsole;
-import Shared.SharedConstants;
+import shared.SharedConstants;
 
 public class OthelloConsoleTest {
 	

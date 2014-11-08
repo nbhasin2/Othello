@@ -1,5 +1,14 @@
 package gameui;
-
+/**
+ * @author Nishant
+ * This class deals with all the gui elements. For this particular milestone 
+ * This class is small and not tightly coupled with other components.
+ * 
+ * It has reference to the Othello Console class that acts as our controller and is mainly
+ * used to get available moves that is shown in yellow coloured boxes. 
+ * 
+ * There 
+ */
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -8,6 +17,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -15,6 +26,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -22,10 +34,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 
+import Othello.BoardSpace;
 import Othello.OthelloConsole;
-import Othello.boardSpace;
-import Othello.playableItem;
+import Othello.PlayableItem;
 
 public class Gameui {
 	
@@ -33,10 +46,11 @@ public class Gameui {
 	private int Row = gridSize;
 	private int Col = gridSize;
 	private ArrayList<ButtonWithCoordinates> guiButtons;
-	private boardSpace[][] playField;	
+	private BoardSpace[][] playField;	
 	private ActionListener listener;
 	private OthelloConsole othelloconsole;
 	private Boolean aiRandomCheck, aiMinimaxCheck;
+	private String aiType;
 	
 	//ui
 	private JFrame frame;
@@ -47,6 +61,8 @@ public class Gameui {
     private JRadioButtonMenuItem randomAI;
     private JRadioButtonMenuItem minimaxAI;
     private JLabel scoreLabel;
+    private JCheckBox checkbox;
+   
 	
 	//Constructor 
 	public Gameui(OthelloConsole othelloconsole)
@@ -62,15 +78,12 @@ public class Gameui {
 		return guiButtons.get(index);
 	}
 	
-	private void aiCheckToggle()
-	{
-		
-	}
-	
-	/*
-	 * Here size is in terms of 4x4 i.e. square side
+	/**
+	 * This method is use to initialize a square grid gui with 
+	 * size as grid size. Mainly deals with adding initial buttons
+	 * to the gridlayout in frame.
 	 */
-	public void initializeGrid(int size)
+	public void initializeGrid()
 	{
 		 
 		    frame = new JFrame("GridLayout Test");
@@ -82,14 +95,18 @@ public class Gameui {
 	        aiMenu = new JMenu("AI");
 
 	        menuBar.add(menu);
-
-//	        menuBar.add(aiMenu);
 	        
 	        item = new JMenuItem("Exit");
 	        randomAI = new JRadioButtonMenuItem("Random", true);
 	        minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 	        scoreLabel = new JLabel();
+	        checkbox = new JCheckBox();
+	        checkbox.setSelected(true);
+	        checkbox.addItemListener(new CheckBoxListener());
+	        menuBar.add(new JLabel(" | Score - "));
 	        menuBar.add(scoreLabel);
+	        menuBar.add(new JLabel(" | Enable Available Moves"));
+	        menuBar.add(checkbox);
 	        item.addActionListener(new ActionListener(){
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
@@ -116,6 +133,11 @@ public class Gameui {
 		    frame.setResizable(false);
 	}
 	
+	/**
+	 * This method takes in listPlayableItems params and updates the 
+	 * grid when user makes a move. 
+	 * @param listPLayableItems
+	 */
 	public void updateGrid(ArrayList<String> listPLayableItems)
 	{
 
@@ -136,51 +158,56 @@ public class Gameui {
 	    	Image img = null;
 	    	try {
 	    	String temp = listPLayableItems.get(i).toString();
-	    	if(temp.equals(playableItem.EMPTY.toString()))
+	    	if(temp.equals(PlayableItem.EMPTY.toString()))
 	    	{		    		  
 	    		img = ImageIO.read(getClass().getResource(emptyImage));  	  
 	    	}
-	    	else if(temp.equals(playableItem.WHITE.toString()))
+	    	else if(temp.equals(PlayableItem.WHITE.toString()))
 	    	{
 	    		img = ImageIO.read(getClass().getResource(whiteImage));
 	    		
 	    		
-	    	}else if(temp.equals(playableItem.BLACK.toString()))
+	    	}else if(temp.equals(PlayableItem.BLACK.toString()))
 	    	{
 	    		img = ImageIO.read(getClass().getResource(blackImage));
 	    	}
  
-	    	ArrayList<String> tempAvailableSolutions = new ArrayList<String>();
-	    	
-    		for(int l=0; l<othelloconsole.getAvailableSolutions(0).size(); l++)
+	    	if(checkbox.isSelected())
 	    	{
-	    			tempAvailableSolutions.add(othelloconsole.getAvailableSolutions(0).get(l).split(",")[0]+
-	    						","+othelloconsole.getAvailableSolutions(0).get(l).split(",")[1]);
+		    	ArrayList<String> tempAvailableSolutions = new ArrayList<String>();
+		    	
+	    		for(int l=0; l<othelloconsole.getAvailableSolutions(0).size(); l++)
+		    	{
+		    			tempAvailableSolutions.add(othelloconsole.getAvailableSolutions(0).get(l).split(",")[0]+
+		    						","+othelloconsole.getAvailableSolutions(0).get(l).split(",")[1]);
+		    	}
+				for (int k=0; k < guiButtons.size(); k++) {
+					String tempVar = guiButtons.get(i).coordX+","+guiButtons.get(i).coordY;
+					if(tempAvailableSolutions.contains(tempVar))
+					{
+						img = ImageIO.read(getClass().getResource(availableMoveImage));
+					}
+			    }
 	    	}
-//    		System.out.println("Available Sol 0 - "+tempAvailableSolutions.toString());
-			for (int k=0; k < guiButtons.size(); k++) {
-				String tempVar = guiButtons.get(i).coordX+","+guiButtons.get(i).coordY;
-//				System.out.println(tempVar);
-				if(tempAvailableSolutions.contains(tempVar))
-				{
-					img = ImageIO.read(getClass().getResource(availableMoveImage));
-				}
-		    }
 
 	    	guiButtons.get(i).setContentAreaFilled(true);
 	    	guiButtons.get(i).setIcon(new ImageIcon(img)); 
 	    	if(othelloconsole.getCurrentScore()!=null)
 	    	{
-	    		scoreLabel.setText("Score - "+"White : "+othelloconsole.getCurrentScore()[1]+" - Black :	 "+othelloconsole.getCurrentScore()[2]);
+	    		scoreLabel.setText("White : "+othelloconsole.getCurrentScore()[1]+" - Black :	 "+othelloconsole.getCurrentScore()[2]);
 	    	}
 	    	} catch (IOException ex) {
 	    	  }
 	    }
 	}
 	
+	/**
+	 * Action listener for checkbox button
+	 * @author Nishant
+	 *
+	 */
 	private class MyListener implements ActionListener {
 		  public void actionPerformed(ActionEvent e) {
-//		     System.out.println("Button pressed: " + e.getActionCommand());
 		     int row = ((ButtonWithCoordinates)e.getSource()).getCoordX();
 		     int col = ((ButtonWithCoordinates)e.getSource()).getCoordY();
 		     othelloconsole.setGameuiMoveX(row);
@@ -189,9 +216,29 @@ public class Gameui {
 		  }
 		}
 
+	/**
+	 * This method is used to show the popup message when user wins.
+	 * Practically this can be used to show any message.
+	 * @param message
+	 */
 	public void showPopup(String message)
 	{
 		JOptionPane.showMessageDialog(frame,
 			    message);
 	}
+	
+	/**
+	 * This will be used later. More functionality will be added later.
+	 * @author Nishant
+	 *	
+	 */
+	 private class CheckBoxListener implements ItemListener{
+	        public void itemStateChanged(ItemEvent e) {
+	            if(e.getSource()==checkbox){
+	                if(checkbox.isSelected()) {
+	                    System.out.println("one has been selected");
+	                } else {System.out.println("nothing");}
+	            }
+	        }
+	    }
 }

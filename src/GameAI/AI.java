@@ -1,11 +1,12 @@
-package GameAI;
+package gameai;
+
+import gamemodel.GameConsoleInterface;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import Shared.SharedConstants;
-import GameModel.GameConsoleInterface;
 import Othello.OthelloConsole;
+import shared.SharedConstants;
 /**
  * 
  * @author Zacharie

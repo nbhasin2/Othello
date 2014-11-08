@@ -1,4 +1,4 @@
-package Play;
+package play;
 /**
  * @author Nishant Bhasin
  * Base launcher class for playing games.
@@ -6,8 +6,8 @@ package Play;
 import java.util.Scanner;
 
 import Othello.OthelloConsole;
-import Shared.SharedConstants;
-import TicTacToeConsole.TicTacToeConsole;
+import shared.SharedConstants;
+import tictactoe.TicTacToeConsole;
 
 
 public class Launcher {
@@ -80,16 +80,12 @@ public class Launcher {
 				System.out.println(dummy+ " is not an integer therefore it is not an option");
 			}
 			else if(ans == 1){
-				//TicTacToeConsole ticTacToeGame = new TicTacToeConsole();
-				//ticTacToeGame.playTicTacToe();
 				return "TicTacToe";
 			}
 			else if(ans == 2){
-				//OthelloConsole othello = new OthelloConsole();
 				return "Othello";
 			}
 			else if(ans ==3){
-				//System.out.print("Goodbye! \n");
 				quit = true;
 				return "Quit";
 			}
@@ -120,12 +116,9 @@ public class Launcher {
 				System.out.println(dummy+" is not an integer therefore it is not an option");
 			}
 			else if(ans == 1){
-				//TicTacToeConsole ticTacToeGame = new TicTacToeConsole();
-				//ticTacToeGame.playTicTacToe();
 				return SharedConstants.AIRandom;
 			}
 			else if(ans == 2){
-				//OthelloConsole othello = new OthelloConsole();
 				return SharedConstants.AIMinimax;
 			}
 			else if(ans ==3){

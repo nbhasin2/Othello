@@ -1,12 +1,12 @@
 package Othello;
 
-public class boardSpace {
+public class BoardSpace {
 
-playableItem gamePiece; //Either blank, white or black
+PlayableItem gamePiece; //Either blank, white or black
 
 int row, col;
 
-public boardSpace(int row, int col){
+public BoardSpace(int row, int col){
 	this.row = row;
 	this.col = col;
 	clear();
@@ -17,7 +17,7 @@ public boardSpace(int row, int col){
  * This method clears the board spot.
  */
 public void clear() {
-	gamePiece = playableItem.EMPTY;//this will make the board spot contain no game piece 
+	gamePiece = PlayableItem.EMPTY;//this will make the board spot contain no game piece 
 	
 }
 
@@ -33,7 +33,7 @@ public void putItem() {
 	
 }
 
- public playableItem getGamePiece(){
+ public PlayableItem getGamePiece(){
 	 return this.gamePiece;
 	 
  }
