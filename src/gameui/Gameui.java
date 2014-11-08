@@ -36,9 +36,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
-import Othello.BoardSpace;
-import Othello.OthelloConsole;
-import Othello.PlayableItem;
+import othello.BoardSpace;
+import othello.OthelloConsole;
+import othello.PlayableItem;
 
 public class Gameui {
 	

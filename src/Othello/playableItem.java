@@ -1,4 +1,4 @@
-package Othello;
+package othello;
 
 /*
  * Enums for playableItems for othello board.

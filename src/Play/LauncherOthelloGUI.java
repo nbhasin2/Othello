@@ -13,7 +13,8 @@ import javax.swing.JOptionPane;
  * Cancel is used to exit the game. The red button doesn't do anything. 
  */
 
-import Othello.OthelloConsole;
+
+import othello.OthelloConsole;
 import shared.SharedConstants;
 
 public class LauncherOthelloGUI {

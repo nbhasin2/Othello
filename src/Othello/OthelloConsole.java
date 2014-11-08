@@ -1,4 +1,4 @@
-package Othello;
+package othello;
 import gameai.AI;
 import gamemodel.GameConsoleInterface;
 import gameui.Gameui;

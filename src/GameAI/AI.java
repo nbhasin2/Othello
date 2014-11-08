@@ -5,7 +5,7 @@ import gamemodel.GameConsoleInterface;
 import java.util.ArrayList;
 import java.util.Random;
 
-import Othello.OthelloConsole;
+import othello.OthelloConsole;
 import shared.SharedConstants;
 /**
  * 
@@ -61,7 +61,7 @@ public class AI {
 	 * @param level the depth of which the AI is looking through a higher depth means a better result
 	 * @param alpha the best maximum score used for prunning
 	 * @param beta the best minimum score used for prunning
-	 * @returna string coordinate picked that will have minimal risk
+	 * @return string coordinate picked that will have minimal risk
 	 */
 	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta){
 		

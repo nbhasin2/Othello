@@ -1,4 +1,4 @@
-package Othello;
+package othello;
 
 import gameui.Gameui;
 

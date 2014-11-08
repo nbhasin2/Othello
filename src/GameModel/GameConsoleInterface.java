@@ -5,7 +5,7 @@ package gamemodel;
  */
 import java.util.ArrayList;
 
-import Othello.GameBoard;
+import othello.GameBoard;
 
 public abstract class GameConsoleInterface {
 

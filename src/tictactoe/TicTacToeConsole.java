@@ -10,7 +10,7 @@ import gamemodel.GameConsoleInterface;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Othello.GameBoard;
+import othello.GameBoard;
 import shared.SharedConstants;
 import sun.security.mscapi.PRNG;
 

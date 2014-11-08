@@ -1,9 +1,67 @@
 **Kernelpanic**
 ===========
-
 ## Milestone 2
 
+#### DESIGN DECISIONS 1 - Othello 
+Console based Othello was designed using five different classes. The basis of the game is created using the gameBoard class. Each gameboard object will be a 2D array made of up boardSpace objects. Each boardSpace object can contain one playableItem (black or white game token). 
+
+Othello uses two enum classes, gameStatus and playableItem. gameStatus is used to determine whether the game should end or not. playableItem is used to determine where on the board each player has placed a token. 
+
+The main incentive behind designing Othello using multiple classes was maintainability. 
+By not grouping everything together into one Othello class, it is easier to build the game in steps. Every object can be tested individually, then brought together inside the OthelloConsole class. 
+
+Having these multiple classes will also make it easier in the future to build other games in the same style as Othello. For example, connect four would be easy to implement using the same class files as othello. The only thing that will need to be changed is the logic to determine a win.
+
+The goal of having multiple classes was to break down the work each one did. This will lead to low cohesion and code that is easier to maintain. As the milestones progress we will look into refactoring our code, to create an even more robust framework that any board game can be created from. 
+
+Furthurmore once we refactor and create a stable framwork, the games will be easier
+to port to the Android platform, or any other systems. 
+
+Ultimatley the main idea behind the design style of Othello was to make a loosely coupled
+code base that has code which can be re-used in similar games. 
+
+#### DESIGN DECISIONS - AI | Game Console Interface
+
+The point of the AI was to make a player that can play by only knowing two things:
+ -What moves are legal
+ -Which moves to pick
+Another challenge that we had to keep in mind was to design an AI that could work with any games(Board type game).
+
+So to solve these problems we first decided to design a GameConsoleInterface(GCI) that is an abstract class 
+since the AI will does not know exactly which game it is playing it knows it?s playing a game. 
+So all our other game console(TicTacToeConsole and OthelloConsole) have to extend GCI. 
+And the AI will work based on what GCI can do.
+The first method added to GCI was used to solve our first problem of knowing which move are legal.  
+The method getAvailableSolutions() was added to the interface and this method return the available solutions to the AI so it knows which moves to pick from. 
+Since every game is extending GCI they implement the method based on the rules of their own game.
+
+
+The second problem is a bit more complicated, which moves to pick. 
+For the AI to know which move to pick it needs to have a strategy, 
+thankfully we didn?t have to think of which strategies we would implement 
+because a random strategy and a minimax strategy was required by our client(SYSC 3110 project).
+For the random strategy the design is simple, get a list of valid moves and pick one at random. 
+For the minimax needs to test out all the moves and find which one is best; 
+with that all we needed:
+-to make a test move , 
+-check wether or not it was a good move
+-undo the previous move so that another test move can be tried 
+But that is not sufficient enough for minimax, minimax needs to look ahead and anticipate a 
+move by the human. To solve that problem we decided to make minimax recursive and have it go through 
+until the game is over so the AI needs to know that game is over. 
+We realised that waiting for the game to be over in Othello was way too long 
+so we added a depth search limit in the minimax.
+
+These were implemented in GCI to help minimax based on our design decisions: 
+-isGameOver, return a Boolean true if the game is over,
+-evaluate, returns a result that ?translate? the visual form of the game to a form the AI can understand (integer)
+-moveSet,  will make a test move and see what the result is 
+-undoMove, will undo the previous test move so the board is not crowded with test moves
+with these function implemented for every game the minimax becomes possible, 
+see the javaDoc for gameAI.AI#minimaxStrategy to see how it was implemented in details 
 ### FUTURE SAVE XML
+
+We are adding the basic design of our future XML save and reload strategy. This keeps track of column and row along with AIMOVE and Player and also the type of game we are playing. More information will be updated later as we progress through the assignment.
 
 ```XML
   <GAME>

@@ -5,7 +5,7 @@ package play;
  */
 import java.util.Scanner;
 
-import Othello.OthelloConsole;
+import othello.OthelloConsole;
 import shared.SharedConstants;
 import tictactoe.TicTacToeConsole;
 
