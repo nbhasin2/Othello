@@ -143,6 +143,7 @@ Game Started ...
    |   |   
 -----------
    |   |   
+   
 ```
 
 3. To play othello simply enter 2 instead of 1.
@@ -162,6 +163,7 @@ Enter the game you want to play,
    |   |   |   |
 ----------------
 Enter your move player Black
+
 ```
 
 
@@ -177,7 +179,9 @@ an example fot this bug is given as an attachment in a .txt file
 .txt File contents 
 {
 For example
+
 ```
+
    |   | * |   |
 ----------------
  * | * | * | O |
@@ -186,9 +190,14 @@ For example
 ----------------
    | O | * | O |
 ----------------
+
 ```
+
  then this is what the board should be outputted 
-```   |   | * |   |
+ 
+```
+
+|   | * |   |
 ----------------
  * | * | * | O |
 ----------------
@@ -196,9 +205,13 @@ For example
 ----------------
  * | * | * | O |
 ----------------
+
 ```
+
 How ever the game will output something like this
+
 ```
+
    |   | * |   |
 ----------------
  * | * | * | O |
@@ -206,6 +219,7 @@ How ever the game will output something like this
  O | O | O | O |
 ----------------
  * | * | * | O |
+ 
  ```
  You see the difference is that it only changed one row 
  this happens because there are three possible solutions that share the same coordinates
