@@ -92,6 +92,9 @@ These were implemented in GCI to help minimax based on our design decisions:
 -undoMove, will undo the previous test move so the board is not crowded with test moves
 with these function implemented for every game the minimax becomes possible, 
 see the javaDoc for gameAI.AI#minimaxStrategy to see how it was implemented in details
+Not much was changed for tictactoe class. We added more tests and added minimax ai. Thus there is not much design decison that we can discuss in read me.
+
+Note - We don't really know the format / guideline of the design decison of how to put it so we wrote it all in one big paragraph. Please let us know if there is any special format that we need to follow and we will update it in milestone 3. 
 
 ### FUTURE SAVE XML
 
