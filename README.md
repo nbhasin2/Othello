@@ -1,10 +1,9 @@
 **Kernelpanic**
+===========
 
 ### Branch Switched to Develop 
-===========
 This branch is obsolete since milestone 2 please use develop branch. Thanks.
 
-===========
 ## Milestone 2
 
 #### How to run the game
