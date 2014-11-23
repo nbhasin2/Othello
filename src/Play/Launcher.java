@@ -3,55 +3,59 @@ package play;
  * @author Nishant Bhasin
  * Base launcher class for playing games.
  */
+import gameai.*;
+
 import java.util.Scanner;
 
+import com.connect.four.ConnectFourConsole;
+
 import othello.OthelloConsole;
-import shared.SharedConstants;
 import tictactoe.TicTacToeConsole;
 
 
 public class Launcher {
 
 	private Scanner scan;
-	
+	private AIStrategy playaiType;
+	private String playgame;
 	public Launcher(){
-		scan = new Scanner(System.in);
-		String aiType;
-		String game;
-		game = getGameType();
-		if(!(game.equals("Quit"))) 
-			aiType = getAIType(); 
-		else
-			aiType = "Cancel";
-		
-		playGame(game,aiType);
 		
 	}
-	public void playGame(String game,String aiType)
+	public void newGame(){
+		scan = new Scanner(System.in);
+		playgame = getGameType();
+		if(!(playgame.equals("Quit"))) 
+			playaiType = getAIType(); 
+		else
+			playaiType = null;
+		playGame(playgame,playaiType);
+	}
+	public void playGame(String game,AIStrategy aiType)
 	{
 		String thisGame = game;
-		String thisAIType  = aiType;
-		if(thisGame.equals("")||aiType.equals("")) System.out.println("Oops something went wrong");
+		AIStrategy thisAIType  = aiType;
+		if(thisGame.equals("")) System.out.println("Oops something went wrong");
 		else if(thisGame.equals("Quit")){
 			System.out.println("GoodBye");
 			System.exit(0);
-			
 		}
-		else if(aiType.equals("Cancel"))
-		{
+		else if(aiType == null)	{
 			System.out.println("Okay choose the game again");
 			return;
 		}
-		else if(thisGame.equals("TicTacToe")) 
-		{
+		else if(thisGame.equals("TicTacToe")) {
 			TicTacToeConsole ticTacToeGame = new TicTacToeConsole(thisAIType);
 			ticTacToeGame.playTicTacToe();
 			return;
 		}
-		else if(thisGame.equals("Othello"))
-		{
+		else if(thisGame.equals("Othello")){
 			OthelloConsole othello = new OthelloConsole(thisAIType);
+			othello.gameOthelloInitializer(null);
 			othello.playOthello();
+		}
+		else if(thisGame.equals("ConnectFour")){
+			ConnectFourConsole cFour = new ConnectFourConsole(thisAIType);
+			cFour.playConnectFour();
 		}
 	}
 	public String getGameType()
@@ -59,21 +63,17 @@ public class Launcher {
 		int ans;
 		boolean quit;
 		do{
-			
 			quit = false;
-			
 			System.out.print("Enter the game you want to play,\n"
 					+ " 1- Tic Tac Toe\n"
 					+ " 2- Othello\n"
-					+ " 3- quit\n"); 
-		
-				
+					+ " 3- Connect Four\n"
+					+ " 4- quit\n"); 
 			if(scan.hasNextInt()){
 				ans = scan.nextInt();
 			}
 			else{
 				ans = 0;
-				
 			}
 			if(ans == 0){
 				String dummy = scan.nextLine();
@@ -86,6 +86,9 @@ public class Launcher {
 				return "Othello";
 			}
 			else if(ans ==3){
+				return "ConnectFour";
+			}
+			else if(ans ==4){
 				quit = true;
 				return "Quit";
 			}
@@ -95,7 +98,7 @@ public class Launcher {
 		}while(!quit);
 		return "";
 	}
-	public String getAIType(){
+	public AIStrategy getAIType(){
 		boolean cancel;
 		int ans = -1;
 		do{
@@ -103,40 +106,44 @@ public class Launcher {
 			System.out.print("Enter the type of AI you want to play against,\n"
 					+ " 1- Random\n"
 					+ " 2- Minimax\n"
-					+ " 3- Cancel\n"); 	
+					+ " 3- Idiot\n"
+					+ " 4- Picks the middle the solutions\n"
+					+ " 5- Cancel\n"); 	
 			if(scan.hasNextInt()){
 				ans = scan.nextInt();
 			}
 			else{
 				ans = 0;
-				
 			}
 			if(ans == 0){
 				String dummy = scan.nextLine();
 				System.out.println(dummy+" is not an integer therefore it is not an option");
 			}
 			else if(ans == 1){
-				return SharedConstants.AIRandom;
+				return new AIRandom();
 			}
 			else if(ans == 2){
-				return SharedConstants.AIMinimax;
+				return new AIMinimax();
 			}
-			else if(ans ==3){
+			else if(ans == 3){
+				return new AIIdiot();
+			}
+			else if(ans ==4){
+				return new AIPickMiddleMove();
+			}
+			else if(ans ==5){
 				cancel = true;
-				return "Cancel";
 			}
 			else{
 				System.out.print("Not an option\n");
-				
 			}
 		}while(!cancel);
-		return "";
+		return null;
 	}
-	
 	public static void main(String[] args)   {
+		Launcher launch = new Launcher();
 		while(true){
-			Launcher launch = new Launcher();
+			launch.newGame();
 		}
 	}
-	
 }

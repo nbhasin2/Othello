@@ -1,5 +1,9 @@
 package play;
 
+import gameai.*;
+import gameui.Controller;
+import gameui.Gameui;
+
 import javax.swing.JOptionPane;
 /**
  * @author Nishant
@@ -14,34 +18,82 @@ import javax.swing.JOptionPane;
  */
 
 
+
+
+
+
 import othello.OthelloConsole;
 import shared.SharedConstants;
 
 public class LauncherOthelloGUI {
-	
+
+	private  int buttonAIRandom = 0;
+	private  int buttonAIMinimax = 1;
+	private  int buttonAIPickMiddle = 2;
+	private  int buttonCancelClose = 3;
+	private  int buttonResponsenil = -1;
 	public static void main(String[] args) {
-		int response = -1;
+		LauncherOthelloGUI guiLauncherOthello = new LauncherOthelloGUI();
+		guiLauncherOthello.initGuiLauncer();
+	}
+
+
+	/*
+	 * This function is the initializer for the othello gui. This will be used inside our console
+	 * launcher to provide an option to launch the gui directly.
+	 * 
+	 */
+	public void initGuiLauncer() {
+		
+		int response = buttonResponsenil;
 		OthelloConsole othello = null;
 		do{
-		String[] options = new String[] {"Random", "Minimax", "Cancel"};
-		response = JOptionPane.showOptionDialog(null, "Select the AI type", "AI",
-		        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-		        null, options, options[0]);
-		if(response==0)
-		{
-			othello = new OthelloConsole(SharedConstants.AIRandom);
-		}else if(response==1)
-		{
-			othello = new OthelloConsole(SharedConstants.AIMinimax);
-		}else if(response==2)
-		{
-			System.exit(0);
-		}		
-		if(othello!=null)
-		{
-			othello.playOthello();
-		}
-		}while(response==-1);
+			String[] options = new String[] {SharedConstants.AIRandom, SharedConstants.AIMinimax,SharedConstants.AIPickMiddleStrategy, SharedConstants.CancelButton};
+			response = JOptionPane.showOptionDialog(null, "Select the AI type", "AI",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+					null, options, options[0]);
+			/*
+			 * If game controller and othello gui are not inside each if statement, the frame
+			 * will be initialized without any AI and you will be left with a blank game
+			 * grid that is uncloseable with the exit button. This is a small known bug where 
+			 * duplicating a small amount of code will fix the bug, allowing the frame to close
+			 * properly. This is intended as per our design, but we will implement a fix looking
+			 * forward to our next milestone.
+			 */
+			if(response==buttonAIRandom)
+			{
+				Controller gamecontroller = new Controller();
+				Gameui othellogui = new Gameui(gamecontroller);
+				othello = new OthelloConsole(new AIRandom());
+				gamecontroller.setOthelloModel(othello);
+				othello.gameOthelloInitializer(gamecontroller);
+
+			}else if(response==buttonAIMinimax)
+			{			
+				Controller gamecontroller = new Controller();
+				Gameui othellogui = new Gameui(gamecontroller);
+				othello = new OthelloConsole(new AIMinimax());
+				gamecontroller.setOthelloModel(othello);
+				othello.gameOthelloInitializer(gamecontroller);
+			}else if(response==buttonAIPickMiddle)
+			{			
+				Controller gamecontroller = new Controller();
+				Gameui othellogui = new Gameui(gamecontroller);
+				othello = new OthelloConsole(new AIPickMiddleMove());
+				gamecontroller.setOthelloModel(othello);
+				othello.gameOthelloInitializer(gamecontroller);
+			}
+			else if(response==buttonCancelClose)
+			{
+				System.exit(0);
+			}		
+			if(othello!=null)
+			{
+				othello.playOthello();
+			}
+
+		}while(response==buttonResponsenil);
+
 	}
 
 }

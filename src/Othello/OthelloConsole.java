@@ -1,144 +1,154 @@
 package othello;
-import gameai.AI;
+import gameai.AIMain;
+import gameai.AIStrategy;
+import gamemodel.GameConsole;
 import gamemodel.GameConsoleInterface;
+import gameui.Controller;
 import gameui.Gameui;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
-
 import shared.SharedConstants;
 
 
-public class OthelloConsole extends GameConsoleInterface {
-	
-	
+public class OthelloConsole extends  GameConsole {
+
+
 	private ArrayList<String> tokensChanged = null;
 	private ArrayList<String> availableSolutions = null;
 	private GameBoard board;
-	private GameStatus currentState;
-	private PlayableItem currentPlayer;
-	private AI aiPlayer;
-	private int countNO;
+	private SharedConstants.GameStatus currentState;
+	private SharedConstants.PlayableItem currentPlayer;
+	private AIMain aiPlayer;
 	private int  globalCounter; 
 	private static Scanner playerMove= new Scanner(System.in); 
-	private Gameui gameui;
-	private static int gridSize = 16; // Total number of 	
 	private boolean gameuiMove = false;
 	private int gameuiMoveX = -1;
 	private int gameuiMoveY = -1;
 	private String scoreString = "";
 	private int currentScore[];
-	
-	public OthelloConsole(String AIType){
-		this(new AI(AIType));
+	private boolean isConsole = true;
+	private ArrayList<String> directionArray;
+	private ArrayList<Observer> observers = new ArrayList<Observer>();
+
+	public OthelloConsole(AIStrategy AIType){
+
+		this(new AIMain(AIType));
 	}
 
 	/*
 	 * Constructor for othello console game
 	 */
-	public OthelloConsole(AI AIType){
+	public OthelloConsole(AIMain AIType){
 
 		super();
-		gameui = new Gameui(this);
-		gameui.initializeGrid();
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
-		countNO = 0;
 		aiPlayer = AIType;
-		board = new GameBoard();
-		gameSetup();
-		
-		
+
 	}
+
+	/**
+	 * @author Nishant
+	 * After the constructor is initialized we use gameOthelloInitializer
+	 * is mainly used to tell which kind of gui is going to be used i.e.
+	 * Swing or Console based. If the controller is empty then we use
+	 * console based gui and if the controller is present we use
+	 * the gui based. The controller is actually not hooked to the model
+	 * but has an observer so that when the board changes it notifies 
+	 * the controller to update the gui and thus Othello Console (Model)
+	 * doesn't know about the controler.
+	 */
+	public void gameOthelloInitializer(Controller gamecon)
+	{
+		if(gamecon!=null)
+		{
+			isConsole = false;
+			addObserver(gamecon);
+		}
+		board = new GameBoard(gamecon);
+
+		gameSetup();
+	}
+
 	public void playOthello(){
-		board.printBoard(gameui);
+		board.printBoard();
 		do{ 
 			playerMove(currentPlayer);
-			board.printBoard(gameui);
-			currentPlayer = (currentPlayer == PlayableItem.BLACK) ? PlayableItem.WHITE : PlayableItem.BLACK;
-		} while(currentState == GameStatus.PLAYING);
+			evaluate();
+			board.printBoard();
+			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
+		} while(currentState == SharedConstants.GameStatus.PLAYING);
 		winner();
 	}
-	
+
 	/*
 	 * Method to setup the initial game with basic item on the board.
 	 */
 	private void gameSetup(){
 		board.boardSetup();
-		currentPlayer = PlayableItem.BLACK;//Black goes first
-		currentState = GameStatus.PLAYING;
+
+		directionArray = setUpDirectionArray();
+
+		currentPlayer = SharedConstants.PlayableItem.BLACK;//Black goes first
+		currentState = SharedConstants.GameStatus.PLAYING;
 	}
-	
 	/*
 	 * This method is used to move the player item
 	 */
-	private void playerMove(PlayableItem move){
+	private void playerMove(SharedConstants.PlayableItem move){
 		boolean isValidInput = false;
 		int row=-1;
-	    int col=-1;
-	    int validity;
-	    
-	    String coor;
+		int col=-1;
+		String coor;
 		do {
-			
-			availableSolutions = availableSolutions(move);
-			//System.out.println(availableSolutions);
-			validity = validMove(-1,-1,availableSolutions);
-			if(validity == -1){
-				//System.out.print("No avaible moves switch to other player\n");
-				isValidInput = true;
-				countNO++;
-				if(countNO ==2) currentState = GameStatus.GAME_END;
-			}
-			else{
-				if(move == PlayableItem.BLACK) {
+
+			if(move == SharedConstants.PlayableItem.BLACK) {
+				if(!isConsole)
+				{
 					int item = 0;
-					//System.out.print("Enter your move player Black\n"); 
 					do{
 						item++;
 						if(item >= Integer.MAX_VALUE-10000){
 							item = 0;
-							//System.out.print(gameuiMove +"\n"); 
 						}
 						if(gameuiMove){
-							
+
 							System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
 							row = getGameuiMoveX();
 							col = getGameuiMoveY();
 						}
-						else{
-	//						System.out.println("Skipping --");
-	//						row = playerMove.nextInt() -1;
-	//						col = playerMove.nextInt() -1;
-						}
 					}while(!gameuiMove);
 					gameuiMove = false;
-						
+				}else{
+					System.out.println("Black player move:");
+					int[] parsed = consoleParser(playerMove,true);
+					row = parsed[0];
+					col = parsed[1];
 				}
-				else{
-					coor = aiPlayer.makeMove(this);
-					//System.out.println("White ai turn:");
-					row = Integer.parseInt(coor.split(",")[0]);
-					col = Integer.parseInt(coor.split(",")[1]);
-				}
-				availableSolutions = availableSolutions(move);
-				validity = validMove(row,col,availableSolutions);
-				{ 
-					countNO = 0;
-			        if(validity == 1){
-			        	board.playField[row][col].gamePiece = move;
-			        	board.currentRow = row;
-			        	board.currentCol = col;
-			        	tokenChange(row,col,move,availableSolutions,-1);
-			        	isValidInput = true; }
-			         else {
-			        	System.out.println("Invalid move");
-				        }
-					}
-				}
+			}
+			else{
+
+				System.out.println(aiPlayer.getAIType() + " player move:");
+				coor = aiPlayer.makeMove(this);
+				//System.out.println("White ai turn:");
+				row = Integer.parseInt(coor.split(",")[0]);
+				col = Integer.parseInt(coor.split(",")[1]);
+			}
+			int substituteLevel = (move == SharedConstants.PlayableItem.BLACK ? -2:-1);
+
+			if(moveSet(row,col,substituteLevel)){
+				isValidInput = true; 
+			}
+			else 
+				System.out.println("Invalid move");  
+
 		} while (!isValidInput);
+		if(isGameOver()){
+			currentState = SharedConstants.GameStatus.GAME_END;
+		}
 	}
 	/**
 	 * @author Zacharie
@@ -147,7 +157,7 @@ public class OthelloConsole extends GameConsoleInterface {
 	 * that the black player and white player had when the game is over
 	 */
 	private void winner(){
-		
+
 		int[] results = evaluate();
 		String scoreStr = "Black Count: "+ results[2] + " White Count: " + results[1]+"\n";
 		StringBuilder sb = new StringBuilder(scoreStr);
@@ -165,7 +175,8 @@ public class OthelloConsole extends GameConsoleInterface {
 			System.out.println("White Wins!");
 		}
 		setScoreString(sb.toString());
-		gameui.showPopup(scoreString);
+		setChanged();
+		notifyObservers(sb.toString());
 	}
 	/**
 	 * Will return a number depending on the number of tokens a positive number means that there are more white tokens a black number 
@@ -184,102 +195,66 @@ public class OthelloConsole extends GameConsoleInterface {
 		int[]  results = new int[3];
 		for(int row = 0; row < GameBoard.ROWS ;row++){
 			for(int col = 0; col < GameBoard.COLS ;col++){
-				if(board.playField[row][col].gamePiece.equals(PlayableItem.BLACK))
+				if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.BLACK))
 					blackToken++;
-				else if(board.playField[row][col].gamePiece.equals(PlayableItem.WHITE))
+				else if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.WHITE))
 					whiteToken++;
 			}
 		}
 		//System.out.println(whiteToken);
 		score = whiteToken - blackToken;
-		
+
 		results[0] = score;
 		results[1] = whiteToken;
 		results[2] = blackToken;
-		
+
 		setCurrentScore(results);
 		return results;
 	}
-	
+
 	/*
 	 * This method is used to checking whether the player move is valid or not.
 	 */
 	private int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
-		ArrayList<String> splitStr = new ArrayList<>();
+		new ArrayList<>();
 		ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
 		int resultValidMove = -1;
 		if(validCoordinatesAndDirection.size() == 0){
 			return resultValidMove;
 		}
-		//System.out.println(validCoordinatesAndDirection);
-	
+
 		for(String s : validCoordinatesAndDirection){
 			validCoordinatesOnly.add(s.split(",")[0]+","+s.split(",")[1]);
 		}
-		//System.out.println(validCoordinatesOnly);
 		String playerMove = row+","+col;
-		
+
 		resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
-		//System.out.println(playerMove + "--" + validCoordinatesOnly.contains(playerMove)+"--"+resultValidMove);
 		return resultValidMove;
-		
+
 	}
 	/**
 	 * @author Zacharie
 	 * depending on the value of the direction, it will go through the and reverse all the tokens
 	 * until it reachs a token of a thoken that has the same color othe player 
 	 * 
-	 * @param row the head of the line to be reversed
-	 * @param col 
-	 * @param dir cardinal direction of where the line will be changed 
-	 * @param player the color that the tokens will be flipped to
-	 * @param level the depth of the AI, used for the undoMove method
+	 * row the head of the line to be reversed
+	 * col 
+	 * dir cardinal direction of where the line will be changed 
+	 * player the color that the tokens will be flipped to
+	 * level the depth of the AI, used for the undoMove method
 	 * if level is -1 then the move was made by a player
 	 */
-	private void tokenChangeWithDirection(int row,int col,int dir,PlayableItem player,int level){
+	private void tokenChangeWithDirection(int row,int col,int dir, SharedConstants.PlayableItem player,int level){
 		int r;
 		int c;
-		
-		if(dir == 0){
-			r= 1;
-			c= 1;
-		}
-		else if(dir == 1 ){
-			r=1;
-			c=0;
-		}
-		else if(dir == 2 ){
-			r=1; 
-			c=-1;
-		}
-		else if(dir == 3 ){
-			r=0;
-			c=-1;
-		}
-		else if(dir == 4 ){
-			r=-1;
-			c=-1;
-		}
-		else if(dir == 5 ){
-			r=-1;
-			c=0;
-		}
-		else if(dir == 6){
-			r=-1;
-			c=+1;
-		}
-		else if(dir == 7){
-			r=0;
-			c=1;
-		}
-		else{
-			return;
-		}
-		while(!((board.playField[row+r][col+c].gamePiece.equals(player)))){
+		String rowAndColMods = directionArray.get(dir);
+		r = Integer.parseInt(rowAndColMods.split(",")[0]);
+		c = Integer.parseInt(rowAndColMods.split(",")[1]);
+		while(!((board.getPlayField()[row+r][col+c].gamePiece.equals(player)))){
 			if(level > 0){
 				tokensChanged.add((row+r)+","+(col+c)+","+level);
 			}
-			board.playField[row+r][col+c].gamePiece = player;
+			board.getPlayField()[row+r][col+c].gamePiece = player;
 			//board.printBoard(gameui);
 			row +=r;
 			col +=c;
@@ -292,40 +267,41 @@ public class OthelloConsole extends GameConsoleInterface {
 	 * the direction points to where the line should be reversed,
 	 * it is possible that a move has many lines to be reversed
 	 * 
-	 * @param row the value of where the a token has been added
-	 * @param col 
-	 * @param player the color of the token being placed
-	 * @param changeSolution the array list of all the players available moves
-	 * @param level the level of the AI used to save the tokens to be changed
+	 * row the value of where the a token has been added
+	 * col 
+	 * player the color of the token being placed
+	 * changeSolution the array list of all the players available moves
+	 * level the level of the AI used to save the tokens to be changed
 	 */
-	private void tokenChange(int row,int col,PlayableItem player,ArrayList<String> changeSolution,int level){
+	private void tokenChange(int row,int col,SharedConstants.PlayableItem player,ArrayList<String> changeSolution,int level){
 		int dir = -1;
 		String sRow = "" + row;
 		String sCol = "" + col;
-		
+
 		for(String solution: changeSolution){
 			if(sRow.equals(solution.split(",")[0]) && sCol.equals(solution.split(",")[1])){
 				dir = Integer.parseInt(solution.split(",")[2]);
 				tokenChangeWithDirection(row,col,dir,player,level);
-				//System.out.println("Tokens: " +tokensChanged);
-				//board.printBoard(gameui);
+
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * @author Zacharie
 	 * 
-	 * @param playerPiece is the color of the player that wants to check for his available moves
-	 * @return an arrayList<String> of all the valid moves for the player of playerPiece color
+	 * @param 
+	 * playerPiece is the color of the player that wants to check for his available moves
+	 * @return 
+	 * an arrayList - String of all the valid moves for the player of playerPiece color
 	 * the format of each string is has follows "row,col,dir"
 	 * where row is the row value of the avaible move
 	 * where col is the col value of the avaible move
 	 * where dir is the directions where the its source for reversing the line is coming from 
 	 * it is possible for having strings with the same row and col but the direction will be different
 	 */
-	private ArrayList<String> availableSolutions(PlayableItem playerPiece) {
+	private ArrayList<String> availableSolutions(SharedConstants.PlayableItem playerPiece) {
 		ArrayList<String> temp = new ArrayList<String>();
 		int maxRow = GameBoard.ROWS -1;
 		int maxCol = GameBoard.COLS -1;	
@@ -334,8 +310,8 @@ public class OthelloConsole extends GameConsoleInterface {
 		boolean valid =false;
 		for (int row = 0; row < maxRow+1; ++row) {
 			for (int col = 0; col < maxCol+1; ++col) {
-				if(board.playField[row][col].gamePiece.equals(playerPiece)){
-					
+				if(board.getPlayField()[row][col].gamePiece.equals(playerPiece)){
+
 					/**
 					 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
 					 *    7|s|3 //if the col is == 0 it should not check spots 0,6,7
@@ -343,196 +319,110 @@ public class OthelloConsole extends GameConsoleInterface {
 					 *    		//if the col is == max it should not check spots 2,3,4			
 					 *    where s is the currently selected space on the board
 					 */
-					for(int c = 0; c < 8; c++){
+					for(int dir = 0; dir < 8; dir++){
 						valid =false;
 						globalCounter = 1;
-						if(c == 0 && !(row <= 0 || col <=0)){
-							valid = isValid(row-1,col-1,c,playerPiece);
-							validRow = row-globalCounter;
-							validCol = col-globalCounter;
+						String rowAndColMods = directionArray.get(dir);
+						int r = Integer.parseInt(rowAndColMods.split(",")[0]);
+						int c = Integer.parseInt(rowAndColMods.split(",")[1]);
+
+						int boundRow =row-r;
+						int boundCol = col-c;
+						if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
+						{
+							valid = isValid(boundRow,boundCol,dir,playerPiece);
+							validRow = row-globalCounter*r;
+							validCol = col-globalCounter*c;
+							if(valid){
+								temp.add(validRow +","+ validCol + "," + dir);
+							}
 						}
-						else if(c == 1 && !(row <= 0)){
-							valid = isValid(row-1,col,c,playerPiece);
-							validRow = row-globalCounter;
-							validCol = col;
-						}
-						else if(c == 2 && !(row <= 0 || col >= maxCol)){
-							valid = isValid(row-1,col+1,c,playerPiece);
-							validRow = row-globalCounter;
-							validCol = col+globalCounter;
-						}
-						else if(c == 3 && !(col >= maxCol)){
-							valid = isValid(row,col+1,c,playerPiece);
-							validRow = row;
-							validCol = col+globalCounter;
-						}
-						else if(c == 4 && !(row >= maxRow || col >= maxCol)){
-							valid = isValid(row+1,col+1,c,playerPiece);
-							validRow = row+globalCounter;
-							validCol = col+globalCounter;
-						}
-						else if(c == 5 && !(row >= maxRow)){
-							valid = isValid(row+1,col,c,playerPiece);
-							validRow = row+globalCounter;
-							validCol = col;
-						}
-						else if(c == 6 && !(row >= maxRow || col <= 0)){
-							valid = isValid(row+1,col-1,c,playerPiece);
-							validRow = row+globalCounter;
-							validCol = col-globalCounter;
-						}
-						else if(c == 7 && !(col <= 0)){
-							valid = isValid(row,col-1,c,playerPiece);
-							validRow = row;
-							validCol = col-globalCounter;
-						}
-						if(valid){
-							//System.out.println("Root Row-" + row + " Root Col-" + col + " Valid Row - " + validRow + " Valid Col - " + validCol+" Direction-" + c);
-							temp.add(validRow +","+ validCol + "," + c);
-						}
+
 					}
 				}
 			}
 		}
 		return temp;
 	}
-	
+
 	/**
 	 * @author Zacharie
 	 * 
 	 * a recursive function that will go in a line on the board to find out if the line is 
 	 * reversible by the players moves
 	 * 
-	 * @see #availableSolutions(PlayableItem)
-	 * @param row of the adjacent space of the source token from availableSoltutions;
-	 * @param col "   "     "      "     "  "    "      "     "        "
-	 * @param c if the cardinal direction of where the line is pointing from the source token
-	 * @param if the color of the player piece
+	 * @see #availableSolutions(SharedConstants.PlayableItem)
+	 * row of the adjacent space of the source token from availableSoltutions;
+	 * col "   "     "      "     "  "    "      "     "        "
+	 * c if the cardinal direction of where the line is pointing from the source token
+	 * if the color of the player piece
 	 * @return a boolean if the line is reversible
 	 */
-	private boolean isValid(int row,int col,int c,PlayableItem playerPiece){
+	private boolean isValid(int row,int col,int dir,SharedConstants.PlayableItem playerPiece){
 		int maxRow = GameBoard.ROWS -1;
 		int maxCol = GameBoard.COLS -1;
-		
+
 		globalCounter++;
-		if(board.playField[row][col].gamePiece.equals(PlayableItem.EMPTY)){
+		if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY)){
 			return false;
 		}
-		else if(board.playField[row][col].gamePiece.equals(playerPiece)){
+		else if(board.getPlayField()[row][col].gamePiece.equals(playerPiece)){
 			return false;
 		}
 		else{
-			if(c == 0 && !(row <= 0 || col <=0)){
-				if(!(board.playField[row-1][col-1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row-1,col-1,c,playerPiece);
+			String rowAndColMods = directionArray.get(dir);
+			int r = Integer.parseInt(rowAndColMods.split(",")[0]);
+			int c = Integer.parseInt(rowAndColMods.split(",")[1]);
+			int boundRow =row-r;
+			int boundCol = col-c;
+			if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
+			{
+				if(!(board.getPlayField()[boundRow][boundCol].gamePiece.equals(SharedConstants.PlayableItem.EMPTY))){
+					return isValid(boundRow,boundCol,dir,playerPiece);
 				}
 				else{
 					return true;
 				}
 			}
-			else if(c == 1 && !(row <= 0)){
-				if(!(board.playField[row-1][col].gamePiece.equals(PlayableItem.EMPTY)))
-				{
-					return isValid(row-1,col,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 2 && !(row <= 0 || col >= maxCol)){
-				if(!(board.playField[row-1][col+1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row-1,col+1,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 3 && !(col >= maxCol)){
-				if(!(board.playField[row][col+1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row,col+1,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 4 && !(row >= maxRow || col >= maxCol)){
-				if(!(board.playField[row+1][col+1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row+1,col+1,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 5 && !(row >= maxRow)){
-				if(!(board.playField[row+1][col].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row+1,col,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 6 && !(row >= maxRow || col <= 0)){
-				if(!(board.playField[row+1][col-1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row+1,col-1,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else if(c == 7 && !(col <= 0)){
-				if(!(board.playField[row][col-1].gamePiece.equals(PlayableItem.EMPTY))){
-					return isValid(row,col-1,c,playerPiece);
-				}
-				else{
-					return true;
-				}
-			}
-			else{
+			else
+			{
 				return false;
 			}
+
 		}
 	}
-	
-	
+
 	/**
 	 * @see gamemodel.GameConsoleInterface#getAvailableSolutions(int)
 	 */
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
-		PlayableItem move;
-		move = (player == 0 ? PlayableItem.BLACK : PlayableItem.WHITE);
+		SharedConstants.PlayableItem move;
+		move = (player == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
 		availableSolutions = availableSolutions(move);
 		return availableSolutions;
 	}
-		
-	public Gameui getGameui() {
-		return gameui;
-	}
-	
-	public void setGameui(Gameui gameui) {
-		this.gameui = gameui;
-	}
-	
+
 	public boolean isGameuiMove() {
 		return gameuiMove;
 	}
-	
+
 	public void setGameuiMove(boolean gameuiMove) {
 		this.gameuiMove = gameuiMove;
 	}
-	
+
 	public int getGameuiMoveX() {
 		return gameuiMoveX;
 	}
-	
+
 	public void setGameuiMoveX(int gameuiMoveX) {
 		this.gameuiMoveX = gameuiMoveX;
 	}
-	
+
 	public int getGameuiMoveY() {
 		return gameuiMoveY;
 	}
-	
+
 	public void setGameuiMoveY(int gameuiMoveY) {
 		this.gameuiMoveY = gameuiMoveY;
 	}
@@ -541,59 +431,59 @@ public class OthelloConsole extends GameConsoleInterface {
 	 */
 	@Override
 	public boolean moveSet(int row, int col, int level) {
-		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
+		if((row >= GameBoard.ROWS || row < 0)||(col >= GameBoard.COLS || col <0 )){
 			return false;
 		}
-		PlayableItem move;
-		move = (level%2 == 0 ? PlayableItem.BLACK : PlayableItem.WHITE);
+		SharedConstants.PlayableItem move;
+		move = (Math.abs(level)%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
 		ArrayList<String> solution = availableSolutions(move);
 		if(validMove(row,col,solution) != 1){
 			return false;
 		}
-		board.playField[row][col].gamePiece = move;
-		//board.printBoard(gameui);
-		board.currentRow = row;
-    	board.currentCol = col;
-    	tokenChange(row,col,move,solution,level);
-    	//board.printBoard(gameui);
-    	//System.out.println("\n");
-    	return true;
+		else{
+			board.getPlayField()[row][col].gamePiece = move;
+			board.setCurrentRow(row);
+			board.setCurrentCol(col);
+			tokenChange(row,col,move,solution,level);
+
+			return true;
+		}
 	}	
 	/**
 	 * @see gamemodel.GameConsoleInterface#undoMove(int, int, int)
 	 */
 	@Override
 	public boolean undoMove(int row, int col, int level) {
-		if((row >= board.ROWS || row < 0)||(col >= board.COLS || col <0 )){
+		if((row >= GameBoard.ROWS || row < 0)||(col >= GameBoard.COLS || col <0 )){
 			return false;
 		}
-		else if(board.playField[row][col].gamePiece == PlayableItem.EMPTY){
+		else if(board.getPlayField()[row][col].gamePiece == SharedConstants.PlayableItem.EMPTY){
 			return false;
 		}
-		ArrayList<String> tempChange = new ArrayList<String>(((ArrayList<String>)tokensChanged.clone()));
+		ArrayList<String> tempChange = new ArrayList<String>((ArrayList<String>)tokensChanged.clone());
 		if(tempChange.size() == 0){
 			return false;
 		}
-		PlayableItem move;
-		move = (level%2 == 0 ? PlayableItem.BLACK : PlayableItem.WHITE);
-		board.playField[row][col].gamePiece = PlayableItem.EMPTY;
+		SharedConstants.PlayableItem move;
+		move = (level%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
+		board.getPlayField()[row][col].gamePiece = SharedConstants.PlayableItem.EMPTY;
 		//board.printBoard(gameui);
-		
-		
+
+
 		for(String token:tempChange){
 			int currRow = Integer.parseInt(token.split(",")[0]);
-	    	int currCol = Integer.parseInt(token.split(",")[1]);
-	    	int currLevel = Integer.parseInt(token.split(",")[2]);
-	    	if(currLevel == level){
-	    		if(move == PlayableItem.BLACK){
-		    		board.playField[currRow][currCol].gamePiece = PlayableItem.WHITE;
-		    	}
-		    	else{
-		    		board.playField[currRow][currCol].gamePiece = PlayableItem.BLACK;
-		    	}
-	    		//board.printBoard(gameui);
-		    	tokensChanged.remove(token);
-		    }
+			int currCol = Integer.parseInt(token.split(",")[1]);
+			int currLevel = Integer.parseInt(token.split(",")[2]);
+			if(currLevel == level){
+				if(move == SharedConstants.PlayableItem.BLACK){
+					board.getPlayField()[currRow][currCol].gamePiece = SharedConstants.PlayableItem.WHITE;
+				}
+				else{
+					board.getPlayField()[currRow][currCol].gamePiece = SharedConstants.PlayableItem.BLACK;
+				}
+				//board.printBoard(gameui);
+				tokensChanged.remove(token);
+			}
 		}
 		return true;
 	}
@@ -602,8 +492,7 @@ public class OthelloConsole extends GameConsoleInterface {
 	 */
 	@Override
 	public boolean isGameOver() {
-		
-		int totalSol = availableSolutions(PlayableItem.BLACK).size() + availableSolutions(PlayableItem.WHITE).size(); 
+		int totalSol = availableSolutions(SharedConstants.PlayableItem.BLACK).size() + availableSolutions(SharedConstants.PlayableItem.WHITE).size(); 
 		if(totalSol == 0)
 			return true;
 		else
@@ -635,14 +524,14 @@ public class OthelloConsole extends GameConsoleInterface {
 	/**
 	 * @return the aiPlayer
 	 */
-	public AI getAiPlayer() {
+	public AIMain getAiPlayer() {
 		return aiPlayer;
 	}
 
 	/**
 	 * @param aiPlayer the aiPlayer to set
 	 */
-	public void setAiPlayer(AI aiPlayer) {
+	public void setAiPlayer(AIMain aiPlayer) {
 		this.aiPlayer = aiPlayer;
 	}
 }

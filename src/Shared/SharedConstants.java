@@ -1,4 +1,5 @@
 package shared;
+
 /**
  * @author Nishant Bhasin
  * Shared constants class is used to store
@@ -11,16 +12,44 @@ public abstract class SharedConstants {
  * GENERAL CONSTANTS
  */
 
+//General Constants
+public static final String CancelButton = "Cancel";
+
 //AI constants 
 public static final String TicTacToe = "TicTacToeGame";
 public static final String Othello = "OthelloGame";
 
+//GUI Files
+public static final String EmptyImage = "/GameIcons/resized-images/empty.png";
+public static final String WhiteImage = "/GameIcons/resized-images/white-green.png";
+public static final String BlackGreenImage = "/GameIcons/resized-images/black-green.png";
+public static final String GreenYellowImage= "/GameIcons/resized-images/empty-available-green-yellow.png";
+
+
 //AI Type
 public static final String AIRandom = "Random";
 public static final String AIMinimax = "Minimax";
+public static final String AIIdiot = "Idiot";
+public static final String AIPickMiddleStrategy = "AI Picks the middle move";
 
 //Error
 public static final String ErrorMessage = "Something went wrong. Error !!";
+
+
+/*
+ * OTHELLO and CONNECT FOUR
+ * 
+ */
+public enum PlayableItem {
+EMPTY, WHITE, BLACK
+}
+
+/*
+ * Enum for state of the game. This tells whether the game is in playing mode or ended.
+ */
+public enum GameStatus {
+PLAYING, GAME_END
+}
 
 
 /*

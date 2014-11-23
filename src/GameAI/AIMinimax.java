@@ -1,70 +1,36 @@
 package gameai;
 
+import java.util.ArrayList;
+
+import shared.SharedConstants;
 import gamemodel.GameConsoleInterface;
 
-import java.util.ArrayList;
-import java.util.Random;
+public class AIMinimax implements  AIStrategy{
 
-import othello.OthelloConsole;
-import shared.SharedConstants;
-/**
- * 
- * @author Zacharie
- * AI funcitons that game will use, depending on the strategies called.
- */
-
-public class AI {
-	private String GameType;
-	private Random randomGenerator;
-	private String AIType;
-	private int [][] TicTacToeBoard;
-	private ArrayList<String> othelloValidMoves;
-	
-	/**
-	 * constructor for AI using strategy
-	 */
-	public AI( String AIType){
-		this.setAIType(AIType);
-	}
-	/**
-	 * 
-	 * @param game the game that the AI is playing
-	 * @return a string coordinate that return the move it chooses to make based on the set AI 
-	 */
-	public String makeMove(GameConsoleInterface game )  {
-		if(AIType.equals(SharedConstants.AIRandom)){
-			return randomStrategy(game.getAvailableSolutions(-1));
-		}
-		else if(AIType.equals(SharedConstants.AIMinimax)){
-			return minimaxStrategy(game,3,Integer.MIN_VALUE+1,Integer.MAX_VALUE-1);
-		}
-		else{
-			return "";
-		}
-	}
-	/**
-	 * 
-	 * @param validMoves a array list of valid moves that it will choose from
-	 * @return a string coordinate picked randomly from the valid moves
-	 */
-	private String randomStrategy(ArrayList<String> validMoves){
-		long ranSeed = System.nanoTime();
-		randomGenerator = new Random(ranSeed);
-		int index = randomGenerator.nextInt(validMoves.size());
-		return validMoves.get(index);
+	public AIMinimax() {
+		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * A recursive function that checks for the best possible solutions based on a given depth to search through
-	 * most of the logic was found from this website:{@link https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html}
+	 * most of the logic was found from this website:
+	 * ink https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html
 	 * 
-	 * @param game the game the AI is playing
-	 * @param level the depth of which the AI is looking through a higher depth means a better result
-	 * @param alpha the best maximum score used for prunning
-	 * @param beta the best minimum score used for prunning
+	 *  
+	 * game the game the AI is playing
+	 *  
+	 * level the depth of which the AI is looking through a higher depth means a better result
+	 * 
+	 * alpha the best maximum score used for prunning
+	 * 
+	 * beta the best minimum score used for prunning
 	 * @return string coordinate picked that will have minimal risk
 	 */
+	@Override
+	public String makeMove(GameConsoleInterface game) {
+		return minimaxStrategy(game,3,Integer.MIN_VALUE +1,Integer.MAX_VALUE -1);
+	}
+	
 	private String minimaxStrategy(GameConsoleInterface game,int level,int alpha,int beta){
-		
 		GameConsoleInterface tempGame;
 	    int currentScore;
 	    String currentScoreStr;
@@ -109,18 +75,9 @@ public class AI {
 	     }
 	     return bestRow + "," + bestCol + "," + ((level%2 != 0) ? alpha: beta);
 	}
-
-	/**
-	 * @return the aIType
-	 */
-	public String getAIType() {
-		return AIType;
+	@Override
+	public String toString(){
+		return SharedConstants.AIMinimax;
 	}
 
-	/**
-	 * @param aIType the aIType to set
-	 */
-	public void setAIType(String aIType) {
-		AIType = aIType;
-	}
 }

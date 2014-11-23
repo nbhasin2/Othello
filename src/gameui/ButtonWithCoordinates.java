@@ -17,8 +17,8 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class ButtonWithCoordinates extends JButton {
 
-    int coordX;
-    int coordY;
+	private  int coordX;
+    private int coordY;
 
     /**
      * Constructor for the class. This also calls the super class.

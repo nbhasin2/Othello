@@ -1,13 +1,11 @@
 package testing;
 
 import static org.junit.Assert.*;
-
+import gameai.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import othello.OthelloConsole;
-import shared.SharedConstants;
-
 public class OthelloConsoleTest {
 	
 	private OthelloConsole othGame;
@@ -16,9 +14,14 @@ public class OthelloConsoleTest {
 	private String testCoor;
 	@Before 
 	public void setUp() {
-		othGame = new OthelloConsole(SharedConstants.AIMinimax);
+		othGame = new OthelloConsole(new AIMinimax());
+		othGame.gameOthelloInitializer(null);
 	}
-	
+	/**
+	 * 
+	 * test the get avainble solution and that make a move by picking a move from that method 
+	 * is a valid
+	 */
 	@Test
 	public void testGetAvailableSolutions() {
 		
@@ -28,7 +31,11 @@ public class OthelloConsoleTest {
 		assertTrue(othGame.moveSet(testRow, testCol, 0));
 		
 	}
-
+	/**
+	 * tests the evaulate method of connect 4 test results should 
+	 * be depended on what moves were made, and having negative score for a human player
+	 * and positive score on a aiplayer
+	 */
 	@Test
 	public void testEvaluate() {
 		assertEquals(0,othGame.evaluate()[0]);//score for the intitial board
@@ -56,7 +63,13 @@ public class OthelloConsoleTest {
 		assertEquals(5,othGame.evaluate()[1]);//number of whitetokens
 		assertEquals(3,othGame.evaluate()[2]);//number of blacktokens
 	}
-
+	/**
+	 * tests the functionality of moveset
+	 * first it will test for the move that  are out of range
+	 * then it will test for moves that should not be valid
+	 * then it will test for moves that should be valid
+	 * then it will test for moves that should no longer be valid
+	 */
 	@Test
 	public void testMoveSet() {
 		//moves that are out of range
@@ -81,7 +94,13 @@ public class OthelloConsoleTest {
 		
 		
 	}
-
+	/**
+	 * Test to try to undo moves
+	 * first will test to undo moves that are out of range
+	 * then it will test for moves that are already empty
+	 * then it will test to aussure that a move made can be removed
+	 * then it will test to ausser that removed moves can not be removed again(because they are empty)
+	 */
 	@Test
 	public void testUndoMove() {
 		//Testing out of range rows and cols
@@ -107,11 +126,14 @@ public class OthelloConsoleTest {
 		testCol = Integer.parseInt(testCoor.split(",")[1]);
 		othGame.moveSet(testRow, testCol, 4);
 		assertTrue(othGame.undoMove(testRow, testCol, 4));
-		
-		
-		
+		assertFalse(othGame.undoMove(testRow, testCol, 4));
 	}
-
+	/**
+	 * test to aussure that the game is not over from the start
+	 * then will test to see if the human player won
+	 * then will test to see if the ai won
+	 * then will test for a finished game based on turn by turn
+	 */
 	@Test
 	public void testIsGameOver() {
 		assertFalse(othGame.isGameOver());// the game should not be over initially

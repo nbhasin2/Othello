@@ -2,7 +2,7 @@ package gamemodel;
 
 import java.util.ArrayList;
 
-public class DummyConsole extends GameConsoleInterface {
+public class DummyConsole implements GameConsoleInterface {
 	private ArrayList<String> solutions;
 	
 	public DummyConsole(ArrayList<String> solutions) {

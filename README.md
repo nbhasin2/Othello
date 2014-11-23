@@ -1,9 +1,121 @@
 **Kernelpanic**
 ===========
+## Milestone 3
 
-### Branch Switched to Develop 
-This branch is obsolete since milestone 2 please use develop branch. Thanks.
+<img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
 
+#### How to run the game
+There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
+run both games and test it out.
+
+Running othello game using GUI is very simple. You can use the Othello_executablejar_m3.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+
+Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
+othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
+
+```
+Enter the game you want to play,
+ 1- Tic Tac Toe
+ 2- Othello
+ 3- Connect Four
+ 4- quit
+
+2
+Enter the type of AI you want to play against,
+ 1- Random
+ 2- Minimax
+ 3- Idiot
+ 4- Picks the middle the solutions
+ 5- Cancel
+4
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   | O | * |   |   |   |
+----------------
+   |   |   | * | O |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+Black player move: X X
+
+```
+#### How to run tests with JUnit 
+
+1. go to Run->Run Configurations
+
+2. Then find JUnit in the column on the left 
+
+3. In JUnit there should be a unit called AllTests. Click  on it.
+
+4. Now in the test tab on the right, the field Test Class should read: testing.AllTests click apply then Run
+
+#### DESIGN DECISIONS AND REFACTORING (Per Package/class)
+
+--com.connect.four : 
+-ConnectFourConsole (Matt and Zach)
+
+I decided to extract isGameOver() to a superclass called GameConsole so because it was the exact same code as the isGameOver() method of TicTacToe, also exracted setUpDirectionArray because it was the same as the one for OthelloConsole
+ Also now makes use of a new function called consoleParser from it's super class to get info from the user
+player move now uses the method moveset to see if moves are valid.
+
+One refactoring design that I implemented was to move the PlayableItem.java and GameStatus.java files into the shared constants package. Doing so eliminated the need for Othello and tic tac toe to each have their own copies of these java files. Doing so makes it easier to implement any new games that use black and white tokens by simply importing the shared constants package. 
+
+Connect four was created using the same tools as Othello. It was designed to be implemented very easily and to handle any AI stratgeies that will be created in the future. Every board is created with board spaces that will hold a playable item, either a black, white or empty piece. Connect four was able to be refactored quite easily once it reached a working state. Our goal of using the separate java classes
+to build these games proved useful when we looked at refactoring options for our code base. 
+
+--gameai (Zach and Matt)
+-AI 
+now implements the strategy pattern for its strategy
+added a interface called AI Strategy and a class for every strategy we have
+two new strategies were implemented:
+-AIIdiot which is a reverse minimax
+-AIPickMiddle move which pick the move in the middle of the list of avaible moves
+
+--gamemodel (Zach)
+-GameConsoleInterFace is now an appropriate Interface
+
+Added an abstract class called GameConsole to handle some methods where code was being repeated in mutluple gameConsoles
+-GameConsole aslo has a funciton that parses int from the console, since it's a method that every game makse use of it is appropriate to place it there
+
+--gameui (Nishnat)
+-Controller.java
+-ButtonWithCoordinates.java
+-Gameui.java
+With the feedback received I decided to add a controller class that implements observabe interface and has access to both the Model (othelloconsole) and View (Gameui). Othelloconsole extends gameconsole abstract class that extends observable. This way when we need to update anything from othelloconsole we notify the observers and send the the object with appropriate information. For example now Gameui is not a part of othelloconsole but still gets updated using observer pattern. A lot of refactoring was done in Gameui and a new class called Controller.java was created to lower the load on Gameui and remove responsibility from Gameui. For example now if the Gameui requires available solutions it talks with Controller class and gets it from there and not directly from othelloConsole (model). Also if othelloconsole needs to update the grid it sends notification to the controller that takes care of updating the grid. This way Model doesn't know about the view and vice versa but they both talk to each other using observers. ButtonWithCoordinate class didn't need any refactoring and hence nothing much was done.
+
+--othello:
+
+-OthelloConsole got rid of all the if else if else statements in the following methods: isValid,availableSolution, and tokenChangeWithDirection
+for new way to minimize lines and confusion, the new was makes uses of an array of coordinates and depending on the index(which direction it is looking at) it will have a different coordinate parsed the array is implemented in GameConsole and passes it down to OthelloConsole now makes use of consoleParser player move now uses the method moveset to see if moves are valid.
+Not much was there to refactor in BoardSpace and GameBoard. Gameboard however extends observable and sends notifications to update the grid in gameui but it doesn't know about gameui. 
+
+--play: (Nishant Matt and Zach)
+-Launcher now as more choice of AI and more choice of games,
+also the AI being passed to games is no longer a string but an AIStrategy class
+-LauncherOthelloGui is created specifically for OthelloGUI. This way you have the Launcher that deals only with Console and LauncherOthelloGui that takes care of GUI part.
+
+--tictactoe (Nishant(initially made the game) and Zach (refactored, added AI etc.))
+-Tictactoe console was refactored to make use of the methods evauluate and isGameOver to determine the winner by consequence hasWon() and isDraw() were removed because they are no longer needed so they were removed
+Titactoe evaluateLine method got rid of all the if else if statements and replaced it with a pre determined array similar to how ConnectFourConsole's evaulateToken look like
+player move now uses the method moveset to see if moves are valid.
+now makes use of consoleParser
+
+--Testing (Adhi)
+As for JUnit tests, the following information was taken into account: the pickmiddleMove AI, random AI and minimax AI was tested thoroughly and all the public methods were checked. The Idiot AI was not checked because it was mentioned that it did not count as a third AI for the project. Therefore, it is implemented as an extra AI in our game. The tests conducted in all three games were similar. For testing of the AI, the testMakeMove() method was tested. Solutions were set and the testMakeMove was tested to see if the AI identified it as a valid move or not. The only exception in the minimax AI was the minimax AI utilized a third column which is set to 1 as during play, the AI is assigned the player 1 and human is assigned the player 0. As for the PickMiddleMove test, the size of the valid moves is cut in half, therefore we only expect the middle solution to be a valid move for this AI. Furthmore, testSetAIType is a self explanatory test that just looks into weather the AI strategy can be selected or not. It is a basic test and quite straightforward. Again please note that the toString was not tested as it is a basic function that just returns the name of the AI that is in play at that moment. In the testSetAIType, we use the implementation of the toSTring method when we use assert equals to see if we received the correct name of the AI or not. Now for the game class tests, all the game classes had the same methods, therefore all 3 of the game test classes utilized the same testing concept. The games are set up first, othello and connect4 are set up by simply instantiating a game and using the minimax strategy for AI. The tic tac toe game is initialized first by inputting a X and then instantiating the game with a Minimax AI. The games are then tested to see if the game can correctly process that an avaialble move is possible to be made. Test evaluates just evaluates the score for each player. TestMoveSet() tests moves that are out of range, should be valid and ones that should not be valid as a move like that has been previously made. TestUndoMoves tests out of range row and columns, places that have already been set, ones that have not been set yet and ones that have already been removed. Lastly, testIsGameOver is tested to see if a game is over once the player wins, once then AI wins or once there is a draw.
+
+
+*Note - Again we don't really know the exact format so as how to tell what was added / removed during refactoring so we did our best to put it in paragraph format perpackage and class. We will add more and take into consideration any suggestions made to improve this. Also we took into consideration all the issues opened and tried to resolve them. If any issue you think is missed then please let us know and we will fix it in next milestone.
+
+Also make sure you have java 8 else the executable won't run.
+===========
 ## Milestone 2
 
 #### How to run the game
@@ -29,7 +141,7 @@ Enter the type of AI you want to play against,
  Now you can chose 1 for tictactoe 2 for Othello and then once game is chosen you can select the strategy. 1 for random 2 for minimax. Othello will fire up a gui where you can play the game in GUI mode but we don't have gui for tictactoe as according to the guidelines we needed to make gui for only othello.
  
  - GUI play without the hassle.
- There is an executable java launcher for Othello Game. Its called Othello_executable.jar. Double click it and select the strategy you want to play the game in and same gui will pop up that will allow you to play othello.
+ There is an executable java launcher for Othello Game. Its called Othello_executable.jar. Double click it and select the strategy you want to play the game in and same gui will pop up that will allow you to play othello. You must have jre1.8 lastest isnstalled on your computer to run that jar otherwise it will give you errors. 
  
 #### How to run tests with JUnit 
 
@@ -40,6 +152,34 @@ Enter the type of AI you want to play against,
 3. In JUnit there should be a unit called AllTests. Click  on it.
 
 4. Now in the test tab on the right, the field Test Class should read: testing.AllTests click apply then Run
+
+##### Lines to comment in OthelloConsole.java (Line no. 97) (Console play)
+
+```java 
+
+//					int item = 0;
+//					System.out.print("Enter your move player Black\n"); 
+//					do{
+//						item++;
+//						if(item >= Integer.MAX_VALUE-10000){
+//							item = 0;
+//							//System.out.print(gameuiMove +"\n"); 
+//						}
+//						if(gameuiMove){
+//							
+//							System.out.println("X - " + gameuiMoveX + " -- " + "Y - " + gameuiMoveY);
+//							row = getGameuiMoveX();
+//							col = getGameuiMoveY();
+//						}
+//						else{
+//							System.out.println("Skipping --");
+							row = playerMove.nextInt() -1;
+							col = playerMove.nextInt() -1;
+//						}
+//					}while(!gameuiMove);
+//					gameuiMove = false;
+
+```
 
 #### DESIGN DECISIONS 
 Console based Othello was designed using five different classes. The basis of the game is created using the gameBoard class. Each gameboard object will be a 2D array made of up boardSpace objects. Each boardSpace object can contain one playableItem (black or white game token). 
@@ -147,7 +287,6 @@ Game Started ...
    |   |   
 -----------
    |   |   
-   
 ```
 
 3. To play othello simply enter 2 instead of 1.
@@ -196,11 +335,9 @@ For example
 ----------------
 
 ```
-
  then this is what the board should be outputted 
  
 ```
-
 |   | * |   |
 ----------------
  * | * | * | O |
@@ -211,7 +348,6 @@ For example
 ----------------
 
 ```
-
 How ever the game will output something like this
 
 ```

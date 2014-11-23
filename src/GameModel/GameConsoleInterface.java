@@ -4,23 +4,23 @@ package gamemodel;
  * The general game interface that AI works with, all the methods here are what each game needs to implement
  */
 import java.util.ArrayList;
-
-import othello.GameBoard;
-
-public abstract class GameConsoleInterface {
+public interface GameConsoleInterface {
 
 	/**
 	 * @author Zacharie
-	 * @param player an integer that defines the player that needs to see move
+	 * 
+	 * player an integer that defines the player that needs to see move
 	 * usually 0 for the human 1 for the AI
-	 * @return  A list of moves that are available for the player to make, the 
+	 * 
+	 * A list of moves that are available for the player to make, the 
 	 * list holds string in the following format "row,col,dir"(dir is used for Othello)
 	 * 
 	 */
 	public abstract ArrayList<String> getAvailableSolutions(int player);
 	/**
 	 * @author Zacharie
-	 * @returns and integer array in which the first element is a score that defines the state
+	 *  
+	 * and integer array in which the first element is a score that defines the state
 	 * of the board. The score is used by the AI to determine what wether a certain desicions 
 	 * is a good move
 	 */
