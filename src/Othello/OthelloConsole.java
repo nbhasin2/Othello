@@ -3,6 +3,7 @@ import gameai.AIMain;
 import gameai.AIStrategy;
 import gamemodel.GameConsole;
 import gamemodel.GameConsoleInterface;
+import gamestate.GameSateModel;
 import gameui.Controller;
 import gameui.Gameui;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
+
 import shared.SharedConstants;
 
 
@@ -32,7 +34,8 @@ public class OthelloConsole extends  GameConsole {
 	private boolean isConsole = true;
 	private ArrayList<String> directionArray;
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
-
+	private GameSateModel gameStateModel;
+	
 	public OthelloConsole(AIStrategy AIType){
 
 		this(new AIMain(AIType));
@@ -44,6 +47,7 @@ public class OthelloConsole extends  GameConsole {
 	public OthelloConsole(AIMain AIType){
 
 		super();
+		gameStateModel = new GameSateModel();
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
 		aiPlayer = AIType;
@@ -75,9 +79,11 @@ public class OthelloConsole extends  GameConsole {
 
 	public void playOthello(){
 		board.printBoard();
+		gameStateModel.getUndoBoard().add(board.getPlayField());
 		do{ 
 			playerMove(currentPlayer);
 			evaluate();
+			gameStateModel.getUndoBoard().add(board.getPlayField());
 			board.printBoard();
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
