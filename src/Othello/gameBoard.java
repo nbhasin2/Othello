@@ -73,6 +73,27 @@ public class GameBoard  extends Observable{
 		setChanged();
 		notifyObservers(listOfItems);	
 	}
+	
+	
+	/*
+	 * This method is used to print the board for the user.
+	 */
+	public void printBoard(BoardSpace[][] bspace){
+		ArrayList<String> listOfItems = new ArrayList<>();
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				bspace[i][j].putItem();
+				listOfItems.add(bspace[i][j].gamePiece+"");
+				if(j < COLS ) System.out.print("|");
+			}
+		System.out.println();
+		if(i < ROWS  )
+			System.out.println("----------------");
+		}
+		setChanged();
+		notifyObservers(listOfItems);	
+	}
+	
 	public BoardSpace[][] getPlayField() {
 		return playField;
 	}

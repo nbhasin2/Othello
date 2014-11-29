@@ -1,6 +1,7 @@
 package gamestate;
 
 import java.util.ArrayList;
+import com.connect.four.boardSpace;
 import com.connect.four.gameBoard;
 
 import othello.BoardSpace;
@@ -19,6 +20,33 @@ public class GameSateModel {
 		undoBoard = new ArrayList<BoardSpace[][]>();
 	}
 
+	public BoardSpace[][] undoBoardMove()
+	{
+		BoardSpace[][] tempSpace = null;
+		if(undoBoard.size()>0)
+		{
+			tempSpace = undoBoard.get(undoBoard.size()-1);
+			redoBoard.add(tempSpace);
+			undoBoard.remove(undoBoard.size()-1);
+		}
+		
+		return tempSpace;
+	}
+	
+	
+	public BoardSpace[][] redoBoardMove()
+	{
+		BoardSpace[][] tempSpace = null;
+		if(redoBoard.size()>0)
+		{
+			tempSpace = redoBoard.get(redoBoard.size()-1);
+			undoBoard.add(tempSpace);
+			redoBoard.remove(redoBoard.size()-1);
+		}
+		
+		return tempSpace;
+	}
+	
 	/**
 	 * @return the redoBoard
 	 */

@@ -12,6 +12,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import com.connect.four.boardSpace;
+
 import shared.SharedConstants;
 
 
@@ -36,6 +38,9 @@ public class OthelloConsole extends  GameConsole {
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private GameSateModel gameStateModel;
 	
+	private ArrayList<BoardSpace[][]> redoBoard;
+	private ArrayList<BoardSpace[][]> undoBoard;
+	
 	public OthelloConsole(AIStrategy AIType){
 
 		this(new AIMain(AIType));
@@ -47,6 +52,8 @@ public class OthelloConsole extends  GameConsole {
 	public OthelloConsole(AIMain AIType){
 
 		super();
+		redoBoard = new ArrayList<BoardSpace[][]>();
+		undoBoard = new ArrayList<BoardSpace[][]>();
 		gameStateModel = new GameSateModel();
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
@@ -79,12 +86,29 @@ public class OthelloConsole extends  GameConsole {
 
 	public void playOthello(){
 		board.printBoard();
-		gameStateModel.getUndoBoard().add(board.getPlayField());
+		System.out.println("Adding State "+"\n\n BOARD \n\n");
+		
+		undoBoard.add(board.getPlayField());
+		
+		board.printBoard(board.getPlayField());
+		
+		System.out.println("\n\n END \n\n");
+//		gameStateModel.getUndoBoard().add(board.getPlayField());
 		do{ 
-			playerMove(currentPlayer);
+			playerMove(currentPlayer);			
 			evaluate();
-			gameStateModel.getUndoBoard().add(board.getPlayField());
 			board.printBoard();
+			System.out.println("CUrrent PLayer - "+currentPlayer);
+			if(currentPlayer.equals(SharedConstants.PlayableItem.BLACK))
+			{
+				System.out.println("Adding State "+"\n\n BOARD \n\n");
+				
+				undoBoard.add(board.getPlayField());
+				
+				board.printBoard(board.getPlayField());
+				
+				System.out.println("\n\n END \n\n");
+			}
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
 		winner();
@@ -218,6 +242,22 @@ public class OthelloConsole extends  GameConsole {
 		return results;
 	}
 
+	public void undoMove()
+	{
+//		board.setPlayField(gameStateModel.undoBoardMove());
+		
+		for(BoardSpace[][] bs: undoBoard)
+		{
+			board.printBoard(bs);
+		}
+	}
+	
+	public void redoMove()
+	{
+		board.setPlayField(gameStateModel.redoBoardMove());
+		board.printBoard();
+	}
+	
 	/*
 	 * This method is used to checking whether the player move is valid or not.
 	 */
@@ -539,5 +579,19 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void setAiPlayer(AIMain aiPlayer) {
 		this.aiPlayer = aiPlayer;
+	}
+
+	/**
+	 * @return the gameStateModel
+	 */
+	public GameSateModel getGameStateModel() {
+		return gameStateModel;
+	}
+
+	/**
+	 * @param gameStateModel the gameStateModel to set
+	 */
+	public void setGameStateModel(GameSateModel gameStateModel) {
+		this.gameStateModel = gameStateModel;
 	}
 }

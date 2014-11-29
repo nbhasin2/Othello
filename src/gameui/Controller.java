@@ -126,6 +126,26 @@ public class Controller extends Object implements Observer{
 		}
 	}
 	
+	/**
+	 * @author Nishant
+	 * This method is used to undo a move and redraw the gui
+	 * on the board.
+	 */
+	public void undoMove()
+	{
+		othelloModel.undoMove();
+	}
+	
+	/**
+	 * @author Nishant
+	 * This method is used to redo a move if a person has not 
+	 * made a move after undo.
+	 */
+	public void redoMove()
+	{
+		othelloModel.redoMove();
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if(arg1 instanceof ArrayList<?>)
