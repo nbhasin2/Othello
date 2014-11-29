@@ -38,7 +38,6 @@ public class BoardSpace {
 	 public SharedConstants.PlayableItem getGamePiece(){
 		 return this.gamePiece;
 		 
-	 }
-	
+	 }	
 
 }

@@ -3,9 +3,14 @@ package othello;
 import gameui.Controller;
 import gameui.Gameui;
 import shared.SharedConstants;
+import shared.SharedConstants.PlayableItem;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.connect.four.boardSpace;
 
 /*
  * This class is mainly deals with initialization of the game board for othellogame.
@@ -73,6 +78,28 @@ public class GameBoard  extends Observable{
 		setChanged();
 		notifyObservers(listOfItems);	
 	}
+	
+	public BoardSpace[][] makeDeepCopy()
+	{
+		BoardSpace[][] bsDeepCopy = new BoardSpace[ROWS][COLS];	//New board that is 4x4 
+	
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				bsDeepCopy[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
+			}
+		}
+		
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				SharedConstants.PlayableItem gamePiece = playField[i][j].getGamePiece();
+				bsDeepCopy[i][j].gamePiece = gamePiece;
+			}
+		}
+			
+		return bsDeepCopy;
+	}
+
+	
 	public BoardSpace[][] getPlayField() {
 		return playField;
 	}

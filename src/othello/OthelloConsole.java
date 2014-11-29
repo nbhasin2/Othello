@@ -79,11 +79,11 @@ public class OthelloConsole extends  GameConsole {
 
 	public void playOthello(){
 		board.printBoard();
-		gameStateModel.getUndoBoard().add(board.getPlayField());
+		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		do{ 
 			playerMove(currentPlayer);
 			evaluate();
-			gameStateModel.getUndoBoard().add(board.getPlayField());
+			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			board.printBoard();
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
