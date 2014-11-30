@@ -79,6 +79,30 @@ public class GameBoard  extends Observable{
 		notifyObservers(listOfItems);	
 	}
 	
+	/*
+	 * This method is used to print the board for the user.
+	 */
+	public void printBoard(BoardSpace[][] boardToPrint){
+		ArrayList<String> listOfItems = new ArrayList<>();
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				boardToPrint[i][j].putItem();
+				listOfItems.add(boardToPrint[i][j].gamePiece+"");
+				if(j < COLS ) System.out.print("|");
+			}
+		System.out.println();
+		if(i < ROWS  )
+			System.out.println("----------------");
+		}
+		setChanged();
+		notifyObservers(listOfItems);	
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * @return
+	 * This method is used to create deep copy of the board.
+	 */
 	public BoardSpace[][] makeDeepCopy()
 	{
 		BoardSpace[][] bsDeepCopy = new BoardSpace[ROWS][COLS];	//New board that is 4x4 

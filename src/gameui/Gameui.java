@@ -62,6 +62,8 @@ public class Gameui {
 	private JMenuItem item;
 	private JRadioButtonMenuItem randomAI;
 	private JRadioButtonMenuItem minimaxAI;
+	private JButton undoButton;
+	private JButton redoButton;
 	private JLabel scoreLabel;
 	private JCheckBox checkbox;
 	private String emptyImage;
@@ -110,11 +112,22 @@ public class Gameui {
 		minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 		scoreLabel = new JLabel();
 		checkbox = new JCheckBox();
+		
+		//undo and redo button
+		undoButton = new JButton("Undo");
+		redoButton = new JButton("Redo");
+		
+		//adding action listener to the button
+		undoMoveAddButtonListener(undoButton);
+		redoMoveAddButtonListener(redoButton);
+		
 		checkbox.setSelected(true);
 		checkbox.addItemListener(new CheckBoxListener());
 		menuBar.add(new JLabel(" | Score - "));
 		menuBar.add(scoreLabel);
 		menuBar.add(new JLabel(" | Enable Available Moves"));
+		menuBar.add(undoButton);
+		menuBar.add(redoButton);
 		menuBar.add(checkbox);
 		item.addActionListener(new ActionListener(){
 			@Override
@@ -204,6 +217,32 @@ public class Gameui {
 			}   
 	}
 
+	
+	public void undoMoveAddButtonListener(JButton button)
+	{
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gameController.undoMove();
+			}
+		});
+	}
+	
+	
+	public void redoMoveAddButtonListener(JButton button)
+	{
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gameController.redoMove();
+			}
+		});
+	}
+	
 	/**
 	 * Action listener for checkbox button
 	 * @author Nishant

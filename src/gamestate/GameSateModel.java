@@ -18,6 +18,26 @@ public class GameSateModel {
 		redoBoard = new ArrayList<BoardSpace[][]>();
 		undoBoard = new ArrayList<BoardSpace[][]>();
 	}
+	
+	public BoardSpace[][] popUndoElement()
+	{
+		if(undoBoard.size()<=0)
+			return null;
+		
+		BoardSpace[][] temp = undoBoard.get(undoBoard.size()-1);
+		
+		undoBoard.remove(undoBoard.size()-1);
+		
+		BoardSpace[][] playField = new BoardSpace[row][col];	//New board that is 4x4 
+		
+		for(int i = 0; i < row; i++){
+			for(int j = 0; j < col; j++){
+				playField[i][j] = temp[i][j]; //4x4 gameboard where every space is a new boardSpace object 
+			}
+		}
+	
+		return temp;
+	}
 
 	/**
 	 * @return the redoBoard

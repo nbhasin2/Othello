@@ -144,6 +144,24 @@ public class Controller extends Object implements Observer{
 	}
 
 	/**
+	 * @author nishantbhasin
+	 * @return
+	 */
+	public void undoMove()
+	{
+		this.othelloModel.undoBoard();
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * @return
+	 */
+	public void redoMove()
+	{
+		this.othelloModel.redoBoard();
+	}
+	
+	/**
 	 * @return the othelloModel
 	 */
 	public OthelloConsole getOthelloModel() {

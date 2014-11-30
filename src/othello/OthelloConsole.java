@@ -89,7 +89,26 @@ public class OthelloConsole extends  GameConsole {
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
 		winner();
 	}
-
+	
+	/**
+	 * @author nishantbhasin
+	 * Undo player move and print board
+	 */
+	public void undoBoard()
+	{
+		board.printBoard(gameStateModel.popUndoElement());
+	}
+	
+	
+	/**
+	 * @author nishantbhasin
+	 * Redo player move and print board
+	 */
+	public void redoBoard()
+	{
+		
+	}
+	
 	/*
 	 * Method to setup the initial game with basic item on the board.
 	 */
