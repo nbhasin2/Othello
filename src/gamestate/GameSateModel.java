@@ -35,14 +35,6 @@ public class GameSateModel {
 		
 		undoBoard.remove(undoBoard.size()-1);
 		
-		BoardSpace[][] playField = new BoardSpace[row][col];	//New board that is 4x4 
-		
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				playField[i][j] = undoTempElement[i][j]; //4x4 gameboard where every space is a new boardSpace object 
-			}
-		}
-	
 		return undoTempElement;
 	}
 	
@@ -58,14 +50,6 @@ public class GameSateModel {
 		
 		BoardSpace[][] redoTempElement = redoBoard.get(redoBoard.size()-1);
 		redoBoard.remove(redoBoard.size()-1);
-		
-		BoardSpace[][] playField = new BoardSpace[row][col];	//New board that is 4x4 
-		
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < col; j++){
-				playField[i][j] = redoTempElement[i][j]; //4x4 gameboard where every space is a new boardSpace object 
-			}
-		}
 		
 		return redoTempElement;
 	}
