@@ -10,6 +10,7 @@ package gameui;
  * There 
  */
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Font;
@@ -53,24 +54,28 @@ public class Gameui {
 	private Boolean aiRandomCheck, aiMinimaxCheck;
 	private String aiType;
 	private Controller gameController;
+	private String emptyImage;
+	private String whiteImage;
+	private String blackImage;
+	private String availableMoveImage;
+	private Image img;
 
 	//ui
 	private JFrame frame;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenu aiMenu;
-	private JMenuItem item;
+	private JMenuItem exitJmenuItem;
+	private JMenuItem saveJmenuItem;
+	private JMenuItem loadJmenuItem;
 	private JRadioButtonMenuItem randomAI;
 	private JRadioButtonMenuItem minimaxAI;
 	private JButton undoButton;
 	private JButton redoButton;
 	private JLabel scoreLabel;
 	private JCheckBox checkbox;
-	private String emptyImage;
-	private String whiteImage;
-	private String blackImage;
-	private String availableMoveImage;
-	private Image img;
+	private JButton undoButton;
+	private JButton redoButton;
 
 
 	//Constructor 
@@ -107,10 +112,13 @@ public class Gameui {
 
 		menuBar.add(menu);
 
-		item = new JMenuItem("Exit");
+		exitJmenuItem = new JMenuItem("Exit");
+		loadJmenuItem = new JMenuItem("Load");
+		saveJmenuItem = new JMenuItem("Save");
 		randomAI = new JRadioButtonMenuItem("Random", true);
 		minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 		scoreLabel = new JLabel();
+		
 		checkbox = new JCheckBox();
 		
 		//undo and redo button
@@ -123,20 +131,32 @@ public class Gameui {
 		
 		checkbox.setSelected(true);
 		checkbox.addItemListener(new CheckBoxListener());
+		
+		undoButton = new JButton("Undo");
+		redoButton = new JButton("Redo");
+		addUndoButtonListener(undoButton);
+		addRedoButtonListener(redoButton);
+		
 		menuBar.add(new JLabel(" | Score - "));
 		menuBar.add(scoreLabel);
 		menuBar.add(new JLabel(" | Enable Available Moves"));
 		menuBar.add(undoButton);
 		menuBar.add(redoButton);
 		menuBar.add(checkbox);
-		item.addActionListener(new ActionListener(){
+		menuBar.add(new JLabel(" | Option - "));
+		menuBar.add(undoButton);
+		menuBar.add(redoButton);
+		
+		exitJmenuItem.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
 
-		menu.add(item);
+		menu.add(loadJmenuItem);
+		menu.add(saveJmenuItem);
+		menu.add(exitJmenuItem);
 		aiMenu.add(randomAI);
 		aiMenu.add(minimaxAI);
 		frame.setJMenuBar(menuBar);
@@ -215,6 +235,41 @@ public class Gameui {
 			{
 				img = ImageIO.read(getClass().getResource(availableMoveImage));
 			}   
+	}
+	
+	/**
+	 * @author Nishant
+	 * Button listener for redo move
+	 * @param redo
+	 */
+	public void addRedoButtonListener(JButton redo)
+	{
+		redo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameController.redoMove();
+				
+			}
+		});
+	}
+	
+	/**
+	 * @author Nishant
+	 * Button listener for undo move
+	 * @param undo
+	 */
+	public void addUndoButtonListener(JButton undo)
+	{
+		undo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("Acion");
+				gameController.undoMove();
+			}
+		});
 	}
 
 	
