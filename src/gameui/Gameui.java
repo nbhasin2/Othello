@@ -70,12 +70,12 @@ public class Gameui {
 	private JMenuItem loadJmenuItem;
 	private JRadioButtonMenuItem randomAI;
 	private JRadioButtonMenuItem minimaxAI;
-	private JButton undoButton;
-	private JButton redoButton;
 	private JLabel scoreLabel;
 	private JCheckBox checkbox;
 	private JButton undoButton;
 	private JButton redoButton;
+	private JMenuItem undoJmenuItem;
+	private JMenuItem redoJmenuItem;
 
 
 	//Constructor 
@@ -115,6 +115,11 @@ public class Gameui {
 		exitJmenuItem = new JMenuItem("Exit");
 		loadJmenuItem = new JMenuItem("Load");
 		saveJmenuItem = new JMenuItem("Save");
+		undoJmenuItem = new JMenuItem("Undo");
+		redoJmenuItem = new JMenuItem("Redo");
+		
+		undoMenuItem(undoJmenuItem);
+		redoMenuItem(redoJmenuItem);
 		randomAI = new JRadioButtonMenuItem("Random", true);
 		minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 		scoreLabel = new JLabel();
@@ -131,21 +136,14 @@ public class Gameui {
 		
 		checkbox.setSelected(true);
 		checkbox.addItemListener(new CheckBoxListener());
+	
 		
-		undoButton = new JButton("Undo");
-		redoButton = new JButton("Redo");
-		addUndoButtonListener(undoButton);
-		addRedoButtonListener(redoButton);
-		
-		menuBar.add(new JLabel(" | Score - "));
+		menuBar.add(new JLabel("|Score - "));
 		menuBar.add(scoreLabel);
-		menuBar.add(new JLabel(" | Enable Available Moves"));
+		menuBar.add(new JLabel("|Enable Available Moves"));
 		menuBar.add(undoButton);
 		menuBar.add(redoButton);
 		menuBar.add(checkbox);
-		menuBar.add(new JLabel(" | Option - "));
-		menuBar.add(undoButton);
-		menuBar.add(redoButton);
 		
 		exitJmenuItem.addActionListener(new ActionListener(){
 			@Override
@@ -289,6 +287,31 @@ public class Gameui {
 	public void redoMoveAddButtonListener(JButton button)
 	{
 		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gameController.redoMove();
+			}
+		});
+	}
+	
+	
+	public void undoMenuItem(JMenuItem item)
+	{
+		item.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gameController.undoMove();
+			}
+		});
+	}
+	
+	public void redoMenuItem(JMenuItem item)
+	{
+		item.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {

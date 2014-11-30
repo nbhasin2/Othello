@@ -20,12 +20,18 @@ public class GameSateModel {
 		undoBoard = new ArrayList<BoardSpace[][]>();
 	}
 	
+	/**
+	 * @author nishantbhasin
+	 * This method is used to undo the move.
+	 */
 	public BoardSpace[][] popUndoElement()
 	{
 		if(undoBoard.size()<=0)
 			return null;
 		
-		BoardSpace[][] temp = undoBoard.get(undoBoard.size()-1);
+		BoardSpace[][] undoTempElement = undoBoard.get(undoBoard.size()-1);
+		BoardSpace[][] undoTempElementForRedoArrayList = undoBoard.get(undoBoard.size()-1);
+		redoBoard.add(undoTempElementForRedoArrayList);
 		
 		undoBoard.remove(undoBoard.size()-1);
 		
@@ -33,38 +39,54 @@ public class GameSateModel {
 		
 		for(int i = 0; i < row; i++){
 			for(int j = 0; j < col; j++){
-				playField[i][j] = temp[i][j]; //4x4 gameboard where every space is a new boardSpace object 
+				playField[i][j] = undoTempElement[i][j]; //4x4 gameboard where every space is a new boardSpace object 
 			}
 		}
 	
-		return temp;
-	}
-
-	public BoardSpace[][] undoBoardMove()
-	{
-		BoardSpace[][] tempSpace = null;
-		if(undoBoard.size()>0)
-		{
-			tempSpace = undoBoard.get(undoBoard.size()-1);
-			redoBoard.add(tempSpace);
-			undoBoard.remove(undoBoard.size()-1);
-		}
-		
-		return tempSpace;
+		return undoTempElement;
 	}
 	
-	
-	public BoardSpace[][] redoBoardMove()
+	/**
+	 * @author nishantbhasin
+	 * @return
+	 * This method is used to redo the move.
+	 */
+	public BoardSpace[][] popRedoElement()
 	{
-		BoardSpace[][] tempSpace = null;
-		if(redoBoard.size()>0)
-		{
-			tempSpace = redoBoard.get(redoBoard.size()-1);
-			undoBoard.add(tempSpace);
-			redoBoard.remove(redoBoard.size()-1);
+		if(redoBoard.size()<=0)
+			return null;
+		
+		BoardSpace[][] redoTempElement = redoBoard.get(redoBoard.size()-1);
+		redoBoard.remove(redoBoard.size()-1);
+		
+		BoardSpace[][] playField = new BoardSpace[row][col];	//New board that is 4x4 
+		
+		for(int i = 0; i < row; i++){
+			for(int j = 0; j < col; j++){
+				playField[i][j] = redoTempElement[i][j]; //4x4 gameboard where every space is a new boardSpace object 
+			}
 		}
 		
-		return tempSpace;
+		return redoTempElement;
+	}
+			
+	
+	/**
+	 * @author nishantbhasin
+	 * Method clearns the array list for undoBoard
+	 */
+	public void resetUndoBoard()
+	{
+		undoBoard.clear();
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * Method clears the arrays list for redoboard.
+	 */
+	public void resetRedoBoard()
+	{
+		redoBoard.clear();
 	}
 	
 	/**

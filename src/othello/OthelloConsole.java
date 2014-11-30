@@ -81,8 +81,15 @@ public class OthelloConsole extends  GameConsole {
 		board.printBoard();
 		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		do{ 
+			System.out.println("Current Player - "+currentPlayer);
 			playerMove(currentPlayer);
 			evaluate();
+			//Rest the redo board array because now player has made a move and previous undo no longer exists.
+//			if(currentPlayer.equals(SharedConstants.PlayableItem.BLACK))
+//			{
+//				System.out.println("Resetting Redo Board");
+//				gameStateModel.resetRedoBoard();
+//			}
 			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			board.printBoard();
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
@@ -106,7 +113,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void redoBoard()
 	{
-		
+		board.printBoard(gameStateModel.popRedoElement());
 	}
 	
 	/*
