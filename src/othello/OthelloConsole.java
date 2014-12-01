@@ -90,7 +90,7 @@ public class OthelloConsole extends  GameConsole {
 //				System.out.println("Resetting Redo Board");
 //				gameStateModel.resetRedoBoard();
 //			}
-			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+//			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			board.printBoard();
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
@@ -160,6 +160,7 @@ public class OthelloConsole extends  GameConsole {
 					row = parsed[0];
 					col = parsed[1];
 				}
+				gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			}
 			else{
 
