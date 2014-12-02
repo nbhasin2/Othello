@@ -13,7 +13,22 @@ public class GameSateModel {
 	private int col = gameBoard.COLS;
 	private ArrayList<BoardSpace[][]> redoBoard;
 	private ArrayList<BoardSpace[][]> undoBoard;
+	private BoardSpace[][] currentBoard;
 	
+	/**
+	 * @return the currentBoard
+	 */
+	public BoardSpace[][] getCurrentBoard() {
+		return currentBoard;
+	}
+
+	/**
+	 * @param currentBoard the currentBoard to set
+	 */
+	public void setCurrentBoard(BoardSpace[][] currentBoard) {
+		this.currentBoard = currentBoard;
+	}
+
 	public GameSateModel()
 	{
 		redoBoard = new ArrayList<BoardSpace[][]>();
@@ -31,7 +46,7 @@ public class GameSateModel {
 		
 		BoardSpace[][] undoTempElement = undoBoard.get(undoBoard.size()-1);
 		BoardSpace[][] undoTempElementForRedoArrayList = undoBoard.get(undoBoard.size()-1);
-		redoBoard.add(undoTempElementForRedoArrayList);
+//		redoBoard.add(undoTempElement);
 		
 		undoBoard.remove(undoBoard.size()-1);
 		
@@ -54,6 +69,11 @@ public class GameSateModel {
 		return redoTempElement;
 	}
 			
+	
+	public void addCurrentBoard(BoardSpace[][] currentBoard)
+	{
+		redoBoard.add(currentBoard);
+	}
 	
 	/**
 	 * @author nishantbhasin

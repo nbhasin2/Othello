@@ -103,6 +103,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void undoBoard()
 	{
+		gameStateModel.addCurrentBoard(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popUndoElement());
 	}
 	
