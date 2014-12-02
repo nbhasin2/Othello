@@ -21,6 +21,8 @@ public class OthelloConsoleTest {
 	 * 
 	 * test the get avainble solution and that make a move by picking a move from that method 
 	 * is a valid
+	 * 
+	 * will also test for when one player has no moves available to make 
 	 */
 	@Test
 	public void testGetAvailableSolutions() {
@@ -30,7 +32,9 @@ public class OthelloConsoleTest {
 		testCol = Integer.parseInt(testCoor.split(",")[1]);
 		assertTrue(othGame.moveSet(testRow, testCol, 0));
 		
+		
 	}
+	
 	/**
 	 * tests the evaulate method of connect 4 test results should 
 	 * be depended on what moves were made, and having negative score for a human player

@@ -18,6 +18,8 @@ public class AITest {
 	private AIMain PickMiddleMove;
 	
 	ArrayList<String> solutions;
+	ArrayList<String> emptylist;
+	
 	GameConsoleInterface gameTest;
 	@Before
 	public void setUp(){
@@ -29,6 +31,8 @@ public class AITest {
 		solutions.add("1,2");
 		solutions.add("1,1");
 		gameTest = new DummyConsole(solutions);
+		emptylist = new ArrayList<String>();
+		
 		
 	}
 	
@@ -45,6 +49,7 @@ public class AITest {
 		assertTrue(answer.equals("3,3,1"));
 		answer = PickMiddleMove.makeMove(gameTest);
 		assertTrue(answer.equals("1,2"));
+		
 	
 	}
 	/**

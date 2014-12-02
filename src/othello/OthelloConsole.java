@@ -170,15 +170,20 @@ public class OthelloConsole extends  GameConsole {
 				//System.out.println("White ai turn:");
 				row = Integer.parseInt(coor.split(",")[0]);
 				col = Integer.parseInt(coor.split(",")[1]);
+				
 			}
 			int substituteLevel = (move == SharedConstants.PlayableItem.BLACK ? -2:-1);
 
 			if(moveSet(row,col,substituteLevel)){
 				isValidInput = true; 
 			}
-			else 
+			else if(row == -1 && col == -1){
+				System.out.println("No moves available");
+				isValidInput = true;
+			}	
+			else{
 				System.out.println("Invalid move");  
-
+			}
 		} while (!isValidInput);
 		if(isGameOver()){
 			currentState = SharedConstants.GameStatus.GAME_END;
