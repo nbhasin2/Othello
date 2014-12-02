@@ -50,14 +50,23 @@ public class Controller extends Object implements Observer{
 	 */
 	public void guiButtonClicked(int row, int col, boolean value)
 	{
+		
 		if(othelloModel!=null)
 		{
+			clearRedoState(row,col);
 			othelloModel.setGameuiMoveX(row);
 			othelloModel.setGameuiMoveY(col);
 			othelloModel.setGameuiMove(true);
 		}
 	}
 	
+	public void clearRedoState(int row, int col)
+	{
+		String temp = row+","+col;
+		if(guiAskForAvailableSolutions().contains(temp)){
+			othelloModel.getGameStateModel().resetRedoBoard();
+		}
+	}
 	
 	/**
 	 * @author Nishant
