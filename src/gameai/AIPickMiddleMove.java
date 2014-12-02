@@ -18,10 +18,14 @@ public class AIPickMiddleMove implements AIStrategy{
 	 */
 	@Override
 	public String makeMove(GameConsoleInterface game) {
-		
 		ArrayList<String> validMoves = game.getAvailableSolutions(-1);
-		int index = (validMoves.size()/2);
-		return validMoves.get(index);
+		if(validMoves.size() != 0){
+			int index = (validMoves.size()/2);
+			return validMoves.get(index);
+		}
+		else{
+			return "-1,-1";
+		}
 	}
 	@Override
 	public String toString(){
