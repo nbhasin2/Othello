@@ -79,7 +79,7 @@ public class OthelloConsole extends  GameConsole {
 
 	public void playOthello(){
 		board.printBoard();
-		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+//		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		do{ 
 			System.out.println("Current Player - "+currentPlayer);
 			playerMove(currentPlayer);
@@ -103,7 +103,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void undoBoard()
 	{
-		gameStateModel.addCurrentBoard(board.makeDeepCopy());
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popUndoElement());
 	}
 	
@@ -114,7 +114,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void redoBoard()
 	{
-		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popRedoElement());
 	}
 	

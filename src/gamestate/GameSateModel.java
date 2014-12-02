@@ -70,9 +70,16 @@ public class GameSateModel {
 	}
 			
 	
-	public void addCurrentBoard(BoardSpace[][] currentBoard)
+	public void addCurrentBoardToRedo(BoardSpace[][] currentBoard)
 	{
-		redoBoard.add(currentBoard);
+		if(undoBoard.size()>0)
+			redoBoard.add(currentBoard);
+	}
+	
+	public void addCurrentBoardToUndo(BoardSpace[][] currentBoard)
+	{
+		if(redoBoard.size()>0)
+			undoBoard.add(currentBoard);
 	}
 	
 	/**
