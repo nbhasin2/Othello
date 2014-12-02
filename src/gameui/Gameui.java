@@ -226,7 +226,6 @@ public class Gameui {
 	public void showAvailableMovesInGui(int buttonLocation, ArrayList<String> tempAvailableSolutions) throws IOException
 	{
 
-//		for (int k=0; k < guiButtons.size(); k++) {
 			String tempVar = guiButtons.get(buttonLocation).getCoordX()+","+guiButtons.get(buttonLocation).getCoordY();
 
 			if(tempAvailableSolutions.contains(tempVar))

@@ -83,7 +83,7 @@ public class GameBoard  extends Observable{
 	 * This method is used to print the board for the user.
 	 */
 	public void printBoard(BoardSpace[][] boardToPrint){
-		
+		if(boardToPrint != null){
 		ArrayList<String> listOfItems = new ArrayList<>();
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
@@ -102,6 +102,7 @@ public class GameBoard  extends Observable{
 		assignDeepCopy(boardToPrint);
 		setChanged();
 		notifyObservers(listOfItems);	
+		}
 	}
 	
 	/**

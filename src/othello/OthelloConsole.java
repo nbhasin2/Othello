@@ -114,6 +114,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void redoBoard()
 	{
+		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popRedoElement());
 	}
 	
@@ -572,5 +573,13 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void setAiPlayer(AIMain aiPlayer) {
 		this.aiPlayer = aiPlayer;
+	}
+
+	public GameSateModel getGameStateModel() {
+		return gameStateModel;
+	}
+
+	public void setGameStateModel(GameSateModel gameStateModel) {
+		this.gameStateModel = gameStateModel;
 	}
 }
