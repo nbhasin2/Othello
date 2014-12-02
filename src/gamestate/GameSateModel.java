@@ -1,38 +1,31 @@
 package gamestate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
 import com.connect.four.boardSpace;
 import com.connect.four.gameBoard;
 
 import othello.BoardSpace;
 
 
-public class GameSateModel {
+public class GameSateModel implements Serializable{
 
 	private int row = gameBoard.ROWS;
 	private int col = gameBoard.COLS;
 	private ArrayList<BoardSpace[][]> redoBoard;
 	private ArrayList<BoardSpace[][]> undoBoard;
-	private BoardSpace[][] currentBoard;
 	
-	/**
-	 * @return the currentBoard
-	 */
-	public BoardSpace[][] getCurrentBoard() {
-		return currentBoard;
-	}
-
-	/**
-	 * @param currentBoard the currentBoard to set
-	 */
-	public void setCurrentBoard(BoardSpace[][] currentBoard) {
-		this.currentBoard = currentBoard;
-	}
-
 	public GameSateModel()
 	{
 		redoBoard = new ArrayList<BoardSpace[][]>();
 		undoBoard = new ArrayList<BoardSpace[][]>();
+	}
+	
+	public GameSateModel(ArrayList<BoardSpace[][]> savedRedoBoard, ArrayList<BoardSpace[][]> savedUndoBoard)
+	{
+		redoBoard = savedRedoBoard;
+		redoBoard = savedUndoBoard;
 	}
 	
 	/**

@@ -1,8 +1,10 @@
 package othello;
 
+import java.io.Serializable;
+
 import shared.SharedConstants;
 
-public class BoardSpace {
+public class BoardSpace implements Serializable{
 
 	SharedConstants.PlayableItem gamePiece; //Either blank, white or black
 
