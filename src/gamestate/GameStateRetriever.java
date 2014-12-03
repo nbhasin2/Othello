@@ -14,13 +14,14 @@ import othello.BoardSpace;
 
 public class GameStateRetriever {
 	
+	private GameSateModel myModel;
 	public GameStateRetriever() {
 		
-
+		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public GameSateModel retrieveModel()
+	public void retrieveModel()
 	{
 	
 		 ArrayList<BoardSpace[][]> redoBoard= new ArrayList<BoardSpace[][]>();
@@ -28,6 +29,7 @@ public class GameStateRetriever {
 		 BoardSpace[][] currentBoard = null;
 	        try
 	        {
+	        	System.out.println("inside");
 	            FileInputStream fisRedoBoard = new FileInputStream("redoBoard");
 	            FileInputStream fisUndoBoard = new FileInputStream("undoBoard");
 	            FileInputStream fisCurrentBoard = new FileInputStream("currentBoard");
@@ -54,9 +56,8 @@ public class GameStateRetriever {
 	             
 	          }
 	        
-	    GameSateModel model = new GameSateModel(redoBoard,undoBoard,currentBoard);
-
-		return model;
+	   setMyModel(new GameSateModel(redoBoard,undoBoard,currentBoard));
+	    
 	}
 	
 	public boolean checkIfFileExist()
@@ -69,5 +70,13 @@ public class GameStateRetriever {
 			return true;
 			}
 		return false;
+	}
+
+	public GameSateModel getMyModel() {
+		return myModel;
+	}
+
+	public void setMyModel(GameSateModel myModel) {
+		this.myModel = myModel;
 	}
 }

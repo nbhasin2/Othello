@@ -164,6 +164,10 @@ public class OthelloConsole extends  GameConsole {
 					row = parsed[0];
 					col = parsed[1];
 				}
+				if(validMove(row,col,getAvailableSolutions(0)) == 1){
+					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+					gameStateModel.setCurrentBoard(board.makeDeepCopy());
+				}
 			}
 			else{
 
@@ -174,15 +178,12 @@ public class OthelloConsole extends  GameConsole {
 				col = Integer.parseInt(coor.split(",")[1]);
 				
 			}
+			
 			int substituteLevel = (move == SharedConstants.PlayableItem.BLACK ? -2:-1);
 
 			if(moveSet(row,col,substituteLevel)){
 				isValidInput = true; 
-				if(substituteLevel==-2)
-				{
-					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
-					gameStateModel.setCurrentBoard(board.makeDeepCopy());
-				}
+				
 			}
 			else if(getAvailableSolutions(substituteLevel).size() == 0){
 				System.out.println("No moves available");

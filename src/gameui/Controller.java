@@ -206,9 +206,12 @@ public class Controller extends Object implements Observer{
 			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
 			BoardSpace[][] currentBoard;
-			redoBoard = loadGame.retrieveModel().getRedoBoard();
-			undoBoard = loadGame.retrieveModel().getUndoBoard();
-			currentBoard = loadGame.retrieveModel().getCurrentBoard();
+			loadGame.retrieveModel();
+			
+			
+			redoBoard = loadGame.getMyModel().getRedoBoard();
+			undoBoard = loadGame.getMyModel().getUndoBoard();
+			currentBoard = loadGame.getMyModel().getCurrentBoard();
 			othelloModel.getGameStateModel().setUndoBoard(undoBoard);
 			othelloModel.getGameStateModel().setRedoBoard(redoBoard);
 			othelloModel.getBoard().setPlayField(currentBoard);
