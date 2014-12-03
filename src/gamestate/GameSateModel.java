@@ -15,17 +15,19 @@ public class GameSateModel implements Serializable{
 	private int col = gameBoard.COLS;
 	private ArrayList<BoardSpace[][]> redoBoard;
 	private ArrayList<BoardSpace[][]> undoBoard;
-	
+	private BoardSpace[][] currentBoard;
+
 	public GameSateModel()
 	{
 		redoBoard = new ArrayList<BoardSpace[][]>();
 		undoBoard = new ArrayList<BoardSpace[][]>();
 	}
 	
-	public GameSateModel(ArrayList<BoardSpace[][]> savedRedoBoard, ArrayList<BoardSpace[][]> savedUndoBoard)
+	public GameSateModel(ArrayList<BoardSpace[][]> savedRedoBoard, ArrayList<BoardSpace[][]> savedUndoBoard, BoardSpace[][] currentBoard)
 	{
 		redoBoard = savedRedoBoard;
 		redoBoard = savedUndoBoard;
+		this.currentBoard = currentBoard;
 	}
 	
 	/**
@@ -121,6 +123,12 @@ public class GameSateModel implements Serializable{
 		this.undoBoard = undoBoard;
 	}
 	
-	
+	public BoardSpace[][] getCurrentBoard() {
+		return currentBoard;
+	}
+
+	public void setCurrentBoard(BoardSpace[][] boardSpaces) {
+		this.currentBoard = boardSpaces;
+	}
 	
 }

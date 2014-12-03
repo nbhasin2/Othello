@@ -1,15 +1,21 @@
 package gameui;
 
+import gamestate.GameStateRetriever;
+import gamestate.GameStateWrter;
+
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import othello.BoardSpace;
 import othello.OthelloConsole;
 
 public class Controller extends Object implements Observer{
 
 	private OthelloConsole othelloModel;
 	private Gameui othelloUi;
+	private GameStateRetriever loadGame;
+	private GameStateWrter saveGame;
 	private boolean isGUI = false; 
 	
 	/**
@@ -23,11 +29,13 @@ public class Controller extends Object implements Observer{
 	 * Once we get updates from GameUi, controler queries the model for
 	 * available moves and updates UI accordingly.
 	 */
-	public Controller(OthelloConsole model, Gameui othelloGui)
-	{
-		othelloModel = model;
-		othelloUi = othelloGui;
-	}
+//	public Controller(OthelloConsole model, Gameui othelloGui)
+//	{
+//		othelloModel = model;
+//		othelloUi = othelloGui;
+//		saveGame = new GameStateWrter(othelloModel.getGameStateModel());
+//		loadGame = new GameStateRetriever();
+//	}
 	
 	/*
 	 * An empty constructor to initialize othelloModel and OthelloUi 
@@ -36,6 +44,8 @@ public class Controller extends Object implements Observer{
 	{
 		othelloModel = null;
 		othelloUi = null;
+		
+		loadGame = new GameStateRetriever();
 	}
 	
 	/**
@@ -174,6 +184,39 @@ public class Controller extends Object implements Observer{
 	}
 	
 	/**
+	 * @author nishantbhasin
+	 * This method saves the entire board to the file by 
+	 * calling GameStateWriter 
+	 */
+	public void saveMove()
+	{
+		this.saveGame.writeModel();
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * This loads the model from the file using GameStateRetriever
+	 * and then also updates the othelloconsole.
+	 */
+	public void loadMove()
+	{
+//		if(loadGame.checkIfFileExist())
+//		{
+			System.out.println("in");
+			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
+			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
+			BoardSpace[][] currentBoard;
+			redoBoard = loadGame.retrieveModel().getRedoBoard();
+			undoBoard = loadGame.retrieveModel().getUndoBoard();
+			currentBoard = loadGame.retrieveModel().getCurrentBoard();
+			othelloModel.getGameStateModel().setUndoBoard(undoBoard);
+			othelloModel.getGameStateModel().setRedoBoard(redoBoard);
+			othelloModel.getBoard().setPlayField(currentBoard);
+			othelloModel.getBoard().printBoard();
+//		}
+//		System.out.println("out");
+	}
+	/**
 	 * @return the othelloModel
 	 */
 	public OthelloConsole getOthelloModel() {
@@ -185,6 +228,7 @@ public class Controller extends Object implements Observer{
 	 */
 	public void setOthelloModel(OthelloConsole othelloModel) {
 		this.othelloModel = othelloModel;
+		saveGame = new GameStateWrter(othelloModel.getGameStateModel());
 	}
 
 	/**

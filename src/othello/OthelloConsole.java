@@ -80,6 +80,8 @@ public class OthelloConsole extends  GameConsole {
 	public void playOthello(){
 		board.printBoard();
 //		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			System.out.println("Current Player - "+currentPlayer);
 			playerMove(currentPlayer);
@@ -162,7 +164,6 @@ public class OthelloConsole extends  GameConsole {
 					row = parsed[0];
 					col = parsed[1];
 				}
-				gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			}
 			else{
 
@@ -177,8 +178,13 @@ public class OthelloConsole extends  GameConsole {
 
 			if(moveSet(row,col,substituteLevel)){
 				isValidInput = true; 
+				if(substituteLevel==-2)
+				{
+					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+					gameStateModel.setCurrentBoard(board.makeDeepCopy());
+				}
 			}
-			else if(row == -1 && col == -1){
+			else if(getAvailableSolutions(substituteLevel).size() == 0){
 				System.out.println("No moves available");
 				isValidInput = true;
 			}	
@@ -581,5 +587,19 @@ public class OthelloConsole extends  GameConsole {
 
 	public void setGameStateModel(GameSateModel gameStateModel) {
 		this.gameStateModel = gameStateModel;
+	}
+
+	/**
+	 * @return the board
+	 */
+	public GameBoard getBoard() {
+		return board;
+	}
+
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(GameBoard board) {
+		this.board = board;
 	}
 }

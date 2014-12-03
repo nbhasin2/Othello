@@ -141,19 +141,18 @@ public class Gameui {
 		menuBar.add(new JLabel("|Score - "));
 		menuBar.add(scoreLabel);
 		menuBar.add(new JLabel("|Enable Available Moves"));
-		menuBar.add(undoButton);
-		menuBar.add(redoButton);
+//		menuBar.add(undoButton);
+//		menuBar.add(redoButton);
 		menuBar.add(checkbox);
 		
-		exitJmenuItem.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		addExitMenuItemListener(exitJmenuItem);
+		addLoadMenuItemListener(loadJmenuItem);
+		addSaveMenuItemListener(saveJmenuItem);
 
 		menu.add(loadJmenuItem);
 		menu.add(saveJmenuItem);
+		menu.add(undoButton);
+		menu.add(redoButton);
 		menu.add(exitJmenuItem);
 		aiMenu.add(randomAI);
 		aiMenu.add(minimaxAI);
@@ -232,6 +231,50 @@ public class Gameui {
 			{
 				img = ImageIO.read(getClass().getResource(availableMoveImage));
 			}   
+	}
+	
+	/**
+	 * This method is used to exit the game.
+	 * @param item
+	 */
+	public void addExitMenuItemListener(JMenuItem item)
+	{
+		item.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * @param item
+	 * This method is used to load the move
+	 */
+	public void addLoadMenuItemListener(JMenuItem item)
+	{
+		item.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameController.loadMove();
+			}
+		});
+	}
+	
+	/**
+	 * @author nishantbhasin
+	 * @param item
+	 * This method is used to save the move.
+	 */
+	public void addSaveMenuItemListener(JMenuItem item)
+	{
+		item.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameController.saveMove();
+			}
+		});
 	}
 	
 	/**
