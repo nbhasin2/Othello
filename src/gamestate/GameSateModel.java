@@ -26,7 +26,7 @@ public class GameSateModel implements Serializable{
 	public GameSateModel(ArrayList<BoardSpace[][]> savedRedoBoard, ArrayList<BoardSpace[][]> savedUndoBoard, BoardSpace[][] currentBoard)
 	{
 		redoBoard = savedRedoBoard;
-		redoBoard = savedUndoBoard;
+		undoBoard = savedUndoBoard;
 		this.currentBoard = currentBoard;
 	}
 	

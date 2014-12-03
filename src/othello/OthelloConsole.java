@@ -80,7 +80,7 @@ public class OthelloConsole extends  GameConsole {
 	public void playOthello(){
 		board.printBoard();
 //		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
-		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+//		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			System.out.println("Current Player - "+currentPlayer);
@@ -93,7 +93,9 @@ public class OthelloConsole extends  GameConsole {
 //				gameStateModel.resetRedoBoard();
 //			}
 //			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+			
 			board.printBoard();
+			gameStateModel.setCurrentBoard(board.makeDeepCopy());
 			currentPlayer = (currentPlayer == SharedConstants.PlayableItem.BLACK) ? SharedConstants.PlayableItem.WHITE : SharedConstants.PlayableItem.BLACK;
 		} while(currentState == SharedConstants.GameStatus.PLAYING);
 		winner();
@@ -105,19 +107,22 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	public void undoBoard()
 	{
+		
 		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popUndoElement());
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 	}
 	
 	
 	/**
 	 * @author nishantbhasin
 	 * Redo player move and print board
-	 */
+	 */ 
 	public void redoBoard()
 	{
 		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popRedoElement());
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 	}
 	
 	/*
@@ -165,8 +170,8 @@ public class OthelloConsole extends  GameConsole {
 					col = parsed[1];
 				}
 				if(validMove(row,col,getAvailableSolutions(0)) == 1){
+					
 					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
-					gameStateModel.setCurrentBoard(board.makeDeepCopy());
 				}
 			}
 			else{
