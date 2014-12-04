@@ -72,6 +72,7 @@ public class ConnectFourConsole extends GameConsole {
 		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
 		
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popUndoElement());
 		board.printBoard();
 	}
 	
@@ -80,6 +81,7 @@ public class ConnectFourConsole extends GameConsole {
 		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
 		
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popRedoElement());
 		board.printBoard();
 	}
 	

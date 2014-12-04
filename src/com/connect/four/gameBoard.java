@@ -99,6 +99,9 @@ public class gameBoard {
 	}
 
 	public void setPlayField(BoardSpace[][] playField) {
+		if(playField == null){
+			return;
+		}
 		this.playField = playField;
 	}
 
