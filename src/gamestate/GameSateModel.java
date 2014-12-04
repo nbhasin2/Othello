@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.connect.four.boardSpace;
 import com.connect.four.gameBoard;
 
-import othello.BoardSpace;
+import shared.BoardSpace;
 
 
 public class GameSateModel implements Serializable{
@@ -16,7 +16,7 @@ public class GameSateModel implements Serializable{
 	private ArrayList<BoardSpace[][]> redoBoard;
 	private ArrayList<BoardSpace[][]> undoBoard;
 	private BoardSpace[][] currentBoard;
-
+	
 	public GameSateModel()
 	{
 		redoBoard = new ArrayList<BoardSpace[][]>();
@@ -26,7 +26,7 @@ public class GameSateModel implements Serializable{
 	public GameSateModel(ArrayList<BoardSpace[][]> savedRedoBoard, ArrayList<BoardSpace[][]> savedUndoBoard, BoardSpace[][] currentBoard)
 	{
 		redoBoard = savedRedoBoard;
-		undoBoard = savedUndoBoard;
+		redoBoard = savedUndoBoard;
 		this.currentBoard = currentBoard;
 	}
 	
@@ -124,6 +124,7 @@ public class GameSateModel implements Serializable{
 	}
 	
 	public BoardSpace[][] getCurrentBoard() {
+		
 		return currentBoard;
 	}
 

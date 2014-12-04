@@ -1,4 +1,4 @@
-package othello;
+package shared;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import shared.SharedConstants;
 
 public class BoardSpace implements Serializable{
 
-	SharedConstants.PlayableItem gamePiece; //Either blank, white or black
+	private SharedConstants.PlayableItem gamePiece; //Either blank, white or black
 
 	private int row, col;
 	
@@ -21,7 +21,7 @@ public class BoardSpace implements Serializable{
 	 * This method clears the board spot.
 	 */
 	public void clear() {
-		gamePiece = SharedConstants.PlayableItem.EMPTY;//this will make the board spot contain no game piece 
+		setGamePiece(SharedConstants.PlayableItem.EMPTY);//this will make the board spot contain no game piece 
 		
 	}
 	
@@ -29,7 +29,7 @@ public class BoardSpace implements Serializable{
 	 * This method adds an item of type WHite black or empty.
 	 */
 	public void putItem() {
-		switch(gamePiece) {
+		switch(getGamePiece()) {
 		case WHITE: System.out.print(" O "); break;
 		case BLACK: System.out.print(" * "); break;
 		case EMPTY: System.out.print("   "); break;
@@ -40,6 +40,10 @@ public class BoardSpace implements Serializable{
 	 public SharedConstants.PlayableItem getGamePiece(){
 		 return this.gamePiece;
 		 
-	 }	
+	 }
+
+	public void setGamePiece(SharedConstants.PlayableItem gamePiece) {
+		this.gamePiece = gamePiece;
+	}	
 
 }

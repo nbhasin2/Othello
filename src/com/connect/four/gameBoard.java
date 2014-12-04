@@ -1,5 +1,7 @@
 package com.connect.four;
 
+import shared.BoardSpace;
+import shared.SharedConstants;
 /*
  * This class is mainly deals with initialization of the game board for othellogame.
  */
@@ -8,20 +10,18 @@ public class gameBoard {
 	public static final int ROWS = 6;
 	public static final int COLS = 7;
 		
-	private boardSpace[][] playField;	
+	private BoardSpace[][] playField;	
 	private int currentRow,currentCol;	
 	
-	
-
 	/*
 	 * This method initializes a playing field for the user.
 	 */
 	public gameBoard(){
-		playField = new boardSpace[ROWS][COLS];	//New board that is 4x4 
+		playField = new BoardSpace[ROWS][COLS];	//New board that is 4x4 
 	
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
-				playField[i][j] = new boardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
+				playField[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
 			}
 		}
 	}
@@ -52,11 +52,53 @@ public class gameBoard {
 			System.out.println("----------------------------");
 		}
 	}
-	public boardSpace[][] getPlayField() {
+	
+	/**
+	 * @author nishantbhasin
+	 * @return
+	 * This method is used to create deep copy of the board.
+	 */
+	public BoardSpace[][] makeDeepCopy()
+	{
+		BoardSpace[][] bsDeepCopy = new BoardSpace[ROWS][COLS];	//New board that is 4x4 
+	
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				bsDeepCopy[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
+			}
+		}
+		
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				SharedConstants.PlayableItem gamePiece = playField[i][j].getGamePiece();
+				bsDeepCopy[i][j].setGamePiece(gamePiece);
+			}
+		}
+			
+		return bsDeepCopy;
+	}
+
+	
+	/**
+	 * @author nishantbhasin
+	 * @return
+	 * This method is used to create deep copy of the board.
+	 */
+	public void assignDeepCopy(BoardSpace[][] copy)
+	{
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				SharedConstants.PlayableItem gamePiece = copy[i][j].getGamePiece();
+				playField[i][j].setGamePiece(gamePiece);
+			}
+		}		
+	
+	}
+	public BoardSpace[][] getPlayField() {
 		return playField;
 	}
 
-	public void setPlayField(boardSpace[][] playField) {
+	public void setPlayField(BoardSpace[][] playField) {
 		this.playField = playField;
 	}
 

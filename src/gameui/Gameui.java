@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
-import othello.BoardSpace;
+import shared.BoardSpace;
 import othello.OthelloConsole;
 import shared.SharedConstants;
 

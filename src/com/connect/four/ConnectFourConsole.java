@@ -8,6 +8,7 @@ package com.connect.four;
 import gameai.AIMain;
 import gameai.AIStrategy;
 import gamemodel.GameConsole;
+import gamestate.GameSateModel;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,6 +25,7 @@ public class ConnectFourConsole extends GameConsole {
 	private SharedConstants.GameStatus currentState;	
 	private AIMain aiPlayer;
 	private ArrayList<String> directionArray;
+	private GameSateModel gameStateModel;
 	/*
 	 * Constructor for connect four console game
 	 */
@@ -34,6 +36,7 @@ public class ConnectFourConsole extends GameConsole {
 	}
 	public void playConnectFour(){
 		board.printBoard();
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			playerMove(currentPlayer);
 			board.printBoard();		
@@ -61,8 +64,25 @@ public class ConnectFourConsole extends GameConsole {
 		directionArray = setUpDirectionArray();
 		currentPlayer = SharedConstants.PlayableItem.BLACK;
 		currentState = SharedConstants.GameStatus.PLAYING;
-		
+		gameStateModel = new GameSateModel();
 	}
+	public void undoBoard()
+	{
+		
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.printBoard();
+	}
+	
+	public void redoBoard()
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.printBoard();
+	}
+	
 
 	/*This function will handle the different moves between
 	 * players and the AI player.
@@ -77,6 +97,18 @@ public class ConnectFourConsole extends GameConsole {
 				System.out.print("What column do you wish to put your piece in player Black?\n"); 
 				int[] parsed = consoleParser(playerMove,false);
 				col = parsed[0];
+				if(col == -2){
+					System.out.println("Redo");
+					redoBoard();
+				}
+				else if(col == -3){
+					System.out.println("Undo");
+					undoBoard();
+				}
+				if(validMove(col)){
+					
+					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+				}
 			}
 			else {
 				System.out.print("AI " + aiPlayer.getAIType() + " move \n");
@@ -88,7 +120,10 @@ public class ConnectFourConsole extends GameConsole {
 	        		int substituteLevel = (currentPlayer.equals(SharedConstants.PlayableItem.BLACK) ? -2:-1);
 	        		moveSet(row,col,substituteLevel);
 		        	isValidInput = true;
-	        }    
+	        }
+	        else if(col < -1){
+	        	System.out.println("Action");
+	        }
 	        else
 				System.out.println("Invalid move"); 	
 		}   while(!isValidInput);	
@@ -108,7 +143,7 @@ public class ConnectFourConsole extends GameConsole {
 		else{
 			int row = 5;
 			while(row >=0 ){
-				if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY))
+				if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY))
 					return true;
 				row--;
 			}
@@ -166,9 +201,9 @@ public class ConnectFourConsole extends GameConsole {
 			String rowAndColMods = directionArray.get(dir);
 			int r = Integer.parseInt(rowAndColMods.split(",")[0]);
 			int c = Integer.parseInt(rowAndColMods.split(",")[1]);
-			if(!(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY))){
-				int tempScore = 10*evalutateLine(row,col,r,c,0,board.getPlayField()[row][col].gamePiece);
-				int modifier = (board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.BLACK)? -1:1);
+			if(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY))){
+				int tempScore = 10*evalutateLine(row,col,r,c,0,board.getPlayField()[row][col].getGamePiece());
+				int modifier = (board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.BLACK)? -1:1);
 				score += tempScore*modifier;
 			}
 			else{
@@ -191,10 +226,10 @@ public class ConnectFourConsole extends GameConsole {
 	
 		if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
 		{
-			if(board.getPlayField()[boundRow][boundCol].gamePiece.equals(player)){
+			if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(player)){
 				score = 10;
 			}
-			else if(board.getPlayField()[boundRow][boundCol].gamePiece.equals(SharedConstants.PlayableItem.EMPTY)){
+			else if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)){
 				score = 1;
 			}
 			else{
@@ -218,12 +253,12 @@ public class ConnectFourConsole extends GameConsole {
 	public boolean moveSet(int row, int col, int player) {
 		if(!validMove(col))
 			return false;
-		while(!(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY)&& row >= 0)){
+		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)&& row >= 0)){
 			row--;
 		}
 		SharedConstants.PlayableItem move;
 		move = (Math.abs(player)%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
-		board.getPlayField()[row][col].gamePiece = move;
+		board.getPlayField()[row][col].setGamePiece(move);
 		return true;
 	}
 	
@@ -235,7 +270,7 @@ public class ConnectFourConsole extends GameConsole {
 		if((row >= gameBoard.ROWS || row < 0)||(col >= gameBoard.COLS || col <0 )){
 			return false;
 		}
-		while(!(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY)) && row >= 0 ){
+		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)) && row >= 0 ){
 			row--;
 			if(row == -1)
 				break;
@@ -245,7 +280,7 @@ public class ConnectFourConsole extends GameConsole {
 		{
 			return false;
 		}
-	board.getPlayField()[row+1][col].gamePiece = SharedConstants.PlayableItem.EMPTY;
+	board.getPlayField()[row+1][col].setGamePiece(SharedConstants.PlayableItem.EMPTY);
 		return true;
 	}
 	

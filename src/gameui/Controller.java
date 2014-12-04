@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import othello.BoardSpace;
+import shared.BoardSpace;
 import othello.OthelloConsole;
 
 public class Controller extends Object implements Observer{

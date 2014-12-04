@@ -247,9 +247,9 @@ public class OthelloConsole extends  GameConsole {
 		int[]  results = new int[3];
 		for(int row = 0; row < GameBoard.ROWS ;row++){
 			for(int col = 0; col < GameBoard.COLS ;col++){
-				if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.BLACK))
+				if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.BLACK))
 					blackToken++;
-				else if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.WHITE))
+				else if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.WHITE))
 					whiteToken++;
 			}
 		}
@@ -302,11 +302,11 @@ public class OthelloConsole extends  GameConsole {
 		String rowAndColMods = directionArray.get(dir);
 		r = Integer.parseInt(rowAndColMods.split(",")[0]);
 		c = Integer.parseInt(rowAndColMods.split(",")[1]);
-		while(!((board.getPlayField()[row+r][col+c].gamePiece.equals(player)))){
+		while(!((board.getPlayField()[row+r][col+c].getGamePiece().equals(player)))){
 			if(level > 0){
 				tokensChanged.add((row+r)+","+(col+c)+","+level);
 			}
-			board.getPlayField()[row+r][col+c].gamePiece = player;
+			board.getPlayField()[row+r][col+c].setGamePiece(player);
 			//board.printBoard(gameui);
 			row +=r;
 			col +=c;
@@ -362,7 +362,7 @@ public class OthelloConsole extends  GameConsole {
 		boolean valid =false;
 		for (int row = 0; row < maxRow+1; ++row) {
 			for (int col = 0; col < maxCol+1; ++col) {
-				if(board.getPlayField()[row][col].gamePiece.equals(playerPiece)){
+				if(board.getPlayField()[row][col].getGamePiece().equals(playerPiece)){
 
 					/**
 					 *    0|1|2 //if the row is == 0 it should not check spots 0,1,2
@@ -415,10 +415,10 @@ public class OthelloConsole extends  GameConsole {
 		int maxCol = GameBoard.COLS -1;
 
 		globalCounter++;
-		if(board.getPlayField()[row][col].gamePiece.equals(SharedConstants.PlayableItem.EMPTY)){
+		if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)){
 			return false;
 		}
-		else if(board.getPlayField()[row][col].gamePiece.equals(playerPiece)){
+		else if(board.getPlayField()[row][col].getGamePiece().equals(playerPiece)){
 			return false;
 		}
 		else{
@@ -429,7 +429,7 @@ public class OthelloConsole extends  GameConsole {
 			int boundCol = col-c;
 			if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
 			{
-				if(!(board.getPlayField()[boundRow][boundCol].gamePiece.equals(SharedConstants.PlayableItem.EMPTY))){
+				if(!(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY))){
 					return isValid(boundRow,boundCol,dir,playerPiece);
 				}
 				else{
@@ -493,7 +493,7 @@ public class OthelloConsole extends  GameConsole {
 			return false;
 		}
 		else{
-			board.getPlayField()[row][col].gamePiece = move;
+			board.getPlayField()[row][col].setGamePiece(move);
 			board.setCurrentRow(row);
 			board.setCurrentCol(col);
 			tokenChange(row,col,move,solution,level);
@@ -509,7 +509,7 @@ public class OthelloConsole extends  GameConsole {
 		if((row >= GameBoard.ROWS || row < 0)||(col >= GameBoard.COLS || col <0 )){
 			return false;
 		}
-		else if(board.getPlayField()[row][col].gamePiece == SharedConstants.PlayableItem.EMPTY){
+		else if(board.getPlayField()[row][col].getGamePiece() == SharedConstants.PlayableItem.EMPTY){
 			return false;
 		}
 		ArrayList<String> tempChange = new ArrayList<String>((ArrayList<String>)tokensChanged.clone());
@@ -518,7 +518,7 @@ public class OthelloConsole extends  GameConsole {
 		}
 		SharedConstants.PlayableItem move;
 		move = (level%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
-		board.getPlayField()[row][col].gamePiece = SharedConstants.PlayableItem.EMPTY;
+		board.getPlayField()[row][col].setGamePiece(SharedConstants.PlayableItem.EMPTY);
 		//board.printBoard(gameui);
 
 
@@ -528,10 +528,10 @@ public class OthelloConsole extends  GameConsole {
 			int currLevel = Integer.parseInt(token.split(",")[2]);
 			if(currLevel == level){
 				if(move == SharedConstants.PlayableItem.BLACK){
-					board.getPlayField()[currRow][currCol].gamePiece = SharedConstants.PlayableItem.WHITE;
+					board.getPlayField()[currRow][currCol].setGamePiece(SharedConstants.PlayableItem.WHITE);
 				}
 				else{
-					board.getPlayField()[currRow][currCol].gamePiece = SharedConstants.PlayableItem.BLACK;
+					board.getPlayField()[currRow][currCol].setGamePiece(SharedConstants.PlayableItem.BLACK);
 				}
 				//board.printBoard(gameui);
 				tokensChanged.remove(token);

@@ -166,6 +166,13 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 				int[] parsed  = consoleParser(in,true);
 				row =parsed[0];
 				col =parsed[1];
+				
+				if(row == -2){
+					
+				}
+				else if( row == -3){
+					
+				}
 			}
 			else {
 				System.out.print("AI " + ticTacToeAI.getAIType() + " move \n");

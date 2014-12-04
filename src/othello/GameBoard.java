@@ -2,15 +2,13 @@ package othello;
 
 import gameui.Controller;
 import gameui.Gameui;
-import shared.SharedConstants;
-import shared.SharedConstants.PlayableItem;
-
+import shared.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.connect.four.boardSpace;
+
 
 /*
  * This class is mainly deals with initialization of the game board for othellogame.
@@ -54,10 +52,10 @@ public class GameBoard  extends Observable{
 			}
 		}
 	
-		playField[(ROWS / 2) - 1][(COLS / 2) - 1].gamePiece = SharedConstants.PlayableItem.WHITE;
-		playField[(ROWS / 2) - 1][COLS / 2].gamePiece = SharedConstants.PlayableItem.BLACK; // No matter what size board is
-		playField[ROWS / 2][(COLS / 2) - 1].gamePiece = SharedConstants.PlayableItem.BLACK;
-		playField[ROWS / 2][COLS / 2].gamePiece = SharedConstants.PlayableItem.WHITE;
+		playField[(ROWS / 2) - 1][(COLS / 2) - 1].setGamePiece(SharedConstants.PlayableItem.WHITE);
+		playField[(ROWS / 2) - 1][COLS / 2].setGamePiece(SharedConstants.PlayableItem.BLACK); // No matter what size board is
+		playField[ROWS / 2][(COLS / 2) - 1].setGamePiece(SharedConstants.PlayableItem.BLACK);
+		playField[ROWS / 2][COLS / 2].setGamePiece(SharedConstants.PlayableItem.WHITE);
 	}
 	
 	/*
@@ -68,7 +66,7 @@ public class GameBoard  extends Observable{
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
 				playField[i][j].putItem();
-				listOfItems.add(playField[i][j].gamePiece+"");
+				listOfItems.add(playField[i][j].getGamePiece()+"");
 				if(j < COLS ) System.out.print("|");
 			}
 		System.out.println();
@@ -90,7 +88,7 @@ public class GameBoard  extends Observable{
 				if(boardToPrint!=null)
 				{
 				boardToPrint[i][j].putItem();
-				listOfItems.add(boardToPrint[i][j].gamePiece+"");
+				listOfItems.add(boardToPrint[i][j].getGamePiece()+"");
 				}
 				if(j < COLS ) System.out.print("|");
 			}
@@ -123,7 +121,7 @@ public class GameBoard  extends Observable{
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
 				SharedConstants.PlayableItem gamePiece = playField[i][j].getGamePiece();
-				bsDeepCopy[i][j].gamePiece = gamePiece;
+				bsDeepCopy[i][j].setGamePiece(gamePiece);
 			}
 		}
 			
@@ -141,7 +139,7 @@ public class GameBoard  extends Observable{
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
 				SharedConstants.PlayableItem gamePiece = copy[i][j].getGamePiece();
-				playField[i][j].gamePiece = gamePiece;
+				playField[i][j].setGamePiece(gamePiece);
 			}
 		}		
 	

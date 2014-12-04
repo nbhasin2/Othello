@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import com.connect.four.boardSpace;
 
-import othello.BoardSpace;
+import shared.BoardSpace;
 
 public class GameStateRetriever {
 	

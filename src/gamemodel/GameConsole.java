@@ -22,6 +22,7 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		int[] parsed = new int[2];
 		int row;
 		int col;
+		String line;
 		if((in.hasNextInt())){
 			row = in.nextInt() - 1;
 			if(!(needTwoInt)){
@@ -36,9 +37,20 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 			}
 		}
 		else{
-			in.nextLine();
-			row = -1;
-			col = -1;
+			line = in.nextLine();
+			
+			if(line.equals("R")){
+				row = -2;
+				col = -2;
+			}
+			else if(line.equals("U")){
+				row = -3;
+				col = -3;
+			}
+			else{
+				row = -1;
+				col = -1;
+			}
 		}
 		parsed[0] = row;
 		parsed[1] = col;
