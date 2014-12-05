@@ -36,7 +36,6 @@ public class GameBoard  extends Observable{
 		
 		ROWS = maxRow;
 		COLS = maxCol;
-		System.out.println(maxRow +","+ maxCol);
 		if(obj!=null)
 			addObserver((Observer) obj);
 		/*if(passedBoardType.equals("TicTac"))

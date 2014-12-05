@@ -17,8 +17,7 @@ import java.util.Observer;
  */
 public class GameBoardTic  extends GameBoard{
 	
-
-
+	private BoardSpaceTic[][] playTic;
 	public GameBoardTic(Object obj) {
 		super(obj, SharedConstants.ticTacRow,SharedConstants.ticTacCol);
 	
@@ -41,8 +40,10 @@ public class GameBoardTic  extends GameBoard{
 	}
 	@Override
 	public void printBoard() {
+	
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
+				
 				playField[i][j].putItem();
 				if(j < COLS-1 ) System.out.print("|");
 			}
@@ -52,4 +53,6 @@ public class GameBoardTic  extends GameBoard{
 			System.out.println("-----------");
 		}
 	}
+	
+	
 }

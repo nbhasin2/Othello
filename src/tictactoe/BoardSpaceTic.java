@@ -7,13 +7,13 @@ public class BoardSpaceTic extends BoardSpace  {
 		super(row,col);
 	}
 	
-	@Override
+	/*@Override
 	public void putItem() {
 		switch(getGamePiece()) {
 		case WHITE: System.out.print(" O "); break;
 		case BLACK: System.out.print(" X "); break;
 		case EMPTY: System.out.print("   "); break;
 		}
-	}
+	}*/
 
 }

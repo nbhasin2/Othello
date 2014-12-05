@@ -30,9 +30,9 @@ public class BoardSpace implements Serializable{
 	 */
 	public void putItem() {
 		switch(getGamePiece()) {
-		case WHITE: System.out.print(" O "); break;
-		case BLACK: System.out.print(" * "); break;
-		case EMPTY: System.out.print("   "); break;
+			case WHITE: System.out.print(" O "); break;
+			case BLACK: System.out.print(" * "); break;
+			case EMPTY: System.out.print("   "); break;
 		}
 		
 	}
