@@ -1,8 +1,10 @@
-package othello;
+package shared;
 
 import gameui.Controller;
 import gameui.Gameui;
 import shared.*;
+import tictactoe.BoardSpaceTic;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
@@ -15,11 +17,13 @@ import java.util.Observer;
  */
 public class GameBoard  extends Observable{
 
-	public static final int ROWS = 8;
-	public static final int COLS = 8;
+	protected int ROWS;
+	
+	protected int COLS;
+	
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	
-	private BoardSpace[][] playField;	
+	protected BoardSpace[][] playField;	
 	
 
 	private int currentRow,currentCol;	
@@ -28,24 +32,31 @@ public class GameBoard  extends Observable{
 	/*
 	 * This method initializes a playing field for the user.
 	 */
-	public GameBoard(Object obj){
+	public GameBoard(Object obj,int maxRow,int maxCol,String passedBoardType){
+		
+		ROWS = maxRow;
+		COLS = maxCol;
+		System.out.println(maxRow +","+ maxCol);
 		if(obj!=null)
 			addObserver((Observer) obj);
+		/*if(passedBoardType.equals("TicTac"))
+			playField =  new BoardSpaceTic[ROWS][COLS];	//New board that is 4x4 
+		else*/
 		
-		playField = new BoardSpace[ROWS][COLS];	//New board that is 4x4 
-	
-		for(int i = 0; i < ROWS; i++){
-			for(int j = 0; j < COLS; j++){
-				playField[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
-			}
-		}
 	}
 	
 	/*
 	 * This method iterates over rows and columns to setup the board with empty tiles in the beginning.
 	 */
 	public void boardSetup(){
-	
+		playField = new BoardSpace[ROWS][COLS];
+		
+		for(int i = 0; i < ROWS; i++){
+			for(int j = 0; j < COLS; j++){
+				playField[i][j] = new BoardSpace(i, j); //4x4 gameboard where every space is a new boardSpace object 
+			}
+		}
+		
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
 				playField[i][j].clear(); //Initialize every space to empty
@@ -69,7 +80,8 @@ public class GameBoard  extends Observable{
 				listOfItems.add(playField[i][j].getGamePiece()+"");
 				if(j < COLS ) System.out.print("|");
 			}
-		System.out.println();
+
+			System.out.println();
 		if(i < ROWS  )
 			System.out.println("----------------");
 		}
@@ -167,6 +179,22 @@ public class GameBoard  extends Observable{
 	public void setCurrentCol(int currentCol) {
 		this.currentCol = currentCol;
 	}
+	public int getROWS() {
+		return ROWS;
+	}
+
+	public void setROWS(int rOWS) {
+		ROWS = rOWS;
+	}
+
+	public int getCOLS() {
+		return COLS;
+	}
+
+	public void setCOLS(int cOLS) {
+		COLS = cOLS;
+	}
+
 
 
 }

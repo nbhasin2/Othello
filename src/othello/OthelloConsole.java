@@ -20,7 +20,7 @@ public class OthelloConsole extends  GameConsole {
 
 	private ArrayList<String> tokensChanged = null;
 	private ArrayList<String> availableSolutions = null;
-	private GameBoard board;
+	private GameBoardOth board;
 	private SharedConstants.GameStatus currentState;
 	private SharedConstants.PlayableItem currentPlayer;
 	private AIMain aiPlayer;
@@ -72,7 +72,7 @@ public class OthelloConsole extends  GameConsole {
 			isConsole = false;
 			addObserver(gamecon);
 		}
-		board = new GameBoard(gamecon);
+		board = new GameBoardOth(gamecon);
 
 		gameSetup();
 	}
@@ -245,8 +245,8 @@ public class OthelloConsole extends  GameConsole {
 		int blackToken = 0;
 		int score;
 		int[]  results = new int[3];
-		for(int row = 0; row < GameBoard.ROWS ;row++){
-			for(int col = 0; col < GameBoard.COLS ;col++){
+		for(int row = 0; row < board.getROWS() ;row++){
+			for(int col = 0; col < board.getCOLS() ;col++){
 				if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.BLACK))
 					blackToken++;
 				else if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.WHITE))
@@ -355,8 +355,8 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	private ArrayList<String> availableSolutions(SharedConstants.PlayableItem playerPiece) {
 		ArrayList<String> temp = new ArrayList<String>();
-		int maxRow = GameBoard.ROWS -1;
-		int maxCol = GameBoard.COLS -1;	
+		int maxRow = board.getROWS() -1;
+		int maxCol = board.getCOLS() -1;	
 		int validRow = -1;
 		int validCol= -1;
 		boolean valid =false;
@@ -411,8 +411,8 @@ public class OthelloConsole extends  GameConsole {
 	 * @return a boolean if the line is reversible
 	 */
 	private boolean isValid(int row,int col,int dir,SharedConstants.PlayableItem playerPiece){
-		int maxRow = GameBoard.ROWS -1;
-		int maxCol = GameBoard.COLS -1;
+		int maxRow = board.getROWS() -1;
+		int maxCol = board.getCOLS() -1;
 
 		globalCounter++;
 		if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)){
@@ -483,7 +483,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	@Override
 	public boolean moveSet(int row, int col, int level) {
-		if((row >= GameBoard.ROWS || row < 0)||(col >= GameBoard.COLS || col <0 )){
+		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
 			return false;
 		}
 		SharedConstants.PlayableItem move;
@@ -506,7 +506,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	@Override
 	public boolean undoMove(int row, int col, int level) {
-		if((row >= GameBoard.ROWS || row < 0)||(col >= GameBoard.COLS || col <0 )){
+		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
 			return false;
 		}
 		else if(board.getPlayField()[row][col].getGamePiece() == SharedConstants.PlayableItem.EMPTY){
@@ -598,14 +598,14 @@ public class OthelloConsole extends  GameConsole {
 	/**
 	 * @return the board
 	 */
-	public GameBoard getBoard() {
+	public GameBoardOth getBoard() {
 		return board;
 	}
 
 	/**
 	 * @param board the board to set
 	 */
-	public void setBoard(GameBoard board) {
+	public void setBoard(GameBoardOth board) {
 		this.board = board;
 	}
 }

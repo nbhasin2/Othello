@@ -37,6 +37,21 @@ public static final String ErrorMessage = "Something went wrong. Error !!";
 
 
 /*
+ * Size of the Boards
+ */
+
+public static final int ticTacRow = 3;
+public static final int ticTacCol = 3;
+
+public static final int othelRow = 8;
+public static final int othelCol = 8;
+
+public static final int connectRow =6;
+public static final int connectCol =7;
+
+
+
+/*
  * OTHELLO and CONNECT FOUR
  * 
  */

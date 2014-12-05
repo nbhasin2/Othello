@@ -7,16 +7,20 @@ package tictactoe;
 import gameai.AIMain;
 import gameai.AIStrategy;
 import gamemodel.GameConsole;
-import gamemodel.GameConsoleInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import shared.SharedConstants;
+import shared.SharedConstants.PlayableItem;
 
-public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterface{
+public class TicTacToeConsole extends GameConsole implements Serializable{//implements GameConsoleInterface{
 
-	private int[][] board = new int[SharedConstants.ROWS][SharedConstants.COLS]; // game board in 2D array
+ 	//private in[][]  board = new int[SharedConstants.ROWS][SharedConstants.COLS]; // game board in 2D array
+	
+	private GameBoardTic board;
+	
 	private int currentState;  
 	private int currentPlayer; 
 	private int AIplayer;
@@ -54,9 +58,9 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 				"\nTo start playing please enter your cell cordinate between [1-3]" +
 				"\nlike 1 1, 2 2. Make sure there is space between the numbers." +
 				"Enjoy your game.\n");
-		System.out.println("What player would you like to be X or O :");
-		Scanner user_input = new Scanner(System.in);
-		playerType = user_input.next();
+	//	System.out.println("What player would you like to be X or O :");
+	//	Scanner user_input = new Scanner(System.in);
+	//	playerType = user_input.next();
 		initGame(playerType);
 	}
 
@@ -66,11 +70,11 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	public void playTicTacToe()  
 	{
 		System.out.println("Game Started ... ");
-		printBoard();
+		board.printBoard();
 		do {
 			playerMove(currentPlayer,this.AImove);  
 			updateGame(currentPlayer, currntRow, currentCol); 
-			printBoard();
+			board.printBoard();
 			checkGameOver();
 			togglePlayer();
 		} while (currentState == SharedConstants.PLAYING); // repeat if not game-over
@@ -115,27 +119,24 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	 * Instantiates the game board 
 	 */
 	private void initGame(String crossOrNought) {
-		if(crossOrNought.equals("X")||crossOrNought.equals("x")){
-			currentPlayer = SharedConstants.CROSS; 
-			tempCurrentPlayer = SharedConstants.CROSS;
-			AIplayer = SharedConstants.NOUGHT;
-		}
-		else if(crossOrNought.equals("O")||crossOrNought.equals("o")){
-			currentPlayer = SharedConstants.NOUGHT;
-			tempCurrentPlayer = SharedConstants.NOUGHT;
-			AIplayer = SharedConstants.CROSS;
-		}else{
+//		if(crossOrNought.equals("X")||crossOrNought.equals("x")){
+//			currentPlayer = SharedConstants.CROSS; 
+//			tempCurrentPlayer = SharedConstants.CROSS;
+//			AIplayer = SharedConstants.NOUGHT;
+//		}
+//		else if(crossOrNought.equals("O")||crossOrNought.equals("o")){
+//			currentPlayer = SharedConstants.NOUGHT;
+//			tempCurrentPlayer = SharedConstants.NOUGHT;
+//			AIplayer = SharedConstants.CROSS;
+//		}else{
 			System.out.println("We assigned you X as you can only enter O or X");
 			currentPlayer = SharedConstants.CROSS;
 			tempCurrentPlayer = SharedConstants.CROSS;
 			AIplayer = SharedConstants.NOUGHT;
-		}
+//		}
 		currentState = SharedConstants.PLAYING; 
-		for (int row = 0; row < SharedConstants.ROWS; ++row) {
-			for (int col = 0; col < SharedConstants.COLS; ++col) {
-				board[row][col] = SharedConstants.EMPTY;  
-			}
-		}
+		board = new GameBoardTic(null);
+		board.boardSetup();
 		setUpLineArray();
 	}
 	/**
@@ -203,11 +204,11 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	}
 	private ArrayList<String> availableSolutions(){
 		ArrayList<String> freeSpaces = new ArrayList<String>();
-		int row = SharedConstants.ROWS;
-		int col = SharedConstants.COLS;
-		for (row = 0; row < SharedConstants.ROWS; ++row){
-			for (col = 0; col < SharedConstants.COLS; ++col){
-				if(board[row][col] == SharedConstants.EMPTY){
+		int row;
+		int col;
+		for (row = 0; row <board.getROWS(); ++row){
+			for (col = 0; col < board.getCOLS(); ++col){
+				if(board.getPlayField()[row][col].getGamePiece().equals(PlayableItem.EMPTY)){
 					freeSpaces.add(row+","+col);
 				}
 			}
@@ -279,22 +280,26 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 		int c1 = Integer.parseInt(lineMod[4]);
 		int c2 = Integer.parseInt(lineMod[5]);
 		
+		PlayableItem aiPiece = (AIplayer == SharedConstants.NOUGHT) ? PlayableItem.WHITE:PlayableItem.BLACK;
+		
+		
+		
 		// this means that the beginning of the line is empty
-		if(board[row][col] == SharedConstants.EMPTY){
-			if(board[row+r1][col+c1] == SharedConstants.EMPTY){
-				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
+		if(board.getPlayField()[row][col].getGamePiece().equals(PlayableItem.EMPTY)){
+			if(board.getPlayField()[row+r1][col+c1].getGamePiece().equals(PlayableItem.EMPTY)){
+				if(board.getPlayField()[row+r2][col+c2].getGamePiece().equals(PlayableItem.EMPTY)){
 					score = 1;
 				}
 				else{
-					score = (board[row+r2][col+c2] == AIplayer ? 10 :-10);
+					score = (board.getPlayField()[row+r2][col+c2].getGamePiece().equals(aiPiece) ? 10 :-10);
 				}
 			}
 			else{
-				if(board[row+r2][col+c2] == SharedConstants.EMPTY){
-					score = (board[row+r1][col+c1]== AIplayer ? 10:-10);
+				if(board.getPlayField()[row+r2][col+c2].getGamePiece().equals(PlayableItem.EMPTY)){
+					score = (board.getPlayField()[row+r1][col+c1].getGamePiece().equals(aiPiece) ? 10:-10);
 				}
-				else if(board[row+r1][col+c1] == board[row+r2][col+c2]){
-					score = (board[row+r1][col+c1]== AIplayer ? 100:-100);
+				else if(board.getPlayField()[row+r1][col+c1] == board.getPlayField()[row+r2][col+c2]){
+					score = (board.getPlayField()[row+r1][col+c1].getGamePiece().equals(aiPiece) ? 100:-100);
 				}
 				else{
 					score = 0;
@@ -302,23 +307,23 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 			}
 		}
 		else{
-			if(board[row][col] == board[row+r1][col+c1]){
-					if(board[row+r1][col+c1] == board[row+r2][col+c2]){
-						score = (board[row][col]== AIplayer ? 1000:-1000);
+			if(board.getPlayField()[row][col].getGamePiece() == board.getPlayField()[row+r1][col+c1].getGamePiece()){
+					if(board.getPlayField()[row+r1][col+c1].getGamePiece() == board.getPlayField()[row+r2][col+c2].getGamePiece()){
+						score = (board.getPlayField()[row][col].getGamePiece().equals(aiPiece) ? 1000:-1000);
 					}
-					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
-							score = (board[row][col]== AIplayer ? 100:-100);
+					else if(board.getPlayField()[row+r2][col+c2].getGamePiece().equals(PlayableItem.EMPTY)){
+							score = (board.getPlayField()[row][col].getGamePiece().equals(aiPiece) ? 100:-100);
 					}
 					else{
 							score = 0;
 					}		
 			}
-			else if(board[row+r1][col+c1] == SharedConstants.EMPTY){	
-					if(board[row][col]  == board[row+r2][col+c2]){
-						score = (board[row][col]== AIplayer ? 100:-100);
+			else if(board.getPlayField()[row+r1][col+c1].getGamePiece().equals(PlayableItem.EMPTY)){	
+					if(board.getPlayField()[row][col].getGamePiece()  == board.getPlayField()[row+r2][col+c2].getGamePiece()){
+						score = (board.getPlayField()[row][col].getGamePiece().equals(aiPiece) ? 100:-100);
 					}
-					else if(board[row+r2][col+c2] == SharedConstants.EMPTY){
-							score = (board[row][col]== AIplayer ? 10:-10);
+					else if(board.getPlayField()[row+r2][col+c2].getGamePiece().equals(PlayableItem.EMPTY)){
+							score = (board.getPlayField()[row][col].getGamePiece().equals(aiPiece) ? 10:-10);
 					}
 					else{
 							score = 0;
@@ -333,10 +338,10 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	/*
 	 * Prints game board
 	 */
-	private void printBoard() {
+/*	private void printBoard() {
 		for (int row = 0; row < SharedConstants.ROWS; ++row) {
 			for (int col = 0; col < SharedConstants.COLS; ++col) {
-				switch (board[row][col]) {
+				switch (board.getPlayField()[row][col].getGamePiece()) {
 				case SharedConstants.EMPTY:  System.out.print("   "); break;
 				case SharedConstants.NOUGHT: System.out.print(" O "); break;
 				case SharedConstants.CROSS:  System.out.print(" X "); break;
@@ -351,7 +356,7 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 			}
 		}
 		System.out.println();
-	}
+	}*/
 	public AIMain getTicTacToeAI() {
 		return ticTacToeAI;
 	}
@@ -373,13 +378,13 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	public boolean moveSet(int row, int col, int level) {
 		currntRow = row;
 		currentCol = col;
-		if((currntRow >= board.length || currntRow < 0)||( currentCol >= board[0].length || currentCol <0 )){
+		if((currntRow >= board.getROWS() || currntRow < 0)||( currentCol >= board.getCOLS() || currentCol <0 )){
 			return false;
 		}
 		else if(!(validMove(currntRow,currentCol,availableSolutions()) == 1))
 			return false;
-		int checkplayerMove = (Math.abs(level)%2 == 0 ? currentPlayer : AIplayer);
-		board[currntRow][currentCol] = checkplayerMove;
+		PlayableItem checkplayerMove = Math.abs(level)%2 == 0 ? PlayableItem.BLACK: PlayableItem.WHITE;
+		board.getPlayField()[currntRow][currentCol].setGamePiece(checkplayerMove);
 		return true;
 	}
 	/**
@@ -389,12 +394,12 @@ public class TicTacToeConsole extends GameConsole{//implements GameConsoleInterf
 	public boolean undoMove(int row, int col, int level) {
 		currntRow = row;
 		currentCol = col;
-		if((currntRow >= board.length || currntRow < 0)||( currentCol >= board[0].length || currentCol <0 ))
+		if((currntRow >= board.getROWS() || currntRow < 0)||( currentCol >= board.getCOLS() || currentCol <0 ))
 			return false;
-		else if(board[currntRow][currentCol] == SharedConstants.EMPTY){
+		else if(board.getPlayField()[currntRow][currentCol].getGamePiece().equals(PlayableItem.EMPTY)){
 				return false;
 		}
-		board[currntRow][currentCol] = SharedConstants.EMPTY;
+		board.getPlayField()[currntRow][currentCol].setGamePiece(PlayableItem.EMPTY);
 		return true;
 	}
 	
