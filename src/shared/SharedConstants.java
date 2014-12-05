@@ -56,7 +56,7 @@ public static final int connectCol =7;
  * 
  */
 public enum PlayableItem {
-EMPTY, WHITE, BLACK
+EMPTY, WHITE, BLACK,
 }
 
 /*

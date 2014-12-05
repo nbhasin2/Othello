@@ -22,7 +22,7 @@ public class GameStateWrter {
 	         ObjectOutputStream oosredoBoard = new ObjectOutputStream(writeRedoBoard);
 	         ObjectOutputStream oosundoBoard = new ObjectOutputStream(writeUndoBoard);
 	         ObjectOutputStream ooscurrentBoard = new ObjectOutputStream(writeCurrentBoard);
-	         
+	    
 	         oosredoBoard.writeObject(gameState.getRedoBoard());
 	         oosundoBoard.writeObject(gameState.getUndoBoard());
 	         ooscurrentBoard.writeObject(gameState.getCurrentBoard());
