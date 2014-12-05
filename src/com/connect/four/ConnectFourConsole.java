@@ -22,7 +22,7 @@ import shared.SharedConstants;
 
 public class ConnectFourConsole extends GameConsole {
 
-	private gameBoard board;
+	private GameBoardC4 board;
 	private SharedConstants.PlayableItem currentPlayer;
 	private static Scanner playerMove= new Scanner(System.in); 
 	private SharedConstants.GameStatus currentState;	
@@ -37,7 +37,7 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	public ConnectFourConsole(AIStrategy AIType){
 		aiPlayer = new AIMain(AIType);
-		board = new gameBoard();
+		board = new GameBoardC4(null);
 		connectFourModel = this;
 		
 		
@@ -157,7 +157,7 @@ public class ConnectFourConsole extends GameConsole {
 	 * check if the column is filled with pieces.
 	 */
 	public boolean validMove(int col){
-		if (col > gameBoard.COLS || col < 0 ){
+		if (col > board.getCOLS() || col < 0 ){
 			return false;
 		}
 		else{
@@ -178,7 +178,7 @@ public class ConnectFourConsole extends GameConsole {
 	@Override
 	public ArrayList<String> getAvailableSolutions(int player) {
 		ArrayList<String> moves = new ArrayList<String>();
-		for (int col = 0; col < gameBoard.COLS; ++col) {
+		for (int col = 0; col < board.getCOLS(); ++col) {
 			if(validMove(col)){
 				moves.add("5,"+col); 
 			}			
@@ -194,8 +194,8 @@ public class ConnectFourConsole extends GameConsole {
 		int score = 0;
 		int[] results = new int[2];
 		results[1] = 0;
-		for(int row = 0; row<gameBoard.ROWS;row++){
-			for(int col = 0;col<gameBoard.COLS;col++){
+		for(int row = 0; row<board.getROWS();row++){
+			for(int col = 0;col<board.getCOLS();col++){
 				int tempScore = evaluateToken(row,col);
 				if(tempScore >= 10000){ 
 					results[1] = 1;
@@ -239,8 +239,8 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	private int evalutateLine(int row,int col,int r,int c,int combo,SharedConstants.PlayableItem player){
 		int score = 1;
-		int maxRow = gameBoard.ROWS -1;
-		int maxCol = gameBoard.COLS -1;
+		int maxRow = board.getROWS() -1;
+		int maxCol = board.getCOLS() -1;
 		int boundRow = row-r;
 		int boundCol = col-c;
 	
@@ -287,7 +287,7 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	@Override
 	public boolean undoMove(int row, int col, int player) {
-		if((row >= gameBoard.ROWS || row < 0)||(col >= gameBoard.COLS || col <0 )){
+		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
 			return false;
 		}
 		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)) && row >= 0 ){
@@ -318,10 +318,10 @@ public class ConnectFourConsole extends GameConsole {
 		this.saveGame.writeModel();
 	}
 	
-	public gameBoard getBoard() {
+	public GameBoardC4 getBoard() {
 		return board;
 	}
-	public void setBoard(gameBoard board) {
+	public void setBoard(GameBoardC4 board) {
 		this.board = board;
 	}
 	public void loadMove()

@@ -32,7 +32,7 @@ public class GameBoard  extends Observable{
 	/*
 	 * This method initializes a playing field for the user.
 	 */
-	public GameBoard(Object obj,int maxRow,int maxCol,String passedBoardType){
+	public GameBoard(Object obj,int maxRow,int maxCol){
 		
 		ROWS = maxRow;
 		COLS = maxCol;
@@ -162,7 +162,8 @@ public class GameBoard  extends Observable{
 	}
 
 	public void setPlayField(BoardSpace[][] playField) {
-		this.playField = playField;
+		if(playField != null)
+			this.playField = playField;
 	}
 	public int getCurrentRow() {
 		return currentRow;

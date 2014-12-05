@@ -8,7 +8,7 @@ import shared.*;
 public class GameBoardOth  extends GameBoard{
 
 	public GameBoardOth(Object obj) {
-		super(obj,SharedConstants.othelRow,SharedConstants.othelCol,null);
+		super(obj,SharedConstants.othelRow,SharedConstants.othelCol);
 	}
 	
 	

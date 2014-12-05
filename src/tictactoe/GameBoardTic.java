@@ -20,7 +20,7 @@ public class GameBoardTic  extends GameBoard{
 
 
 	public GameBoardTic(Object obj) {
-		super(obj, SharedConstants.ticTacRow,SharedConstants.ticTacCol,"TicTac");
+		super(obj, SharedConstants.ticTacRow,SharedConstants.ticTacCol);
 	
 	}
 	@Override
@@ -49,7 +49,7 @@ public class GameBoardTic  extends GameBoard{
 
 			System.out.println();
 		if(i < ROWS-1  )
-			System.out.println("--------------");
+			System.out.println("-----------");
 		}
 	}
 }
