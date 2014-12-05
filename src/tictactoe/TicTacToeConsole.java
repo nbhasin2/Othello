@@ -7,11 +7,18 @@ package tictactoe;
 import gameai.AIMain;
 import gameai.AIStrategy;
 import gamemodel.GameConsole;
+import gamestate.GameSateModel;
+import gamestate.GameStateRetriever;
+import gamestate.GameStateWrter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.connect.four.ConnectFourConsole;
+import com.connect.four.gameBoard;
+
+import shared.BoardSpace;
 import shared.SharedConstants;
 import shared.SharedConstants.PlayableItem;
 
@@ -32,11 +39,16 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	private String playerType;
 	private boolean AImove;
 	private ArrayList<String> lineArray;
+	private GameSateModel gameStateModel;
+	private TicTacToeConsole ticTacToeModel;
+	private GameStateRetriever loadGame;
+	private GameStateWrter saveGame;
 	/*
 	 * Constructor for ticTacToe
 	 */
 	public TicTacToeConsole(AIStrategy AIType){
 		this(new AIMain(AIType),null);
+	
 	}
 	/*
 	 * Constructor for ticTacToe
@@ -48,6 +60,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	 * Constructor for ticTacToe
 	 */
 	public TicTacToeConsole(AIMain AIType,Scanner passedScan){
+		ticTacToeModel = this;
 		setTicTacToeAI(AIType);
 		if(passedScan == null)
 			in = new Scanner(System.in);
@@ -71,6 +84,8 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	{
 		System.out.println("Game Started ... ");
 		board.printBoard();
+		System.out.println("gsM = "+gameStateModel);
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do {
 			playerMove(currentPlayer,this.AImove);  
 			updateGame(currentPlayer, currntRow, currentCol); 
@@ -138,7 +153,32 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		board = new GameBoardTic(null);
 		board.boardSetup();
 		setUpLineArray();
+		gameStateModel = new GameSateModel();
+		loadGame = new GameStateRetriever();
+		saveGame = new GameStateWrter(ticTacToeModel.getGameStateModel());
 	}
+
+	public void undoBoard()
+	{
+		
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popUndoElement());
+		board.printBoard();
+	}
+	
+	public void redoBoard()
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popRedoElement());
+		board.printBoard();
+	}
+	
+	
+	
 	/**
 	 * Method used to set up the lineArray variable to help the method {@link #evaluateLine(int)}
 	 */
@@ -167,13 +207,26 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 				int[] parsed  = consoleParser(in,true);
 				row =parsed[0];
 				col =parsed[1];
+				if(col == -2){
+					System.out.println("Redo");
+					redoBoard();
+				}
+				else if(col == -3){
+					System.out.println("Undo");
+					undoBoard();
+				}
+				else if(col == -4){
+					System.out.println("Save");
+					saveMove();
+				}
+				else if(col == -5){
+					System.out.println("Load");
+					loadMove();
+				}
+				if(validMove(row,col,getAvailableSolutions(0)) == 1){
+					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+				}
 				
-				if(row == -2){
-					
-				}
-				else if( row == -3){
-					
-				}
 			}
 			else {
 				System.out.print("AI " + ticTacToeAI.getAIType() + " move \n");
@@ -402,5 +455,55 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		board.getPlayField()[currntRow][currentCol].setGamePiece(PlayableItem.EMPTY);
 		return true;
 	}
+
 	
+	
+	public TicTacToeConsole getTicTacToeModel() {
+		return ticTacToeModel;
+	}
+	public void setTicTacToeModel(TicTacToeConsole ticTacToeModel) {
+		this.ticTacToeModel = ticTacToeModel;
+	}
+
+	public void saveMove()
+	{
+		gameStateModel.setCurrentBoard(board.getPlayField());
+		this.saveGame.writeModel();
+	}
+	public GameSateModel getGameStateModel() {
+		return gameStateModel;
+	}
+	public void setGameStateModel(GameSateModel gameStateModel) {
+		this.gameStateModel = gameStateModel;
+	}
+
+	public GameBoardTic getBoard() {
+		return board;
+	}
+	public void setBoard(GameBoardTic board) {
+		this.board = board;
+	}
+	public void loadMove()
+	{
+			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
+			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
+			BoardSpace[][] currentBoard;
+			loadGame.retrieveModel();
+			
+			
+			redoBoard = loadGame.getMyModel().getRedoBoard();
+			undoBoard = loadGame.getMyModel().getUndoBoard();
+			currentBoard = loadGame.getMyModel().getCurrentBoard();
+			ticTacToeModel.getGameStateModel().setUndoBoard(undoBoard);
+			ticTacToeModel.getGameStateModel().setRedoBoard(redoBoard);
+			ticTacToeModel.getBoard().setPlayField(currentBoard);
+			
+			ticTacToeModel.getBoard().printBoard();
+	}
+
+	
+	
+	
+
+
 }
