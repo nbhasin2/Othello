@@ -4,15 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.connect.four.boardSpace;
-import com.connect.four.gameBoard;
 
 import shared.BoardSpace;
 
 
 public class GameSateModel implements Serializable{
 
-	private int row = gameBoard.ROWS;
-	private int col = gameBoard.COLS;
 	private ArrayList<BoardSpace[][]> redoBoard;
 	private ArrayList<BoardSpace[][]> undoBoard;
 	private BoardSpace[][] currentBoard;
