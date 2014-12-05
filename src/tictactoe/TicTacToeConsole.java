@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.connect.four.ConnectFourConsole;
-import com.connect.four.gameBoard;
+
 
 import shared.BoardSpace;
 import shared.SharedConstants;
