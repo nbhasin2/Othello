@@ -47,6 +47,14 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 				row = -3;
 				col = -3;
 			}
+			else if(line.equals("S")){
+				row = -4;
+				col = -4;
+			}
+			else if(line.equals("L")){
+				row = -5;
+				col = -5;
+			}
 			else{
 				row = -1;
 				col = -1;

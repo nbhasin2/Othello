@@ -29,7 +29,6 @@ public class GameStateRetriever {
 		 BoardSpace[][] currentBoard = null;
 	        try
 	        {
-	        	System.out.println("inside");
 	            FileInputStream fisRedoBoard = new FileInputStream("redoBoard");
 	            FileInputStream fisUndoBoard = new FileInputStream("undoBoard");
 	            FileInputStream fisCurrentBoard = new FileInputStream("currentBoard");
@@ -40,7 +39,7 @@ public class GameStateRetriever {
 	            redoBoard =(ArrayList<BoardSpace[][]>) oisRedoBoard.readObject();
 	            undoBoard =(ArrayList<BoardSpace[][]>) oisUndoBoard.readObject();
 	            currentBoard = (BoardSpace[][]) oisCurrentBoard.readObject();
-	            
+	            System.out.println("retreive model undo is"+" "+undoBoard);
 	            oisUndoBoard.close();
 	            oisRedoBoard.close();
 	            oisCurrentBoard.close();

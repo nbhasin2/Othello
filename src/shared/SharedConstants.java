@@ -41,7 +41,7 @@ public static final String ErrorMessage = "Something went wrong. Error !!";
  * 
  */
 public enum PlayableItem {
-EMPTY, WHITE, BLACK
+EMPTY, WHITE, BLACK,
 }
 
 /*
