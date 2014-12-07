@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" 
+    android:layout_height="match_parent"
+	android:layout_width="match_parent"
+    tools:context="othello.hypercube.kernelpanic.myapplication.OthelloGrid">
+    
+	<GridView 
+    android:id="@+id/gridView"
+    android:numColumns="8"
+    android:gravity="center"
+    android:layout_above="@+id/utilButtons"
+    android:columnWidth="50dp"
+    android:stretchMode="spacingWidthUniform"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    </GridView>
+    
+    <LinearLayout
+        android:id="@+id/utilButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:id="@+id/loadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"/>
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"/>
+        <Button
+            android:id="@+id/undoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"/>
+        <Button
+            android:id="@+id/redoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"/>
+    </LinearLayout>
+ 
+</RelativeLayout>
