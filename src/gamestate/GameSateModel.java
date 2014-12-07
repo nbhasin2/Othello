@@ -3,8 +3,6 @@ package gamestate;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.connect.four.boardSpace;
-
 import shared.BoardSpace;
 
 

@@ -73,6 +73,7 @@ public class Connect4Test {
 		assertFalse(connect4.moveSet(DEFAULT_ROW, 10,0));
 		assertFalse(connect4.moveSet(DEFAULT_ROW, -1,0));
 		assertFalse(connect4.moveSet(DEFAULT_ROW,-32,0));
+		assertFalse(connect4.moveSet(DEFAULT_ROW, 8, 0));
 		//moves that should be valid
 		assertTrue(connect4.moveSet(DEFAULT_ROW, 3, 0));
 		assertTrue(connect4.moveSet(DEFAULT_ROW, 4, 1));

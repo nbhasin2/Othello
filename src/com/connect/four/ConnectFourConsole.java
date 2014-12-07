@@ -157,7 +157,7 @@ public class ConnectFourConsole extends GameConsole {
 	 * check if the column is filled with pieces.
 	 */
 	public boolean validMove(int col){
-		if (col > board.getCOLS() || col < 0 ){
+		if (col >= board.getCOLS() || col < 0 ){
 			return false;
 		}
 		else{

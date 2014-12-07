@@ -8,8 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import com.connect.four.boardSpace;
-
 import shared.BoardSpace;
 
 public class GameStateRetriever {
