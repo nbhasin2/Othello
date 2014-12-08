@@ -2,6 +2,7 @@ package testing;
 
 import static org.junit.Assert.*;
 import gameai.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -144,6 +145,54 @@ public class TicTacToeConsoleTest {
 		ticTacGame.undoMove(2, 0, 1);
 		assertFalse(ticTacGame.isGameOver());
 	}
-
+	/**
+	 *  Test the undoBoard  functions by makeing the game over then undoing so that the score is zero again 
+	 *  Test redoBoard game by bringing it back to gameOver
+	 */
+	@Test
+	public void testUndoRedoBoard(){
+		int scoreS;
+		int scoreE;
+		assertFalse(ticTacGame.isGameOver());
+		scoreS = ticTacGame.evaluate()[0];
+		ticTacGame.moveSet(0, 0, -2);
+		ticTacGame.moveSet(0, 1, -2);
+		ticTacGame.moveSet(0, 2, -2);
+		assertTrue(ticTacGame.isGameOver());
+		scoreE = ticTacGame.evaluate()[0];
+		assertTrue(scoreS!=scoreE);
+		
+		ticTacGame.undoBoard();
+		ticTacGame.undoBoard();
+		ticTacGame.undoBoard();
+		ticTacGame.undoBoard();
+		scoreE = ticTacGame.evaluate()[0];
+		assertEquals(scoreS,scoreE);
+		assertFalse(ticTacGame.isGameOver());
+		ticTacGame.redoBoard();
+		ticTacGame.redoBoard();
+		ticTacGame.redoBoard();
+		ticTacGame.redoBoard();
+		scoreE = ticTacGame.evaluate()[0];
+		assertFalse(scoreS==scoreE);
+		assertTrue(ticTacGame.isGameOver());
+		
+	}
+	/** 
+	 * saves a board with a win then setUps a new game then load the game that should be over
+	 */
+	@Test
+	public void testSaveAndLoadBoard(){
+		assertFalse(ticTacGame.isGameOver());
+		ticTacGame.moveSet(0, 0, -2);
+		ticTacGame.moveSet(0, 1, -2);
+		ticTacGame.moveSet(0, 2, -2);
+		assertTrue(ticTacGame.isGameOver());
+		ticTacGame.saveBoard();
+		setUp();
+		assertFalse(ticTacGame.isGameOver());
+		ticTacGame.loadBoard();
+		assertTrue(ticTacGame.isGameOver());
+	}
 
 }

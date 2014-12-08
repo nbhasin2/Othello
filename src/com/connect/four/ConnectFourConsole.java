@@ -80,24 +80,7 @@ public class ConnectFourConsole extends GameConsole {
 		loadGame = new GameStateRetriever();
 		saveGame = new GameStateWrter(connectFourModel.getGameStateModel());
 	}
-	public void undoBoard()
-	{
-		
-		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popUndoElement());
-		board.printBoard();
-	}
 	
-	public void redoBoard()
-	{
-		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popRedoElement());
-		board.printBoard();
-	}
 	
 
 	/*This function will handle the different moves between
@@ -123,14 +106,11 @@ public class ConnectFourConsole extends GameConsole {
 				}
 				else if(col == SharedConstants.SAVE){
 					System.out.println("Save");
-					saveMove();
+					saveBoard();
 				}
 				else if(col == SharedConstants.LOAD){
 					System.out.println("Load");
-					loadMove();
-				}
-				if(validMove(col)){
-					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+					loadBoard();
 				}
 			}
 			else {
@@ -213,9 +193,9 @@ public class ConnectFourConsole extends GameConsole {
 		results[0]= score;
 		return results;
 	}
-	/*Looks at all directions and evaluates the lines direction 
+	/*
+	 * Looks at all directions and evaluates the lines direction 
 	 * based on function called evaluate line
-	 * 
 	 * 
 	 */
 	private int evaluateToken(int row,int col){
@@ -242,11 +222,12 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	private int evalutateLine(int row,int col,int r,int c,int combo,SharedConstants.PlayableItem player){
 		int score = 1;
+		int MAXCOMBO = 2;
 		int maxRow = board.getROWS() -1;
 		int maxCol = board.getCOLS() -1;
 		int boundRow = row-r;
 		int boundCol = col-c;
-		if(combo > 2){
+		if(combo > MAXCOMBO){
 			return score;
 		}
 		else{
@@ -281,7 +262,11 @@ public class ConnectFourConsole extends GameConsole {
 		}
 		SharedConstants.PlayableItem move;
 		move = (Math.abs(player)%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
+		if(player == SharedConstants.SUBBLACK){
+			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+		}
 		board.getPlayField()[row][col].setGamePiece(move);
+		
 		return true;
 	}
 	
@@ -299,11 +284,9 @@ public class ConnectFourConsole extends GameConsole {
 				break;
 		}
 
-		if(row == DEFAULT_ROW)
-		{
+		if(row == DEFAULT_ROW){
 			return false;
 		}
-		
 		board.getPlayField()[row+1][col].setGamePiece(SharedConstants.PlayableItem.EMPTY);
 		
 		return true;
@@ -317,11 +300,6 @@ public class ConnectFourConsole extends GameConsole {
 		this.gameStateModel = gameStateModel;
 	}
 	
-	public void saveMove()
-	{
-		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
-	}
 	
 	public GameBoardC4 getBoard() {
 		return board;
@@ -329,28 +307,44 @@ public class ConnectFourConsole extends GameConsole {
 	public void setBoard(GameBoardC4 board) {
 		this.board = board;
 	}
-	public void loadMove()
-	{
-//		if(loadGame.checkIfFileExist())
-//		{
-
-			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
-			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
-			BoardSpace[][] currentBoard;
-			loadGame.retrieveModel();
-			
-			
-			redoBoard = loadGame.getMyModel().getRedoBoard();
-			undoBoard = loadGame.getMyModel().getUndoBoard();
-			currentBoard = loadGame.getMyModel().getCurrentBoard();
-			connectFourModel.getGameStateModel().setUndoBoard(undoBoard);
-			connectFourModel.getGameStateModel().setRedoBoard(redoBoard);
-			connectFourModel.getBoard().setPlayField(currentBoard);
-			
-			connectFourModel.getBoard().printBoard();
+	public void undoBoard(){
 		
-//		}
-//		System.out.println("out");
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popUndoElement());
+		board.printBoard();
+	}
+	
+	public void redoBoard()
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popRedoElement());
+		board.printBoard();
+	}
+	public void saveBoard(){
+		gameStateModel.setCurrentBoard(board.getPlayField());
+		this.saveGame.writeModel();
+	}
+	
+	public void loadBoard(){
+		
+		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
+		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
+		BoardSpace[][] currentBoard;
+		loadGame.retrieveModel();
+		
+		
+		redoBoard = loadGame.getMyModel().getRedoBoard();
+		undoBoard = loadGame.getMyModel().getUndoBoard();
+		currentBoard = loadGame.getMyModel().getCurrentBoard();
+		connectFourModel.getGameStateModel().setUndoBoard(undoBoard);
+		connectFourModel.getGameStateModel().setRedoBoard(redoBoard);
+		connectFourModel.getBoard().setPlayField(currentBoard);
+		
+		connectFourModel.getBoard().printBoard();		
 	}
 
 

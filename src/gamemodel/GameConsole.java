@@ -1,13 +1,25 @@
 package gamemodel;
 
+import shared.BoardSpace;
+import shared.GameBoard;
 import shared.SharedConstants;
+import gamestate.GameSateModel;
+import gamestate.GameStateRetriever;
+import gamestate.GameStateWrter;
+
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Scanner;
 
+import com.connect.four.ConnectFourConsole;
+import com.connect.four.GameBoardC4;
+
 public abstract class GameConsole extends Observable implements GameConsoleInterface {
 
 	private ArrayList<String> directionArray;
+	private GameSateModel gameStateModel;
+	private GameStateRetriever loadGame;
+	private GameStateWrter saveGame;
 	public GameConsole() {
 	
 	}
@@ -97,4 +109,55 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		return false;
 	}
 	
+	public GameSateModel getGameStateModel() {
+		return gameStateModel;
+	}
+
+	public void setGameStateModel(GameSateModel gameStateModel) {
+		this.gameStateModel = gameStateModel;
+	}
+	
+	
+	/*public abstract GameBoard getBoard();
+	
+	
+	public void undoBoard(GameBoard board){
+		
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popUndoElement());
+		board.printBoard();
+	}
+	
+	public void redoBoard(GameBoard board)
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popRedoElement());
+		board.printBoard();
+	}
+	public void saveBoard(GameBoard board){
+		gameStateModel.setCurrentBoard(board.getPlayField());
+		this.saveGame.writeModel();
+	}
+	
+	public void loadBoard(GameConsole consoleModel ,GameBoard board){
+		
+		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
+		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
+		BoardSpace[][] currentBoard;
+		loadGame.retrieveModel();
+		
+		
+		redoBoard = loadGame.getMyModel().getRedoBoard();
+		undoBoard = loadGame.getMyModel().getUndoBoard();
+		currentBoard = loadGame.getMyModel().getCurrentBoard();
+		consoleModel.getGameStateModel().setUndoBoard(undoBoard);
+		consoleModel.getGameStateModel().setRedoBoard(redoBoard);
+		consoleModel.getBoard().setPlayField(currentBoard);
+		
+		consoleModel.getBoard().printBoard();		
+	}*/
 }

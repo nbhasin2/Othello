@@ -33,7 +33,7 @@ public class GameBoardC4 extends GameBoard {
 	@Override
 	public void printBoard() {
 			ArrayList<String> listOfItems = new ArrayList<>();
-			System.out.println(playField);
+			System.out.println("");
 			for(int i = 0; i < ROWS; i++){
 				System.out.print("|");
 				for(int j = 0; j < COLS; j++){

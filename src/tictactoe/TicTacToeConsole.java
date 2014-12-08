@@ -162,24 +162,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		saveGame = new GameStateWrter(ticTacToeModel.getGameStateModel());
 	}
 
-	public void undoBoard()
-	{
-		
-		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popUndoElement());
-		board.printBoard();
-	}
-	
-	public void redoBoard()
-	{
-		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popRedoElement());
-		board.printBoard();
-	}
+
 	
 	
 	
@@ -221,14 +204,11 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 				}
 				else if(col == SharedConstants.SAVE){
 					System.out.println("Save");
-					saveMove();
+					saveBoard();
 				}
 				else if(col == SharedConstants.LOAD){
 					System.out.println("Load");
-					loadMove();
-				}
-				if(validMove(row,col,getAvailableSolutions(0))){
-					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+					loadBoard();
 				}
 				
 			}
@@ -424,6 +404,9 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		else if(!(validMove(currntRow,currentCol,availableSolutions())))
 			return false;
 		PlayableItem checkplayerMove = Math.abs(level)%2 == 0 ? PlayableItem.BLACK: PlayableItem.WHITE;
+		if(level == SharedConstants.SUBBLACK){
+			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+		}
 		board.getPlayField()[currntRow][currentCol].setGamePiece(checkplayerMove);
 		return true;
 	}
@@ -452,11 +435,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		this.ticTacToeModel = ticTacToeModel;
 	}
 
-	public void saveMove()
-	{
-		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
-	}
+	
 	public GameSateModel getGameStateModel() {
 		return gameStateModel;
 	}
@@ -470,7 +449,30 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	public void setBoard(GameBoardTic board) {
 		this.board = board;
 	}
-	public void loadMove()
+	public void undoBoard()
+	{
+		
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popUndoElement());
+		board.printBoard();
+	}
+	
+	public void redoBoard()
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		board.setPlayField(gameStateModel.popRedoElement());
+		board.printBoard();
+	}
+	public void saveBoard()
+	{
+		gameStateModel.setCurrentBoard(board.getPlayField());
+		this.saveGame.writeModel();
+	}
+	public void loadBoard()
 	{
 			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();

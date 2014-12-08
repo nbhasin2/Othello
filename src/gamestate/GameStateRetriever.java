@@ -37,7 +37,6 @@ public class GameStateRetriever {
 	            redoBoard =(ArrayList<BoardSpace[][]>) oisRedoBoard.readObject();
 	            undoBoard =(ArrayList<BoardSpace[][]>) oisUndoBoard.readObject();
 	            currentBoard = (BoardSpace[][]) oisCurrentBoard.readObject();
-	            System.out.println("retreive model undo is"+" "+undoBoard);
 	            oisUndoBoard.close();
 	            oisRedoBoard.close();
 	            oisCurrentBoard.close();

@@ -2,6 +2,7 @@ package testing;
 
 import static org.junit.Assert.*;
 import gameai.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -260,8 +261,37 @@ public class OthelloConsoleTest {
 		othGame.moveSet(1, 2, 1);
 		
 		//game should now be over
+		assertTrue(othGame.isGameOver());	
+	}
+	/**
+	 *  Test the undoBoard  functions by makeing the game over then undoing so that the score is zero again 
+	 *  Test redoBoard game by bringing it back to gameOver
+	 */
+	@Test
+	public void testUndoRedoBoard(){
+		int scoreS;
+		int scoreE;
+		assertFalse(othGame.isGameOver());
+		scoreS = othGame.evaluate()[0];
+		othGame.moveSet(3, 2, -2);
+		othGame.moveSet(5, 4, -2);
 		assertTrue(othGame.isGameOver());
-		
+		scoreE = othGame.evaluate()[0];
+		assertTrue(scoreS!=scoreE);
+		othGame.undoBoard();
+		othGame.undoBoard();
+		othGame.undoBoard();
+		othGame.undoBoard();
+		scoreE = othGame.evaluate()[0];
+		assertEquals(scoreS,scoreE);
+		assertFalse(othGame.isGameOver());
+		othGame.redoBoard();
+		othGame.redoBoard();
+		othGame.redoBoard();
+		othGame.redoBoard();
+		scoreE = othGame.evaluate()[0];
+		assertFalse(scoreS==scoreE);
+		assertTrue(othGame.isGameOver());
 		
 	}
 }

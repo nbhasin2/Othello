@@ -96,25 +96,6 @@ public class OthelloConsole extends  GameConsole {
 	 * @author nishantbhasin
 	 * Undo player move and print board
 	 */
-	public void undoBoard()
-	{
-		
-		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
-		board.printBoard(gameStateModel.popUndoElement());
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-	}
-	
-	
-	/**
-	 * @author nishantbhasin
-	 * Redo player move and print board
-	 */ 
-	public void redoBoard()
-	{
-		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
-		board.printBoard(gameStateModel.popRedoElement());
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-	}
 	
 	/*
 	 * Method to setup the initial game with basic item on the board.
@@ -159,10 +140,6 @@ public class OthelloConsole extends  GameConsole {
 					int[] parsed = consoleParser(playerMove,true);
 					row = parsed[0];
 					col = parsed[1];
-				}
-				if(validMove(row,col,getAvailableSolutions(0))){
-					
-					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 				}
 			}
 			else{
@@ -484,11 +461,14 @@ public class OthelloConsole extends  GameConsole {
 			return false;
 		}
 		else{
+			if(level == SharedConstants.SUBBLACK){
+				gameStateModel.getUndoBoard().add(board.makeDeepCopy());
+			}
 			board.getPlayField()[row][col].setGamePiece(move);
 			board.setCurrentRow(row);
 			board.setCurrentCol(col);
 			tokenChange(row,col,move,solution,level);
-
+			
 			return true;
 		}
 	}	
@@ -599,4 +579,24 @@ public class OthelloConsole extends  GameConsole {
 	public void setBoard(GameBoardOth board) {
 		this.board = board;
 	}
+	public void undoBoard()
+	{
+		
+		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
+		board.printBoard(gameStateModel.popUndoElement());
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+	}
+	
+	
+	/**
+	 * @author nishantbhasin
+	 * Redo player move and print board
+	 */ 
+	public void redoBoard()
+	{
+		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
+		board.printBoard(gameStateModel.popRedoElement());
+		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+	}
+	
 }

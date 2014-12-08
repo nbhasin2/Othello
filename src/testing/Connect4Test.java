@@ -76,7 +76,7 @@ public class Connect4Test {
 		assertFalse(connect4.moveSet(DEFAULT_ROW, 10,0));
 		assertFalse(connect4.moveSet(DEFAULT_ROW, -1,0));
 		assertFalse(connect4.moveSet(DEFAULT_ROW,-32,0));
-		assertFalse(connect4.moveSet(DEFAULT_ROW, 8, 0));
+		assertFalse(connect4.moveSet(DEFAULT_ROW,7, 0));
 		//moves that should be valid
 		assertTrue(connect4.moveSet(DEFAULT_ROW, 3, 0));
 		assertTrue(connect4.moveSet(DEFAULT_ROW, 4, 1));
@@ -176,7 +176,8 @@ public class Connect4Test {
 		assertTrue(connect4.isGameOver());
 		//test the evaluates results class when black is winner
 		assertEquals(SharedConstants.GAMENOWIN,connect4.evaluate()[1]);
-		
+		setUp();
+		assertFalse(connect4.isGameOver());
 		connect4.moveSet(DEFAULT_ROW, 0, 0);
 		connect4.moveSet(DEFAULT_ROW, 0, 0);
 		connect4.moveSet(DEFAULT_ROW, 0, 0);
@@ -199,8 +200,63 @@ public class Connect4Test {
 		//
 		connect4.moveSet(DEFAULT_ROW, 6, 0);
 		assertTrue(connect4.isGameOver());
+		connect4.getBoard().printBoard();
+		System.out.println(connect4.evaluate()[0]);
 		assertEquals(SharedConstants.GAMEBLACKWIN,connect4.evaluate()[1]);
 		
+	}
+	/**
+	 *  Test the undoBoard  functions by makeing the game over then undoing so that the score is zero again 
+	 *  Test redoBoard game by bringing it back to gameOver
+	 */
+	@Test
+	public void testUndoRedoBoard(){
+		int scoreS;
+		int scoreE;
+		assertFalse(connect4.isGameOver());
+		scoreS = connect4.evaluate()[0];
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		assertTrue(connect4.isGameOver());
+		scoreE = connect4.evaluate()[0];
+		assertTrue(scoreS!=scoreE);
+		connect4.getBoard().printBoard();
+		
+		connect4.undoBoard();
+		connect4.undoBoard();
+		connect4.undoBoard();
+		connect4.undoBoard();
+		connect4.getBoard().printBoard();
+		scoreE = connect4.evaluate()[0];
+		assertEquals(scoreS,scoreE);
+		assertFalse(connect4.isGameOver());
+		connect4.redoBoard();
+		connect4.redoBoard();
+		connect4.redoBoard();
+		connect4.redoBoard();
+		scoreE = connect4.evaluate()[0];
+		assertFalse(scoreS==scoreE);
+		assertTrue(connect4.isGameOver());
 		
 	}
+	/** 
+	 * saves a board with a win then setUps a new game then load the game that should be over
+	 */
+	@Test
+	public void testSaveAndLoadBoard(){
+		assertFalse(connect4.isGameOver());
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		connect4.moveSet(DEFAULT_ROW, 0, -2);
+		assertTrue(connect4.isGameOver());
+		connect4.saveBoard();
+		setUp();
+		assertFalse(connect4.isGameOver());
+		connect4.loadBoard();
+		assertTrue(connect4.isGameOver());
+	}
+	
 }
