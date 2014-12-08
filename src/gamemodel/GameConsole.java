@@ -38,6 +38,7 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		String line;
 		if((in.hasNextInt())){
 			row = in.nextInt() - 1;
+			
 			if(!(needTwoInt)){
 				col = SharedConstants.INVALID;
 			}
@@ -47,6 +48,10 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 			}
 			else{
 				col = SharedConstants.INVALID;
+			}
+			if(row < 0 || col < 0){
+				row = SharedConstants.INVALID;
+				col = row;
 			}
 		}
 		else{
@@ -66,6 +71,10 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 			}
 			else if(line.equals("L")){
 				row = SharedConstants.LOAD;
+				col = row;
+			}
+			else if(line.equals("H")){
+				row = SharedConstants.HELP;
 				col = row;
 			}
 			else{
@@ -117,47 +126,18 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		this.gameStateModel = gameStateModel;
 	}
 	
-	
-	/*public abstract GameBoard getBoard();
-	
-	
-	public void undoBoard(GameBoard board){
+	public void  printCommands(boolean help){
+		if(help){
+			System.out.println("Help:");
+		}
+		System.out.println("Commands(Action -- Letter to enter)"
+				+ "\nRedo -- 'R'"
+				+ "\nUndo -- 'U'"
+				+ "\nSave -- 'S'"
+				+ "\nLoad -- 'L'");
 		
-		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popUndoElement());
-		board.printBoard();
 	}
-	
-	public void redoBoard(GameBoard board)
-	{
-		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
-		
-		gameStateModel.setCurrentBoard(board.makeDeepCopy());
-		board.setPlayField(gameStateModel.popRedoElement());
-		board.printBoard();
+	public void printHelp(){
+		System.out.println("Invalid entry, if you for looking for help on commands enter 'H',\nKeep in mind that the commands are case sensitive.");
 	}
-	public void saveBoard(GameBoard board){
-		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
-	}
-	
-	public void loadBoard(GameConsole consoleModel ,GameBoard board){
-		
-		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
-		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
-		BoardSpace[][] currentBoard;
-		loadGame.retrieveModel();
-		
-		
-		redoBoard = loadGame.getMyModel().getRedoBoard();
-		undoBoard = loadGame.getMyModel().getUndoBoard();
-		currentBoard = loadGame.getMyModel().getCurrentBoard();
-		consoleModel.getGameStateModel().setUndoBoard(undoBoard);
-		consoleModel.getGameStateModel().setRedoBoard(redoBoard);
-		consoleModel.getBoard().setPlayField(currentBoard);
-		
-		consoleModel.getBoard().printBoard();		
-	}*/
 }

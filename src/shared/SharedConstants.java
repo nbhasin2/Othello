@@ -61,7 +61,7 @@ public static final int REDO = -2;
 public static final int UNDO = -3;
 public static final int SAVE = -4;
 public static final int LOAD = -5;
-
+public static final int HELP = -6;
 
 /*
  * General game conditions

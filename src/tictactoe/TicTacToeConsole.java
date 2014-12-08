@@ -88,6 +88,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	{
 		System.out.println("Game Started ... ");
 		board.printBoard();
+		printCommands(false);
 		System.out.println("gsM = "+gameStateModel);
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do {
@@ -210,6 +211,9 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 					System.out.println("Load");
 					loadBoard();
 				}
+				else if(col == SharedConstants.HELP){
+					printCommands(true);
+				}
 				
 			}
 			else {
@@ -228,8 +232,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	        	System.out.println("Action");
 	        }
 			else {
-				System.out.println("This move at (" + (row + 1) + "," + (col + 1)
-						+ ") is not valid. Try again...");
+				printHelp();
 			}
 		} while (!validInput);  
 	}

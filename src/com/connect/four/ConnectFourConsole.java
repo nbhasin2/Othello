@@ -48,6 +48,7 @@ public class ConnectFourConsole extends GameConsole {
 	}
 	public void playConnectFour(){
 		board.printBoard();
+		printCommands(false);
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			playerMove(currentPlayer);
@@ -112,6 +113,9 @@ public class ConnectFourConsole extends GameConsole {
 					System.out.println("Load");
 					loadBoard();
 				}
+				else if(col == SharedConstants.HELP){
+					printCommands(true);
+				}
 			}
 			else {
 				System.out.print("AI " + aiPlayer.getAIType() + " move \n");
@@ -128,7 +132,8 @@ public class ConnectFourConsole extends GameConsole {
 	        	System.out.println("Action");
 	        }
 	        else
-				System.out.println("Invalid move"); 	
+	        	printHelp();
+	        
 		}   while(!isValidInput);	
 		if(isGameOver()){
 			currentState = SharedConstants.GameStatus.GAME_END;

@@ -4,6 +4,8 @@ import gameai.AIStrategy;
 import gamemodel.GameConsole;
 import gamemodel.GameConsoleInterface;
 import gamestate.GameSateModel;
+import gamestate.GameStateRetriever;
+import gamestate.GameStateWrter;
 import gameui.Controller;
 import gameui.Gameui;
 
@@ -12,6 +14,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import shared.BoardSpace;
 import shared.SharedConstants;
 
 
@@ -35,7 +38,9 @@ public class OthelloConsole extends  GameConsole {
 	private ArrayList<String> directionArray;
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private GameSateModel gameStateModel;
-	
+	private OthelloConsole othelloModel;
+	private GameStateRetriever loadGame;
+	private GameStateWrter saveGame;
 	public OthelloConsole(AIStrategy AIType){
 
 		this(new AIMain(AIType));
@@ -51,7 +56,7 @@ public class OthelloConsole extends  GameConsole {
 		tokensChanged = new ArrayList<String>();
 		globalCounter = 0;
 		aiPlayer = AIType;
-
+		
 	}
 
 	/**
@@ -73,12 +78,13 @@ public class OthelloConsole extends  GameConsole {
 			addObserver(gamecon);
 		}
 		board = new GameBoardOth(gamecon);
-
+		othelloModel = this;
 		gameSetup();
 	}
 
 	public void playOthello(){
 		board.printBoard();
+		printCommands(false);
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			System.out.println("Current Player - "+currentPlayer);
@@ -102,11 +108,15 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	private void gameSetup(){
 		board.boardSetup();
-
+		
 		directionArray = setUpDirectionArray();
 
 		currentPlayer = SharedConstants.PlayableItem.BLACK;//Black goes first
 		currentState = SharedConstants.GameStatus.PLAYING;
+		gameStateModel = new GameSateModel();
+		loadGame = new GameStateRetriever();
+		saveGame = new GameStateWrter(othelloModel.getGameStateModel());
+
 	}
 	/*
 	 * This method is used to move the player item
@@ -140,6 +150,25 @@ public class OthelloConsole extends  GameConsole {
 					int[] parsed = consoleParser(playerMove,true);
 					row = parsed[0];
 					col = parsed[1];
+					if(col == SharedConstants.REDO){
+						System.out.println("Redo");
+						redoBoard();
+					}
+					else if(col == SharedConstants.UNDO){
+						System.out.println("Undo");
+						undoBoard();
+					}
+					else if(col == SharedConstants.SAVE){
+						System.out.println("Save");
+						saveBoard();
+					}
+					else if(col == SharedConstants.LOAD){
+						System.out.println("Load");
+						loadBoard();
+					}
+					else if(col == SharedConstants.HELP){
+						printCommands(true);
+					}
 				}
 			}
 			else{
@@ -163,7 +192,7 @@ public class OthelloConsole extends  GameConsole {
 				isValidInput = true;
 			}	
 			else{
-				System.out.println("Invalid move");  
+				printHelp();
 			}
 		} while (!isValidInput);
 		if(isGameOver()){
@@ -598,5 +627,26 @@ public class OthelloConsole extends  GameConsole {
 		board.printBoard(gameStateModel.popRedoElement());
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 	}
+	public void saveBoard(){
+		gameStateModel.setCurrentBoard(board.getPlayField());
+		this.saveGame.writeModel();
+	}
 	
+	public void loadBoard(){
+		
+		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
+		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
+		BoardSpace[][] currentBoard;
+		loadGame.retrieveModel();
+		
+		
+		redoBoard = loadGame.getMyModel().getRedoBoard();
+		undoBoard = loadGame.getMyModel().getUndoBoard();
+		currentBoard = loadGame.getMyModel().getCurrentBoard();
+		othelloModel.getGameStateModel().setUndoBoard(undoBoard);
+		othelloModel.getGameStateModel().setRedoBoard(redoBoard);
+		othelloModel.getBoard().setPlayField(currentBoard);
+		
+		othelloModel.getBoard().printBoard();		
+	}
 }

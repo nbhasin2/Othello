@@ -38,9 +38,6 @@ public class GameBoard  extends Observable{
 		COLS = maxCol;
 		if(obj!=null)
 			addObserver((Observer) obj);
-		/*if(passedBoardType.equals("TicTac"))
-			playField =  new BoardSpaceTic[ROWS][COLS];	//New board that is 4x4 
-		else*/
 		
 	}
 	
@@ -66,6 +63,8 @@ public class GameBoard  extends Observable{
 		playField[(ROWS / 2) - 1][COLS / 2].setGamePiece(SharedConstants.PlayableItem.BLACK); // No matter what size board is
 		playField[ROWS / 2][(COLS / 2) - 1].setGamePiece(SharedConstants.PlayableItem.BLACK);
 		playField[ROWS / 2][COLS / 2].setGamePiece(SharedConstants.PlayableItem.WHITE);
+	
+		
 	}
 	
 	/*
