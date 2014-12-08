@@ -1,8 +1,11 @@
 **Kernelpanic**
 ===========
-## Milestone 3
+## Milestone 4
 
 <img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
+
+
+## Milestone 3
 
 #### How to run the game
 There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
