@@ -10,12 +10,17 @@ import gamemodel.GameConsole;
 import gamestate.GameSateModel;
 import gamestate.GameStateRetriever;
 import gamestate.GameStateWrter;
+import gameui.Controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import othello.OthelloConsole;
+
 import com.connect.four.ConnectFourConsole;
+
+
 
 
 
@@ -452,29 +457,38 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	public void setBoard(GameBoardTic board) {
 		this.board = board;
 	}
-	public void undoBoard()
-	{
-		
+	/**
+	 * @see OthelloConsole#undoBoard()
+	 */
+	
+	public void undoBoard(){
 		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
 		
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		board.setPlayField(gameStateModel.popUndoElement());
 		board.printBoard();
 	}
-	
-	public void redoBoard()
-	{
+	/**
+	 * @see OthelloConsole#redoBoard()
+	 */
+	public void redoBoard(){
 		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
 		
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		board.setPlayField(gameStateModel.popRedoElement());
 		board.printBoard();
 	}
+	/**
+	 * @see Controller#saveMove()
+	 */
 	public void saveBoard()
 	{
 		gameStateModel.setCurrentBoard(board.getPlayField());
 		this.saveGame.writeModel();
 	}
+	/**
+	 * @see Controller#loadMove()
+	 */
 	public void loadBoard()
 	{
 			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();

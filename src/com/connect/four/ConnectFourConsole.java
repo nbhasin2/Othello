@@ -11,10 +11,12 @@ import gamemodel.GameConsole;
 import gamestate.GameSateModel;
 import gamestate.GameStateRetriever;
 import gamestate.GameStateWrter;
+import gameui.Controller;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import othello.OthelloConsole;
 import shared.BoardSpace;
 import shared.SharedConstants;
 //import shared.SharedConstants.PlayableItem;
@@ -312,6 +314,9 @@ public class ConnectFourConsole extends GameConsole {
 	public void setBoard(GameBoardC4 board) {
 		this.board = board;
 	}
+	/**
+	 * @see OthelloConsole#undoBoard();
+	 */
 	public void undoBoard(){
 		
 		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
@@ -320,7 +325,9 @@ public class ConnectFourConsole extends GameConsole {
 		board.setPlayField(gameStateModel.popUndoElement());
 		board.printBoard();
 	}
-	
+	/**
+	 * @see OthelloConsole#redoBoard();
+	 */
 	public void redoBoard()
 	{
 		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
@@ -329,11 +336,16 @@ public class ConnectFourConsole extends GameConsole {
 		board.setPlayField(gameStateModel.popRedoElement());
 		board.printBoard();
 	}
+	/**
+	 * @see Controller#saveMove();
+	 */
 	public void saveBoard(){
 		gameStateModel.setCurrentBoard(board.getPlayField());
 		this.saveGame.writeModel();
 	}
-	
+	/**
+	 * @see Controller#undoMove()
+	 */
 	public void loadBoard(){
 		
 		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
@@ -351,8 +363,4 @@ public class ConnectFourConsole extends GameConsole {
 		
 		connectFourModel.getBoard().printBoard();		
 	}
-
-
-
-
 }

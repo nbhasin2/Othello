@@ -8,7 +8,6 @@ import gamemodel.GameConsoleInterface;
 public class AIIdiot implements AIStrategy {
 
 	public AIIdiot() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

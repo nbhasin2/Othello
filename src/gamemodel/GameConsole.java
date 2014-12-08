@@ -29,7 +29,9 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 	 * @param in scanner input to read what the user wants to put in the game
 	 * @param needTwoInt true if the game requires both a row and column as an input
 	 * @return return an int array containing the row and column that user inputs in
-	 * will be -1 if what the user tried to enter is not an int;
+	 * will be a negative number if what the user is entering a none interger.
+	 * depending on the letter, entered will return a specific code number
+	 * 
 	 */
 	public int[] consoleParser(Scanner in,boolean needTwoInt){
 		int[] parsed = new int[2];
@@ -126,6 +128,15 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		this.gameStateModel = gameStateModel;
 	}
 	
+	/**
+	 * 
+	 * Will print he availabe commands that the user can enter
+	 * 
+	 * @param help 
+	 * if help is true then it was request by help 
+	 * 
+	 * 
+	 */
 	public void  printCommands(boolean help){
 		if(help){
 			System.out.println("Help:");
@@ -137,6 +148,9 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 				+ "\nLoad -- 'L'");
 		
 	}
+	/**
+	 * prints the help message when ever a user enters and invalid entry
+	 */
 	public void printHelp(){
 		System.out.println("Invalid entry, if you for looking for help on commands enter 'H',\nKeep in mind that the commands are case sensitive.");
 	}
