@@ -3,6 +3,64 @@
 ## Milestone 4
 
 <img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
+#### How to run the game
+There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
+run both games and test it out.
+
+Running othello game using GUI is very simple. You can use the Othello_executablejar_m3.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+
+Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
+othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
+
+There are now commands that the console can answer too. Each are case sensitive.
+Commands(Action -- Letter to enter)
+Redo -- 'R'
+Undo -- 'U'
+Save -- 'S'
+Load -- 'L'
+```
+Enter the game you want to play,
+ 1- Tic Tac Toe
+ 2- Othello
+ 3- Connect Four
+ 4- quit
+
+2
+Enter the type of AI you want to play against,
+ 1- Random
+ 2- Minimax
+ 3- Idiot
+ 4- Picks the middle the solutions
+ 5- Cancel
+4
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   | O | * |   |   |   |
+----------------
+   |   |   | * | O |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+   |   |   |   |   |   |   |   |
+----------------
+Black player move: X X
+
+```
+#### How to run tests with JUnit 
+
+1. go to Run->Run Configurations
+
+2. Then find JUnit in the column on the left 
+
+3. In JUnit there should be a unit called AllTests. Click  on it.
+
+4. Now in the test tab on the right, the field Test Class should read: testing.AllTests click apply then Run
 
 
 ## Milestone 3
