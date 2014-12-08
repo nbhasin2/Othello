@@ -484,7 +484,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	public void saveBoard()
 	{
 		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
+		this.saveGame.writeModel(SharedConstants.TICCODE);
 	}
 	/**
 	 * @see Controller#loadMove()
@@ -494,7 +494,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
 			BoardSpace[][] currentBoard;
-			loadGame.retrieveModel();
+			loadGame.retrieveModel(SharedConstants.TICCODE);
 			
 			
 			redoBoard = loadGame.getMyModel().getRedoBoard();

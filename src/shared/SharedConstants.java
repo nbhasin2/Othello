@@ -35,6 +35,16 @@ public static final String AIPickMiddleStrategy = "AI Picks the middle move";
 //Error
 public static final String ErrorMessage = "Something went wrong. Error !!";
 /*
+ * Save states game  
+ */
+public static final String SAVEDLOCATION = "./Saved/";
+
+public static final String OTHCODE = "Oth";
+public static final String C4CODE = "C4";
+public static final String TICCODE = "Tic";
+
+
+/*
  * Subsitute level;
  */
 public static final int SUBBLACK = -2;
@@ -106,7 +116,6 @@ EMPTY, WHITE, BLACK,
 public enum GameStatus {
 PLAYING, GAME_END
 }
-
 
 /*
  * TIC TAC TOE

@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import shared.BoardSpace;
+import shared.SharedConstants;
 import othello.OthelloConsole;
 
 public class Controller extends Object implements Observer{
@@ -190,7 +191,7 @@ public class Controller extends Object implements Observer{
 	 */
 	public void saveMove()
 	{
-		this.saveGame.writeModel();
+		this.saveGame.writeModel(SharedConstants.OTHCODE);
 	}
 	
 	/**
@@ -206,7 +207,7 @@ public class Controller extends Object implements Observer{
 			ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 			ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
 			BoardSpace[][] currentBoard;
-			loadGame.retrieveModel();
+			loadGame.retrieveModel(SharedConstants.OTHCODE);
 			
 			
 			redoBoard = loadGame.getMyModel().getRedoBoard();

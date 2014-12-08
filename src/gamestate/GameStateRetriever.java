@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import shared.BoardSpace;
+import shared.SharedConstants;
 
 public class GameStateRetriever {
 	
@@ -19,7 +20,7 @@ public class GameStateRetriever {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void retrieveModel()
+	public void retrieveModel(String code)
 	{
 	
 		 ArrayList<BoardSpace[][]> redoBoard= new ArrayList<BoardSpace[][]>();
@@ -27,9 +28,9 @@ public class GameStateRetriever {
 		 BoardSpace[][] currentBoard = null;
 	        try
 	        {
-	            FileInputStream fisRedoBoard = new FileInputStream("redoBoard");
-	            FileInputStream fisUndoBoard = new FileInputStream("undoBoard");
-	            FileInputStream fisCurrentBoard = new FileInputStream("currentBoard");
+	            FileInputStream fisRedoBoard = new FileInputStream(SharedConstants.SAVEDLOCATION+"redoBoard"+code);
+	            FileInputStream fisUndoBoard = new FileInputStream(SharedConstants.SAVEDLOCATION+"undoBoard"+code);
+	            FileInputStream fisCurrentBoard = new FileInputStream(SharedConstants.SAVEDLOCATION+"currentBoard"+code);
 	            ObjectInputStream oisRedoBoard = new ObjectInputStream(fisRedoBoard);
 	            ObjectInputStream oisUndoBoard = new ObjectInputStream(fisUndoBoard);
 	            ObjectInputStream oisCurrentBoard = new ObjectInputStream(fisCurrentBoard);

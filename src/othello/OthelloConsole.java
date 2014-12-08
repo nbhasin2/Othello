@@ -650,7 +650,7 @@ public class OthelloConsole extends GameConsole {
 
 	public void saveBoard() {
 		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
+		this.saveGame.writeModel(SharedConstants.OTHCODE);
 	}
 
 	public void loadBoard() {
@@ -658,7 +658,7 @@ public class OthelloConsole extends GameConsole {
 		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
 		BoardSpace[][] currentBoard;
-		loadGame.retrieveModel();
+		loadGame.retrieveModel(SharedConstants.OTHCODE);
 
 		redoBoard = loadGame.getMyModel().getRedoBoard();
 		undoBoard = loadGame.getMyModel().getUndoBoard();

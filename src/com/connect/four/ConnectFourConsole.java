@@ -341,7 +341,7 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	public void saveBoard(){
 		gameStateModel.setCurrentBoard(board.getPlayField());
-		this.saveGame.writeModel();
+		this.saveGame.writeModel(SharedConstants.C4CODE);
 	}
 	/**
 	 * @see Controller#undoMove()
@@ -351,7 +351,7 @@ public class ConnectFourConsole extends GameConsole {
 		ArrayList<BoardSpace[][]> redoBoard = new ArrayList<BoardSpace[][]>();
 		ArrayList<BoardSpace[][]> undoBoard = new ArrayList<BoardSpace[][]>();
 		BoardSpace[][] currentBoard;
-		loadGame.retrieveModel();
+		loadGame.retrieveModel(SharedConstants.C4CODE);
 		
 		
 		redoBoard = loadGame.getMyModel().getRedoBoard();

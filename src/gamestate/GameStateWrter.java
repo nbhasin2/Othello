@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import shared.SharedConstants;
+
 public class GameStateWrter {
 
 	private GameSateModel gameState;
@@ -12,12 +14,12 @@ public class GameStateWrter {
 		
 		this.gameState = model;
 	}
-	public void writeModel()
+	public void writeModel(String code)
 	{
 		 try{
-	         FileOutputStream writeRedoBoard= new FileOutputStream("redoBoard");
-	         FileOutputStream writeUndoBoard = new FileOutputStream("undoBoard");
-	         FileOutputStream writeCurrentBoard = new FileOutputStream("currentBoard");
+	         FileOutputStream writeRedoBoard= new FileOutputStream(SharedConstants.SAVEDLOCATION+"redoBoard"+code);
+	         FileOutputStream writeUndoBoard = new FileOutputStream(SharedConstants.SAVEDLOCATION+"undoBoard"+code);
+	         FileOutputStream writeCurrentBoard = new FileOutputStream(SharedConstants.SAVEDLOCATION+"currentBoard"+code);
 	         
 	         ObjectOutputStream oosredoBoard = new ObjectOutputStream(writeRedoBoard);
 	         ObjectOutputStream oosundoBoard = new ObjectOutputStream(writeUndoBoard);
