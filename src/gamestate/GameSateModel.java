@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import shared.BoardSpace;
+import shared.SharedConstants;
 
 
 public class GameSateModel implements Serializable{
@@ -31,7 +32,7 @@ public class GameSateModel implements Serializable{
 	 */
 	public BoardSpace[][] popUndoElement()
 	{
-		if(undoBoard.size()<=0)
+		if(undoBoard.size()<=SharedConstants.EMPTY)
 			return null;
 		
 		BoardSpace[][] undoTempElement = undoBoard.get(undoBoard.size()-1);
@@ -50,7 +51,7 @@ public class GameSateModel implements Serializable{
 	 */
 	public BoardSpace[][] popRedoElement()
 	{
-		if(redoBoard.size()<=0)
+		if(redoBoard.size()<=SharedConstants.EMPTY)
 			return null;
 		
 		BoardSpace[][] redoTempElement = redoBoard.get(redoBoard.size()-1);
@@ -62,13 +63,13 @@ public class GameSateModel implements Serializable{
 	
 	public void addCurrentBoardToRedo(BoardSpace[][] currentBoard)
 	{
-		if(undoBoard.size()>0)
+		if(undoBoard.size()>SharedConstants.EMPTY)
 			redoBoard.add(currentBoard);
 	}
 	
 	public void addCurrentBoardToUndo(BoardSpace[][] currentBoard)
 	{
-		if(redoBoard.size()>0)
+		if(redoBoard.size()>SharedConstants.EMPTY)
 			undoBoard.add(currentBoard);
 	}
 	

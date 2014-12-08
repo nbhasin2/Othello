@@ -1,5 +1,6 @@
 package gamemodel;
 
+import shared.SharedConstants;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Scanner;
@@ -26,38 +27,38 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 		if((in.hasNextInt())){
 			row = in.nextInt() - 1;
 			if(!(needTwoInt)){
-				col = -1;
+				col = SharedConstants.INVALID;
 			}
 			else if((in.hasNextInt())){
 				col = in.nextInt() - 1;
 				in.nextLine();
 			}
 			else{
-				col = -1;
+				col = SharedConstants.INVALID;
 			}
 		}
 		else{
 			line = in.nextLine();
 			
 			if(line.equals("R")){
-				row = -2;
-				col = -2;
+				row = SharedConstants.REDO;
+				col = row;
 			}
 			else if(line.equals("U")){
-				row = -3;
-				col = -3;
+				row = SharedConstants.UNDO;
+				col = row;
 			}
 			else if(line.equals("S")){
-				row = -4;
-				col = -4;
+				row = SharedConstants.SAVE;
+				col = row;
 			}
 			else if(line.equals("L")){
-				row = -5;
-				col = -5;
+				row = SharedConstants.LOAD;
+				col = row;
 			}
 			else{
-				row = -1;
-				col = -1;
+				row = SharedConstants.INVALID;
+				col = row;
 			}
 		}
 		parsed[0] = row;
@@ -87,12 +88,13 @@ public abstract class GameConsole extends Observable implements GameConsoleInter
 	@Override
 	public boolean isGameOver() {
 		int results[] = evaluate();
-		if(results[1] != 0){
+		if(results[1] != SharedConstants.GAMENOWIN){
 			return true;
 		}
-		else if(getAvailableSolutions(-1).size() == 0){
+		else if(getAvailableSolutions(-1).size() == SharedConstants.EMPTY){
 			return true;
 		}
 		return false;
 	}
+	
 }

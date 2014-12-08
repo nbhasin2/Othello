@@ -98,8 +98,8 @@ public class GameBoard  extends Observable{
 			for(int j = 0; j < COLS; j++){
 				if(boardToPrint!=null)
 				{
-				boardToPrint[i][j].putItem();
-				listOfItems.add(boardToPrint[i][j].getGamePiece()+"");
+					boardToPrint[i][j].putItem();
+					listOfItems.add(boardToPrint[i][j].getGamePiece()+"");
 				}
 				if(j < COLS ) System.out.print("|");
 			}

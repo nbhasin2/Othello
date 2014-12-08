@@ -24,7 +24,7 @@ public class AIPickMiddleMove implements AIStrategy{
 			return validMoves.get(index);
 		}
 		else{
-			return "-1,-1";
+			return SharedConstants.INVALID+","+SharedConstants.INVALID;
 		}
 	}
 	@Override

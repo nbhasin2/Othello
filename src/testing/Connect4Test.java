@@ -7,6 +7,9 @@ import gameai.AIMinimax;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import shared.SharedConstants;
+
 import com.connect.four.ConnectFourConsole;
 
 public class Connect4Test {
@@ -172,6 +175,32 @@ public class Connect4Test {
 		}
 		assertTrue(connect4.isGameOver());
 		//test the evaluates results class when black is winner
-		assertEquals(0,connect4.evaluate()[1]);
+		assertEquals(SharedConstants.GAMENOWIN,connect4.evaluate()[1]);
+		
+		connect4.moveSet(DEFAULT_ROW, 0, 0);
+		connect4.moveSet(DEFAULT_ROW, 0, 0);
+		connect4.moveSet(DEFAULT_ROW, 0, 0);
+		connect4.moveSet(DEFAULT_ROW, 0, 1);
+		//
+		connect4.moveSet(DEFAULT_ROW, 1, 1);
+		connect4.moveSet(DEFAULT_ROW, 1, 1);
+		//
+		connect4.moveSet(DEFAULT_ROW, 2, 1);
+		connect4.moveSet(DEFAULT_ROW, 2, 0);
+		connect4.moveSet(DEFAULT_ROW, 2, 1);
+		connect4.moveSet(DEFAULT_ROW, 2, 1);
+		//
+		connect4.moveSet(DEFAULT_ROW, 3, 0);
+		//
+		connect4.moveSet(DEFAULT_ROW, 4, 0);
+		connect4.moveSet(DEFAULT_ROW, 4, 1);
+		//
+		connect4.moveSet(DEFAULT_ROW, 5, 0);
+		//
+		connect4.moveSet(DEFAULT_ROW, 6, 0);
+		assertTrue(connect4.isGameOver());
+		assertEquals(SharedConstants.GAMEBLACKWIN,connect4.evaluate()[1]);
+		
+		
 	}
 }

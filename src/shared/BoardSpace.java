@@ -8,13 +8,8 @@ public class BoardSpace implements Serializable{
 
 	private SharedConstants.PlayableItem gamePiece; //Either blank, white or black
 
-	private int row, col;
-	
 	public BoardSpace(int row, int col){
-		this.row = row;
-		this.col = col;
 		clear();
-		
 	}
 	
 	/*

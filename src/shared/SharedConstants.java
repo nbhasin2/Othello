@@ -34,7 +34,48 @@ public static final String AIPickMiddleStrategy = "AI Picks the middle move";
 
 //Error
 public static final String ErrorMessage = "Something went wrong. Error !!";
+/*
+ * Subsitute level;
+ */
+public static final int SUBBLACK = -2;
+public static final int SUBWHITE = -1;
 
+/*
+ * Oridinal 
+ */
+public static final int ORDINALMAX = 8;
+
+
+
+/*
+ * MinMax levels
+ */
+public static final int NORECORD = 0;
+
+/*
+ *  Parser return types;
+ */
+
+public static final int INVALID = -1;
+public static final int REDO = -2;
+public static final int UNDO = -3;
+public static final int SAVE = -4;
+public static final int LOAD = -5;
+
+
+/*
+ * General game conditions
+ */
+public static final int GAMENOWIN = 0;
+public static final int GAMEBLACKWIN = 2;
+public static final int GAMEWHITEWIN = 1;
+
+/*
+ * Minimuns ;
+ */
+
+public static final int MINCOLS = 0;
+public static final int MINROWS = 0;
 
 /*
  * Size of the Boards

@@ -79,20 +79,11 @@ public class OthelloConsole extends  GameConsole {
 
 	public void playOthello(){
 		board.printBoard();
-//		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
-//		gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
 		do{ 
 			System.out.println("Current Player - "+currentPlayer);
 			playerMove(currentPlayer);
 			evaluate();
-			//Rest the redo board array because now player has made a move and previous undo no longer exists.
-//			if(currentPlayer.equals(SharedConstants.PlayableItem.BLACK))
-//			{
-//				System.out.println("Resetting Redo Board");
-//				gameStateModel.resetRedoBoard();
-//			}
-//			gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 			
 			board.printBoard();
 			gameStateModel.setCurrentBoard(board.makeDeepCopy());
@@ -169,7 +160,7 @@ public class OthelloConsole extends  GameConsole {
 					row = parsed[0];
 					col = parsed[1];
 				}
-				if(validMove(row,col,getAvailableSolutions(0)) == 1){
+				if(validMove(row,col,getAvailableSolutions(0))){
 					
 					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 				}
@@ -184,13 +175,13 @@ public class OthelloConsole extends  GameConsole {
 				
 			}
 			
-			int substituteLevel = (move == SharedConstants.PlayableItem.BLACK ? -2:-1);
+			int substituteLevel = (move == SharedConstants.PlayableItem.BLACK ? SharedConstants.SUBBLACK:SharedConstants.SUBWHITE);
 
 			if(moveSet(row,col,substituteLevel)){
 				isValidInput = true; 
 				
 			}
-			else if(getAvailableSolutions(substituteLevel).size() == 0){
+			else if(getAvailableSolutions(substituteLevel).size() == SharedConstants.EMPTY){
 				System.out.println("No moves available");
 				isValidInput = true;
 			}	
@@ -214,11 +205,11 @@ public class OthelloConsole extends  GameConsole {
 		String scoreStr = "Black Count: "+ results[2] + " White Count: " + results[1]+"\n";
 		StringBuilder sb = new StringBuilder(scoreStr);
 		System.out.print(scoreStr);
-		if(results[0] == 0){
+		if(results[0] == SharedConstants.GAMENOWIN){
 			sb.insert(0, "DRAW! - ");
 			System.out.println("DRAW!");
 		}
-		else if(results[0] < 0){
+		else if(results[0] < SharedConstants.GAMENOWIN){
 			sb.insert(0, "Black Wins! - ");
 			System.out.println("Black Wins!");
 		}
@@ -267,12 +258,12 @@ public class OthelloConsole extends  GameConsole {
 	/*
 	 * This method is used to checking whether the player move is valid or not.
 	 */
-	private int validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
+	private boolean validMove(int row, int col, ArrayList<String> validCoordinatesAndDirection){
 		new ArrayList<>();
 		ArrayList<String> validCoordinatesOnly = new ArrayList<String>();
-		int resultValidMove = -1;
+		
 		if(validCoordinatesAndDirection.size() == 0){
-			return resultValidMove;
+			return false;
 		}
 
 		for(String s : validCoordinatesAndDirection){
@@ -280,8 +271,8 @@ public class OthelloConsole extends  GameConsole {
 		}
 		String playerMove = row+","+col;
 
-		resultValidMove = validCoordinatesOnly.contains(playerMove) ? 1 : 0;
-		return resultValidMove;
+		
+		return validCoordinatesOnly.contains(playerMove) ? true : false;
 
 	}
 	/**
@@ -303,7 +294,7 @@ public class OthelloConsole extends  GameConsole {
 		r = Integer.parseInt(rowAndColMods.split(",")[0]);
 		c = Integer.parseInt(rowAndColMods.split(",")[1]);
 		while(!((board.getPlayField()[row+r][col+c].getGamePiece().equals(player)))){
-			if(level > 0){
+			if(level > SharedConstants.NORECORD){
 				tokensChanged.add((row+r)+","+(col+c)+","+level);
 			}
 			board.getPlayField()[row+r][col+c].setGamePiece(player);
@@ -371,7 +362,7 @@ public class OthelloConsole extends  GameConsole {
 					 *    		//if the col is == max it should not check spots 2,3,4			
 					 *    where s is the currently selected space on the board
 					 */
-					for(int dir = 0; dir < 8; dir++){
+					for(int dir = 0; dir < SharedConstants.ORDINALMAX; dir++){
 						valid =false;
 						globalCounter = 1;
 						String rowAndColMods = directionArray.get(dir);
@@ -380,7 +371,7 @@ public class OthelloConsole extends  GameConsole {
 
 						int boundRow =row-r;
 						int boundCol = col-c;
-						if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
+						if(!((boundRow <SharedConstants.MINROWS || boundRow >maxRow)||(boundCol <SharedConstants.MINCOLS|| boundCol >maxCol)))
 						{
 							valid = isValid(boundRow,boundCol,dir,playerPiece);
 							validRow = row-globalCounter*r;
@@ -427,7 +418,7 @@ public class OthelloConsole extends  GameConsole {
 			int c = Integer.parseInt(rowAndColMods.split(",")[1]);
 			int boundRow =row-r;
 			int boundCol = col-c;
-			if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
+			if(!((boundRow <SharedConstants.MINROWS || boundRow >maxRow)||(boundCol <SharedConstants.MINCOLS|| boundCol >maxCol)))
 			{
 				if(!(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY))){
 					return isValid(boundRow,boundCol,dir,playerPiece);
@@ -483,13 +474,13 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	@Override
 	public boolean moveSet(int row, int col, int level) {
-		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
+		if((row >= board.getROWS() || row < SharedConstants.MINROWS)||(col >= board.getCOLS() || col <SharedConstants.MINCOLS )){
 			return false;
 		}
 		SharedConstants.PlayableItem move;
 		move = (Math.abs(level)%2 == 0 ? SharedConstants.PlayableItem.BLACK : SharedConstants.PlayableItem.WHITE);
 		ArrayList<String> solution = availableSolutions(move);
-		if(validMove(row,col,solution) != 1){
+		if(!validMove(row,col,solution)){
 			return false;
 		}
 		else{
@@ -506,7 +497,7 @@ public class OthelloConsole extends  GameConsole {
 	 */
 	@Override
 	public boolean undoMove(int row, int col, int level) {
-		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
+		if((row >= board.getROWS() || row < SharedConstants.MINROWS)||(col >= board.getCOLS() || col <SharedConstants.MINCOLS )){
 			return false;
 		}
 		else if(board.getPlayField()[row][col].getGamePiece() == SharedConstants.PlayableItem.EMPTY){

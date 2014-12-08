@@ -22,6 +22,9 @@ import shared.SharedConstants;
 
 public class ConnectFourConsole extends GameConsole {
 
+	private static final int DEFAULT_ROW = 5;
+	private static final int MAX_AISCORE = 10000;
+	private static final int MAX_HUSCORE = -10000;
 	private GameBoardC4 board;
 	private SharedConstants.PlayableItem currentPlayer;
 	private static Scanner playerMove= new Scanner(System.in); 
@@ -55,10 +58,10 @@ public class ConnectFourConsole extends GameConsole {
 	}
 	private void getWinner(){
 		int[] results = evaluate();
-		if(results[1] == 0){
+		if(results[1] == SharedConstants.GAMENOWIN){
 			System.out.println("DRAW!");
 		}
-		else if(results[1] == 2){
+		else if(results[1] == SharedConstants.GAMEBLACKWIN){
 			System.out.println("Black Wins!");
 		}
 		else{
@@ -110,19 +113,19 @@ public class ConnectFourConsole extends GameConsole {
 				System.out.print("What column do you wish to put your piece in player Black?\n"); 
 				int[] parsed = consoleParser(playerMove,false);
 				col = parsed[0];
-				if(col == -2){
+				if(col == SharedConstants.REDO){
 					System.out.println("Redo");
 					redoBoard();
 				}
-				else if(col == -3){
+				else if(col == SharedConstants.UNDO){
 					System.out.println("Undo");
 					undoBoard();
 				}
-				else if(col == -4){
+				else if(col == SharedConstants.SAVE){
 					System.out.println("Save");
 					saveMove();
 				}
-				else if(col == -5){
+				else if(col == SharedConstants.LOAD){
 					System.out.println("Load");
 					loadMove();
 				}
@@ -136,12 +139,12 @@ public class ConnectFourConsole extends GameConsole {
 				col = Integer.parseInt(AICoordinates.split(",")[1]);
 			}
 	        if(validMove(col)){
-	        		int row = 5;
-	        		int substituteLevel = (currentPlayer.equals(SharedConstants.PlayableItem.BLACK) ? -2:-1);
+	        		int row = DEFAULT_ROW;
+	        		int substituteLevel = (currentPlayer.equals(SharedConstants.PlayableItem.BLACK) ? SharedConstants.SUBBLACK:SharedConstants.SUBWHITE);
 	        		moveSet(row,col,substituteLevel);
 		        	isValidInput = true;
 	        }
-	        else if(col < -1){
+	        else if(col < SharedConstants.INVALID){
 	        	System.out.println("Action");
 	        }
 	        else
@@ -157,12 +160,12 @@ public class ConnectFourConsole extends GameConsole {
 	 * check if the column is filled with pieces.
 	 */
 	public boolean validMove(int col){
-		if (col >= board.getCOLS() || col < 0 ){
+		if (col >= board.getCOLS() || col < SharedConstants.MINCOLS ){
 			return false;
 		}
 		else{
-			int row = 5;
-			while(row >=0 ){
+			int row = DEFAULT_ROW;
+			while(row >= SharedConstants.MINROWS ){
 				if(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY))
 					return true;
 				row--;
@@ -180,7 +183,7 @@ public class ConnectFourConsole extends GameConsole {
 		ArrayList<String> moves = new ArrayList<String>();
 		for (int col = 0; col < board.getCOLS(); ++col) {
 			if(validMove(col)){
-				moves.add("5,"+col); 
+				moves.add(DEFAULT_ROW+ ","+col); 
 			}			
 		}		
 		return moves;
@@ -197,11 +200,11 @@ public class ConnectFourConsole extends GameConsole {
 		for(int row = 0; row<board.getROWS();row++){
 			for(int col = 0;col<board.getCOLS();col++){
 				int tempScore = evaluateToken(row,col);
-				if(tempScore >= 10000){ 
-					results[1] = 1;
+				if(tempScore >= MAX_AISCORE){ 
+					results[1] = SharedConstants.GAMEWHITEWIN;
 				}
-				else if(tempScore <= -10000 ){
-					results[1] = 2;
+				else if(tempScore <= MAX_HUSCORE ){
+					results[1] = SharedConstants.GAMEBLACKWIN;
 				}
 				score += tempScore;
 				//System.out.println(score);
@@ -217,7 +220,7 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	private int evaluateToken(int row,int col){
 		int score = 0;
-		for(int dir = 0; dir <8;dir++){
+		for(int dir = 0; dir <SharedConstants.ORDINALMAX;dir++){
 			String rowAndColMods = directionArray.get(dir);
 			int r = Integer.parseInt(rowAndColMods.split(",")[0]);
 			int c = Integer.parseInt(rowAndColMods.split(",")[1]);
@@ -243,26 +246,26 @@ public class ConnectFourConsole extends GameConsole {
 		int maxCol = board.getCOLS() -1;
 		int boundRow = row-r;
 		int boundCol = col-c;
-	
-		if(!((boundRow <0 || boundRow >maxRow)||(boundCol <0|| boundCol >maxCol)))
-		{
-			if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(player)){
-				score = 10;
-			}
-			else if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)){
-				score = 1;
-			}
-			else{
-				score = 0;
-			}
-		}
-		else{
-			score = 0;
-		}
-		if(combo >= 3){
+		if(combo > 2){
 			return score;
 		}
 		else{
+			if(!((boundRow <SharedConstants.MINROWS || boundRow >maxRow)||(boundCol <SharedConstants.MINCOLS|| boundCol >maxCol)))
+			{
+				if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(player)){
+					score = 10;
+				}
+				else if(board.getPlayField()[boundRow][boundCol].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)){
+					score = 1;
+				}
+				else{
+					score = 0;
+				}
+			}
+			else{
+					score = 0;
+			}
+		
 			return score*evalutateLine(boundRow,boundCol,r,c,combo+1,player);			
 		}
 	}
@@ -273,7 +276,7 @@ public class ConnectFourConsole extends GameConsole {
 	public boolean moveSet(int row, int col, int player) {
 		if(!validMove(col))
 			return false;
-		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)&& row >= 0)){
+		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)&& row >= SharedConstants.MINROWS)){
 			row--;
 		}
 		SharedConstants.PlayableItem move;
@@ -287,20 +290,22 @@ public class ConnectFourConsole extends GameConsole {
 	 */
 	@Override
 	public boolean undoMove(int row, int col, int player) {
-		if((row >= board.getROWS() || row < 0)||(col >= board.getCOLS() || col <0 )){
+		if((row >= board.getROWS() || row < SharedConstants.MINROWS)||(col >= board.getCOLS() || col <SharedConstants.MINCOLS )){
 			return false;
 		}
-		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)) && row >= 0 ){
+		while(!(board.getPlayField()[row][col].getGamePiece().equals(SharedConstants.PlayableItem.EMPTY)) && row >= SharedConstants.MINROWS ){
 			row--;
-			if(row == -1)
+			if(row == SharedConstants.INVALID)
 				break;
 		}
 
-		if(row == 5)
+		if(row == DEFAULT_ROW)
 		{
 			return false;
 		}
-	board.getPlayField()[row+1][col].setGamePiece(SharedConstants.PlayableItem.EMPTY);
+		
+		board.getPlayField()[row+1][col].setGamePiece(SharedConstants.PlayableItem.EMPTY);
+		
 		return true;
 	}
 	

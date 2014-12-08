@@ -18,13 +18,17 @@ import java.util.Scanner;
 import com.connect.four.ConnectFourConsole;
 
 
+
+
 import shared.BoardSpace;
 import shared.SharedConstants;
 import shared.SharedConstants.PlayableItem;
 
 public class TicTacToeConsole extends GameConsole implements Serializable{//implements GameConsoleInterface{
 
- 	//private in[][]  board = new int[SharedConstants.ROWS][SharedConstants.COLS]; // game board in 2D array
+
+	private static final int AIMAXSCORE = 1000;
+	private static final int HUMAXSCORE = -1000;
 	
 	private GameBoardTic board;
 	
@@ -207,23 +211,23 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 				int[] parsed  = consoleParser(in,true);
 				row =parsed[0];
 				col =parsed[1];
-				if(col == -2){
+				if(col == SharedConstants.REDO){
 					System.out.println("Redo");
 					redoBoard();
 				}
-				else if(col == -3){
+				else if(col == SharedConstants.UNDO){
 					System.out.println("Undo");
 					undoBoard();
 				}
-				else if(col == -4){
+				else if(col == SharedConstants.SAVE){
 					System.out.println("Save");
 					saveMove();
 				}
-				else if(col == -5){
+				else if(col == SharedConstants.LOAD){
 					System.out.println("Load");
 					loadMove();
 				}
-				if(validMove(row,col,getAvailableSolutions(0)) == 1){
+				if(validMove(row,col,getAvailableSolutions(0))){
 					gameStateModel.getUndoBoard().add(board.makeDeepCopy());
 				}
 				
@@ -235,11 +239,15 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 				col = Integer.parseInt(AICoordinates.split(",")[1]);	
 			}
 			
-			int substituteLevel = (this.AImove) ? -1:-2;
+			int substituteLevel = (this.AImove) ? SharedConstants.SUBWHITE:SharedConstants.SUBBLACK;
 			
 			if (moveSet(row,col,substituteLevel)) {
 				validInput = true;  
-			} else {
+			} 
+			else if(col < SharedConstants.INVALID){
+	        	System.out.println("Action");
+	        }
+			else {
 				System.out.println("This move at (" + (row + 1) + "," + (col + 1)
 						+ ") is not valid. Try again...");
 			}
@@ -249,11 +257,11 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	/*
 	 * Checks if the move in row and col is valid and is in valid coordinates;
 	 */
-	private int validMove(int row, int col, ArrayList<String> validCoordinates){
-		int resultValidMove= -1;
+	private boolean validMove(int row, int col, ArrayList<String> validCoordinates){
+		
 		String playerMove = row+","+col;
-		resultValidMove = validCoordinates.contains(playerMove) ? 1:0;
-		return resultValidMove;
+		
+		return validCoordinates.contains(playerMove) ? true:false;
 	}
 	private ArrayList<String> availableSolutions(){
 		ArrayList<String> freeSpaces = new ArrayList<String>();
@@ -276,9 +284,9 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		if(isGameOver()){
 			int[] results = evaluate();
 			
-			if(results[1] == 1)
+			if(results[1] == SharedConstants.GAMEBLACKWIN)
 				currentState = SharedConstants.PLAYER_WON;
-			else if(results[1] == 2)
+			else if(results[1] == SharedConstants.GAMEWHITEWIN)
 				currentState = SharedConstants.AI_WON;
 			else
 				currentState = SharedConstants.DRAW;
@@ -293,10 +301,10 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		results[1] = 0;
 		for(int line = 0; line<8;line++){
 			int tempScore = evaluateLine(line);
-			if(tempScore == 1000)
-				results[1] = 2;
-			else if(tempScore == -1000)
-				results[1] = 1;
+			if(tempScore == AIMAXSCORE)
+				results[1] = SharedConstants.GAMEWHITEWIN;
+			else if(tempScore == HUMAXSCORE)
+				results[1] = SharedConstants.GAMEBLACKWIN;
 			score +=tempScore;
 		}
 		results[0]= score;
@@ -388,28 +396,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 		}		
 		return score;
 	}
-	/*
-	 * Prints game board
-	 */
-/*	private void printBoard() {
-		for (int row = 0; row < SharedConstants.ROWS; ++row) {
-			for (int col = 0; col < SharedConstants.COLS; ++col) {
-				switch (board.getPlayField()[row][col].getGamePiece()) {
-				case SharedConstants.EMPTY:  System.out.print("   "); break;
-				case SharedConstants.NOUGHT: System.out.print(" O "); break;
-				case SharedConstants.CROSS:  System.out.print(" X "); break;
-				}
-				if (col != SharedConstants.COLS - 1) {
-					System.out.print("|");   
-				}
-			}
-			System.out.println();
-			if (row != SharedConstants.ROWS - 1) {
-				System.out.println("-----------"); 
-			}
-		}
-		System.out.println();
-	}*/
+
 	public AIMain getTicTacToeAI() {
 		return ticTacToeAI;
 	}
@@ -431,10 +418,10 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	public boolean moveSet(int row, int col, int level) {
 		currntRow = row;
 		currentCol = col;
-		if((currntRow >= board.getROWS() || currntRow < 0)||( currentCol >= board.getCOLS() || currentCol <0 )){
+		if((currntRow >= board.getROWS() || currntRow < SharedConstants.MINROWS)||( currentCol >= board.getCOLS() || currentCol <SharedConstants.MINROWS )){
 			return false;
 		}
-		else if(!(validMove(currntRow,currentCol,availableSolutions()) == 1))
+		else if(!(validMove(currntRow,currentCol,availableSolutions())))
 			return false;
 		PlayableItem checkplayerMove = Math.abs(level)%2 == 0 ? PlayableItem.BLACK: PlayableItem.WHITE;
 		board.getPlayField()[currntRow][currentCol].setGamePiece(checkplayerMove);
@@ -447,7 +434,7 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 	public boolean undoMove(int row, int col, int level) {
 		currntRow = row;
 		currentCol = col;
-		if((currntRow >= board.getROWS() || currntRow < 0)||( currentCol >= board.getCOLS() || currentCol <0 ))
+		if((currntRow >= board.getROWS() || currntRow < SharedConstants.MINROWS)||( currentCol >= board.getCOLS() || currentCol <SharedConstants.MINCOLS ))
 			return false;
 		else if(board.getPlayField()[currntRow][currentCol].getGamePiece().equals(PlayableItem.EMPTY)){
 				return false;
@@ -500,10 +487,4 @@ public class TicTacToeConsole extends GameConsole implements Serializable{//impl
 			
 			ticTacToeModel.getBoard().printBoard();
 	}
-
-	
-	
-	
-
-
 }
