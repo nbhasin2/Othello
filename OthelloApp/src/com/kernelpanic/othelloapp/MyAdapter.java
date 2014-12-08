@@ -2,11 +2,12 @@ package com.kernelpanic.othelloapp;
 
 import java.util.ArrayList;
 
-import com.javacodegeeks.android.androidgridviewexample.R;
 
-import othellomodel.com.connect.four.boardSpace;
-import othellomodel.othello.BoardSpace;
-import othellomodel.shared.SharedConstants;
+
+
+
+import shared.BoardSpace;
+import shared.SharedConstants;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,7 @@ public class MyAdapter extends BaseAdapter {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		View gridView;
-
-		if (convertView == null) {
+		
 
 			gridView = new View(context);
 
@@ -39,19 +39,15 @@ public class MyAdapter extends BaseAdapter {
 
 			ImageView flag = (ImageView) gridView .findViewById(R.id.flag);
 
-			BoardSpace mobile = boardSpaceList.get(position);
+			BoardSpace bspaceSingle = boardSpaceList.get(position);
 
-			if (mobile.getGamePiece().equals(SharedConstants.PlayableItem.BLACK)) {
+			if (bspaceSingle.getGamePiece().equals(SharedConstants.PlayableItem.BLACK)) {
 				flag.setImageResource(R.drawable.black_green);
-			} else if (mobile.getGamePiece().equals(SharedConstants.PlayableItem.WHITE)) {
+			} else if (bspaceSingle.getGamePiece().equals(SharedConstants.PlayableItem.WHITE)) {
 				flag.setImageResource(R.drawable.white_green);
 			} else{
 					flag.setImageResource(R.drawable.empty);
 			}
-
-		} else {
-			gridView = (View) convertView;
-		}
 
 		return gridView;
 	}
@@ -63,7 +59,7 @@ public class MyAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		return boardSpaceList.get(position);
 	}
 
 	@Override
@@ -77,6 +73,23 @@ public class MyAdapter extends BaseAdapter {
 
 	public void setBoardSpaceList(ArrayList<BoardSpace> boardSpaceList) {
 		this.boardSpaceList = boardSpaceList;
+	}
+	
+
+	// Call this method whenever new data is to be added to existing list.
+	public void updateImageList(ArrayList<BoardSpace> newBoardspaceArraylist) {  
+
+//		ArrayList<BoardSpace> bsl = new ArrayList<BoardSpace>();
+//		for(BoardSpace bs : newBoardspaceArraylist)
+//		{
+//			System.out.print(bs.getGamePiece()+"\t");
+//			bsl.add(bs);
+//		}
+//		
+	
+	       this.boardSpaceList = newBoardspaceArraylist;
+
+	    this.notifyDataSetChanged();
 	}
 
 }

@@ -1,104 +1,87 @@
 package com.kernelpanic.othelloapp;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import com.javacodegeeks.android.androidgridviewexample.R;
-
-import othellomodel.*;
-import othellomodel.gameai.AIRandom;
-import othellomodel.gameui.AndroidButtonWithCoordinates;
-import othellomodel.gameui.Controller;
-import othellomodel.gameui.Gameui;
-import othellomodel.othello.BoardSpace;
-import othellomodel.othello.OthelloConsole;
-import othellomodel.shared.SharedConstants.PlayableItem;
+import shared.SharedConstants;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class MainActivity extends Activity implements Observer{
+public class MainActivity extends Activity {
 
-	GridView gridView;
-	int Row = 8;
-	int Col = 8;
-	private OthelloConsole othello;
-	Controller gamecontroller;
-	ArrayList<BoardSpace> tempItemList = new ArrayList<BoardSpace>();
-	private BoardSpace[][] playField;
-	private MyAdapter myAdapter;
-	private MainActivity activity = this;
-
+	private TextView topText;
+	private Button minimaxBtn, randomBtn, middleBtn, idiotBtn;
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
+		topText = (TextView) findViewById(R.id.textViewTop);
+		topText.setText("Pick a strategy for Othello" );
 		
-		gamecontroller = new Controller();
-//		Gameui othellogui = new Gameui(gamecontroller);
-		othello = new OthelloConsole(new AIRandom());
-		gamecontroller.setOthelloModel(othello);
-		gamecontroller.setActivity(this);
-		othello.gameOthelloInitializer(gamecontroller);
-		playField = othello.getBoard().getPlayField();
+		minimaxBtn = (Button) findViewById(R.id.Minimax);
+		randomBtn = (Button) findViewById(R.id.Random);
+		middleBtn = (Button) findViewById(R.id.Middle);
+		idiotBtn = (Button) findViewById(R.id.Idiot);
 		
-		for(int i = 0; i < Row; i++){
-			for(int j = 0; j < Col; j++){
+		minimaxBtn.setText(shared.SharedConstants.AIMinimax);
+		randomBtn.setText(shared.SharedConstants.AIRandom);
+		middleBtn.setText(shared.SharedConstants.AIPickMiddleStrategy);
+		idiotBtn.setText(shared.SharedConstants.AIIdiot);
+		final Intent i = new Intent(this, OthelloGameActivity.class);
+		
+		minimaxBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
 				
-				tempItemList.add(playField[i][j]);//4x4 gameboard where every space is a new boardSpace object 
-			}
-		}
-		
-		myAdapter = new MyAdapter(this, tempItemList);
-
-		gridView = (GridView) findViewById(R.id.gridView);
-
-		gridView.setAdapter(myAdapter);
-		
-
-		gridView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-
-				int[] values = new int[2]; 
-		           v.getLocationOnScreen(values);
-		           
-		           int row_no=position/Col;
-		            int col_no=position%Col;
-		            Toast.makeText(getBaseContext(), 
-		                    "pic" + (position + 1) + " selected" + "ID" + id + "ROW - "+ row_no+" COL - "+col_no, 
-		                    Toast.LENGTH_SHORT).show();
-		          gamecontroller.guiButtonClicked(row_no, col_no, true);
-
+				i.putExtra(SharedConstants.AITypeintent, SharedConstants.AIMinimax);
+				startActivity(i); 
+				
 			}
 		});
-
-	}
-
-	public void updateGrid(BoardSpace[][] bspace)
-	{
-//		playField = bspace;
-		for(int i = 0; i < Row; i++){
-			for(int j = 0; j < Col; j++){
+		
+		randomBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
 				
-				tempItemList.add(bspace[i][j]);//4x4 gameboard where every space is a new boardSpace object 
+				i.putExtra(SharedConstants.AITypeintent, SharedConstants.AIRandom);
+				startActivity(i); 
+				
 			}
-		}
-		myAdapter.setBoardSpaceList(tempItemList);
-		myAdapter.notifyDataSetChanged();
-	}
-
-	@Override
-	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
+		});
+		
+		middleBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				i.putExtra(SharedConstants.AITypeintent, SharedConstants.AIPickMiddleStrategy);
+				startActivity(i); 
+				
+			}
+		});
+		
+		idiotBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				i.putExtra(SharedConstants.AITypeintent, SharedConstants.AIIdiot);
+				startActivity(i); 
+				
+			}
+		});
+		
+		
 		
 	}
+
+
 
 }

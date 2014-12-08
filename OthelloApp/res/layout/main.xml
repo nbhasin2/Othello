@@ -6,17 +6,30 @@
 	android:layout_width="match_parent"
     tools:context="othello.hypercube.kernelpanic.myapplication.OthelloGrid">
     
-	<GridView 
+<!-- 	<GridView 
     android:id="@+id/gridView"
     android:numColumns="8"
     android:gravity="center"
     android:layout_above="@+id/utilButtons"
-    android:columnWidth="50dp"
+    android:columnWidth="20dp"
     android:stretchMode="spacingWidthUniform"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    </GridView>
+    </GridView> -->
     
+	<GridView 
+    android:id="@+id/gridView"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+
+    android:layout_above="@+id/utilButtons"
+    android:numColumns="8"
+    android:columnWidth="40dp"
+    android:stretchMode="columnWidth"    
+    android:gravity="center"
+	/>
+    
+	
     <LinearLayout
         android:id="@+id/utilButtons"
         android:layout_width="match_parent"
