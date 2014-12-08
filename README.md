@@ -12,13 +12,10 @@ Running othello game using GUI is very simple. You can use the Othello_executabl
 Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
 othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
 
-There are now commands that the console can answer too. Each are case sensitive.
-Commands(Action -- Letter to enter)
-Redo -- 'R'
-Undo -- 'U'
-Save -- 'S'
-Load -- 'L'
+
+
 ```
+
 Enter the game you want to play,
  1- Tic Tac Toe
  2- Othello
@@ -52,6 +49,30 @@ Enter the type of AI you want to play against,
 Black player move: X X
 
 ```
+There are now commands that the console can answer too. Each are case sensitive.
+```
+
+Commands(Action -- Letter to enter)
+Redo -- 'R'
+Undo -- 'U'
+Save -- 'S'
+Load -- 'L'
+
+```
+In the case
+of an invalid entry the console offers help, at the command of 'H'.
+To make and action the letter much mactch meaning that it must be capitialized. 
+
+Each of the commands work like so.
+
+Redo- If the action undo has been called before the game will cancel the undo, if they are no undos that have been done or that you are the most recent action, redo will not do anything. Once a move it will act as if undo has never been done.
+
+Undo- Undo will cancel the last move made, if the board is back to the starting position it will not do anything.
+
+Save- Save will save the current state of the board and the moves that can be undone and redone.
+
+Load- Load will load the saved state of the game and the moves that can be undone and redone.
+
 #### How to run tests with JUnit 
 
 1. go to Run->Run Configurations
