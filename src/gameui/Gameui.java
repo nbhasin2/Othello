@@ -74,9 +74,6 @@ public class Gameui {
 	private JCheckBox checkbox;
 	private JButton undoButton;
 	private JButton redoButton;
-	private JMenuItem undoJmenuItem;
-	private JMenuItem redoJmenuItem;
-
 
 	//Constructor 
 	public Gameui(Controller gameController)
@@ -115,11 +112,9 @@ public class Gameui {
 		exitJmenuItem = new JMenuItem("Exit");
 		loadJmenuItem = new JMenuItem("Load");
 		saveJmenuItem = new JMenuItem("Save");
-		undoJmenuItem = new JMenuItem("Undo");
-		redoJmenuItem = new JMenuItem("Redo");
+
 		
-		undoMenuItem(undoJmenuItem);
-		redoMenuItem(redoJmenuItem);
+
 		randomAI = new JRadioButtonMenuItem("Random", true);
 		minimaxAI = new JRadioButtonMenuItem("Minimax", true);
 		scoreLabel = new JLabel();
@@ -276,41 +271,8 @@ public class Gameui {
 			}
 		});
 	}
-	
-	/**
-	 * @author Nishant
-	 * Button listener for redo move
-	 * @param redo
-	 */
-	public void addRedoButtonListener(JButton redo)
-	{
-		redo.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameController.redoMove();
-				
-			}
-		});
-	}
-	
-	/**
-	 * @author Nishant
-	 * Button listener for undo move
-	 * @param undo
-	 */
-	public void addUndoButtonListener(JButton undo)
-	{
-		undo.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("Acion");
-				gameController.undoMove();
-			}
-		});
-	}
+
+
 
 	
 	public void undoMoveAddButtonListener(JButton button)

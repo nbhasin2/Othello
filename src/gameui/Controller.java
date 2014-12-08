@@ -216,6 +216,7 @@ public class Controller extends Object implements Observer{
 			othelloModel.getGameStateModel().setRedoBoard(redoBoard);
 			othelloModel.getBoard().setPlayField(currentBoard);
 			othelloModel.getBoard().printBoard();
+			othelloModel.evaluate();
 //		}
 //		System.out.println("out");
 	}

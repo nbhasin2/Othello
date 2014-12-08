@@ -78,7 +78,6 @@ public class OthelloConsole extends  GameConsole {
 			addObserver(gamecon);
 		}
 		board = new GameBoardOth(gamecon);
-		othelloModel = this;
 		gameSetup();
 	}
 
@@ -113,10 +112,12 @@ public class OthelloConsole extends  GameConsole {
 
 		currentPlayer = SharedConstants.PlayableItem.BLACK;//Black goes first
 		currentState = SharedConstants.GameStatus.PLAYING;
-		gameStateModel = new GameSateModel();
-		loadGame = new GameStateRetriever();
-		saveGame = new GameStateWrter(othelloModel.getGameStateModel());
-
+		if(isConsole){
+			othelloModel = this;
+			gameStateModel = new GameSateModel();
+			loadGame = new GameStateRetriever();
+			saveGame = new GameStateWrter(othelloModel.getGameStateModel());
+		}
 	}
 	/*
 	 * This method is used to move the player item
@@ -158,14 +159,14 @@ public class OthelloConsole extends  GameConsole {
 						System.out.println("Undo");
 						undoBoard();
 					}
-					else if(col == SharedConstants.SAVE){
-						System.out.println("Save");
-						saveBoard();
-					}
-					else if(col == SharedConstants.LOAD){
-						System.out.println("Load");
-						loadBoard();
-					}
+//					else if(col == SharedConstants.SAVE){
+//						System.out.println("Save");
+//						saveBoard();
+//					}
+//					else if(col == SharedConstants.LOAD){
+//						System.out.println("Load");
+//						loadBoard();
+//					}
 					else if(col == SharedConstants.HELP){
 						printCommands(true);
 					}
@@ -614,6 +615,7 @@ public class OthelloConsole extends  GameConsole {
 		gameStateModel.addCurrentBoardToRedo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popUndoElement());
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		evaluate();
 	}
 	
 	
@@ -621,11 +623,11 @@ public class OthelloConsole extends  GameConsole {
 	 * @author nishantbhasin
 	 * Redo player move and print board
 	 */ 
-	public void redoBoard()
-	{
+	public void redoBoard(){
 		gameStateModel.addCurrentBoardToUndo(board.makeDeepCopy());
 		board.printBoard(gameStateModel.popRedoElement());
 		gameStateModel.setCurrentBoard(board.makeDeepCopy());
+		evaluate();
 	}
 	public void saveBoard(){
 		gameStateModel.setCurrentBoard(board.getPlayField());
@@ -648,5 +650,6 @@ public class OthelloConsole extends  GameConsole {
 		othelloModel.getBoard().setPlayField(currentBoard);
 		
 		othelloModel.getBoard().printBoard();		
+		//evaluate();
 	}
 }
