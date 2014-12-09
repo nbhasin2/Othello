@@ -13,7 +13,7 @@ run both games and test it out.
 
 Running othello game using GUI is very simple. You can use the Othello_M4.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
 
-To play with the android app
+To play with the android app:
 Once the code has been pulled the OthelloApp.apk file can be found inside the OthelloApp_Apk folder. This file can be moved into any folder on any phone running android. Once the file is on the phone, the easiest way to locate it is to download a file explorer app and navigate to the apk file. Install the apk file on the phone, and run the app.
 
 Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
@@ -108,7 +108,7 @@ Design Desicions for android port
 
 When porting othello to android we ran into various small problems dealing with the execution of the code on the android platform. The flexibility of our initial framework design made the intial setup of the android build quite easy. The core game mechanics were ported easily but problems occured when trying to run the game on a phones processor rather than a PC's. Our game contained many do while loops to keep the game running and waiting for user input. When the phone ran the code, it timed out and no game interface was displayed. We were trying to do too much in one block of code, and the phone was struggling to power through all the instructions given. To ease the strain on the processor, we created threads to run different parts of the game which let the phone run the game without timing out. The refactoring we had done made it easy to determine what parts of the code we could separate and run in a thread to speed up the processing. 
 
-
+Some new tests cases were added to test the new funcitons (undo,redo,save and load);
 
 
 ## Milestone 3
