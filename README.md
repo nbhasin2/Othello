@@ -6,7 +6,7 @@
 
 Jar exexcutable screenshot
 
-<img src="http://imgur.com/nvo0XIH.png" width ="150px" height="200px
+<img src="http://imgur.com/nvo0XIH.png" width ="150px" height="200px/>
 
 Android port screen shot
 #### How to run the game
