@@ -75,14 +75,9 @@ public class GameBoard  extends Observable{
 		ArrayList<String> listOfItems = new ArrayList<>();
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLS; j++){
-				playField[i][j].putItem();
 				listOfItems.add(playField[i][j].getGamePiece()+"");
-				if(j < COLS ) System.out.print("|");
 			}
 
-			System.out.println();
-		if(i < ROWS  )
-			System.out.println("----------------");
 		}
 		setChanged();
 		notifyObservers(playField);	
@@ -98,14 +93,12 @@ public class GameBoard  extends Observable{
 			for(int j = 0; j < COLS; j++){
 				if(boardToPrint!=null)
 				{
-				boardToPrint[i][j].putItem();
+
 				listOfItems.add(boardToPrint[i][j].getGamePiece()+"");
 				}
-				if(j < COLS ) System.out.print("|");
+
 			}
-		System.out.println();
-		if(i < ROWS  )
-			System.out.println("----------------");
+
 		}
 		
 		assignDeepCopy(boardToPrint);
