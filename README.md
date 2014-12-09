@@ -104,12 +104,16 @@ Save will save the current GameBoard as a serializable and it will aslo save the
 
 Load will load the last GameBoard state that was saved. It will read the serialized files in the dedicated folder in save, to ensure that games don't load from othe games when a file is saved it is given a code to specify which game was saved, this code is also used to make sure the right file is loaded.
 
+We also went trhough and got rid of all magic numbers and magic strings in our code to make it more understandable.
+
+
 Design Desicions for android port
 
 When porting othello to android we ran into various small problems dealing with the execution of the code on the android platform. The flexibility of our initial framework design made the intial setup of the android build quite easy. The core game mechanics were ported easily but problems occured when trying to run the game on a phones processor rather than a PC's. Our game contained many do while loops to keep the game running and waiting for user input. When the phone ran the code, it timed out and no game interface was displayed. We were trying to do too much in one block of code, and the phone was struggling to power through all the instructions given. To ease the strain on the processor, we created threads to run different parts of the game which let the phone run the game without timing out. The refactoring we had done made it easy to determine what parts of the code we could separate and run in a thread to speed up the processing. 
 
 Some new tests cases were added to test the new funcitons (undo,redo,save and load);
 
+They are no other major changes from the previous versions for more information look at the desicions in previous milestone of this application.
 
 ## Milestone 3
 
