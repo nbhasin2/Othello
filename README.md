@@ -4,7 +4,7 @@
 
 <img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
 Jar exexcutable screenshot
-<img src="http://imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
+<img src="http://i.imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
 Android port screen shot
 #### How to run the game
 
