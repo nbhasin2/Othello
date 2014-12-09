@@ -315,7 +315,7 @@ public class ConnectFourConsole extends GameConsole {
 		this.board = board;
 	}
 	/**
-	 * @see OthelloConsole#undoBoard();
+	 * @see OthelloConsole#undoBoard
 	 */
 	public void undoBoard(){
 		
@@ -326,7 +326,7 @@ public class ConnectFourConsole extends GameConsole {
 		board.printBoard();
 	}
 	/**
-	 * @see OthelloConsole#redoBoard();
+	 * @see OthelloConsole#redoBoard
 	 */
 	public void redoBoard()
 	{
@@ -337,14 +337,14 @@ public class ConnectFourConsole extends GameConsole {
 		board.printBoard();
 	}
 	/**
-	 * @see Controller#saveMove();
+	 * @see Controller#saveMove
 	 */
 	public void saveBoard(){
 		gameStateModel.setCurrentBoard(board.getPlayField());
 		this.saveGame.writeModel(SharedConstants.C4CODE);
 	}
 	/**
-	 * @see Controller#undoMove()
+	 * @see Controller#undoMove
 	 */
 	public void loadBoard(){
 		

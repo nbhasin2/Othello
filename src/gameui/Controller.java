@@ -21,8 +21,8 @@ public class Controller extends Object implements Observer{
 	
 	/**
 	 * @author Nishant
-	 * @param model
-	 * @param othelloGui
+	 *  model
+	 *  othelloGui
 	 * 
 	 * The constructor of Controller has access to both
 	 * othelloconsole class that acts as the model and 
@@ -30,13 +30,7 @@ public class Controller extends Object implements Observer{
 	 * Once we get updates from GameUi, controler queries the model for
 	 * available moves and updates UI accordingly.
 	 */
-//	public Controller(OthelloConsole model, Gameui othelloGui)
-//	{
-//		othelloModel = model;
-//		othelloUi = othelloGui;
-//		saveGame = new GameStateWrter(othelloModel.getGameStateModel());
-//		loadGame = new GameStateRetriever();
-//	}
+
 	
 	/*
 	 * An empty constructor to initialize othelloModel and OthelloUi 
@@ -164,7 +158,7 @@ public class Controller extends Object implements Observer{
 
 	/**
 	 * @author nishantbhasin
-	 * @return
+	 *
 	 * This method is used to undo a move and redraw the gui
 	 * on the board.
 	 */
@@ -175,7 +169,7 @@ public class Controller extends Object implements Observer{
 	
 	/**
 	 * @author nishantbhasin
-	 * @return
+	 * 
 	 * This method is used to redo a move if a person has not 
 	 * made a move after undo.
 	 */
