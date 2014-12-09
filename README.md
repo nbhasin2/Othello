@@ -7,6 +7,8 @@ Jar exexcutable screenshot
 <img src="http://imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
 Android port screen shot
 #### How to run the game
+To play the Jar you must run the executable in it's package, to make sure it can access the files the right way.
+
 There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
 run both games and test it out.
 
@@ -14,9 +16,6 @@ Running othello game using GUI is very simple. You can use the Othello_executabl
 
 Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
 othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
-
-
-
 ```
 
 Enter the game you want to play,
@@ -101,7 +100,12 @@ Redo is also used by creating a stack of GameBoards. Everytime undo is called th
 
 Save will save the current GameBoard as a serializable and it will aslo save the undoboard stack and redoboard stack to ensure that they are not lost when we load them back
 
-Load will load the last GameBoard state that was saved. It will read the serialized files in the dedicated folder in save, to ensure that games don't load from othe games when a file is saved it is given a code 
+Load will load the last GameBoard state that was saved. It will read the serialized files in the dedicated folder in save, to ensure that games don't load from othe games when a file is saved it is given a code to specify which game was saved, this code is also used to make sure the right file is loaded.
+
+Design Desicions for android port
+
+When porting othello to android we ran into various small problems dealing with the execution of the code on the android platform. The flexibility of our initial framework design made the intial setup of the android build quite easy. The core game mechanics were ported easily but problems occured when trying to run the game on a phones processor rather than a PC's. Our game contained many do while loops to keep the game running and waiting for user input. When the phone ran the code, it timed out and no game interface was displayed. We were trying to do too much in one block of code, and the phone was struggling to power through all the instructions given. To ease the strain on the processor, we created threads to run different parts of the game which let the phone run the game without timing out. The refactoring we had done made it easy to determine what parts of the code we could separate and run in a thread to speed up the processing. 
+
 
 
 
