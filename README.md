@@ -5,6 +5,7 @@
 <img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
 Jar exexcutable screenshot
 <img src="http://imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
+Android port screen shot
 #### How to run the game
 There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
 run both games and test it out.
