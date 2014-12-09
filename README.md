@@ -7,12 +7,14 @@ Jar exexcutable screenshot
 <img src="http://imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
 Android port screen shot
 #### How to run the game
-To play the Jar you must run the executable in it's package, to make sure it can access the files the right way.
 
 There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
 run both games and test it out.
 
-Running othello game using GUI is very simple. You can use the Othello_executablejar_m3.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+Running othello game using GUI is very simple. You can use the Othello_M4.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+
+To play with the android app
+Once the code has been pulled the OthelloApp.apk file can be found inside the OthelloApp_Apk folder. This file can be moved into any folder on any phone running android. Once the file is on the phone, the easiest way to locate it is to download a file explorer app and navigate to the apk file. Install the apk file on the phone, and run the app.
 
 Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
 othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
