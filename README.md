@@ -3,17 +3,21 @@
 ## Milestone 4
 
 <img src="http://i.imgur.com/lx7qgwh.png" width="200px" height="200px"/>
+Jar exexcutable screenshot
+<img src="http://imgur.com/a/CvnQj.png" width ="150px" height="200px"/>
+Android port screen shot
 #### How to run the game
+
 There are two ways you can run the game. For this milestone the we have made two different launchers. 1. Console based and 2. Gui based (othello). This way you can 
 run both games and test it out.
 
-Running othello game using GUI is very simple. You can use the Othello_executablejar_m3.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+Running othello game using GUI is very simple. You can use the Othello_M4.jar to play or run it from LauncherOthelloGUI.java in play package. It has a void main method that runs the gui version of the game. 
+
+To play with the android app:
+Once the code has been pulled the OthelloApp.apk file can be found inside the OthelloApp_Apk folder. This file can be moved into any folder on any phone running android. Once the file is on the phone, the easiest way to locate it is to download a file explorer app and navigate to the apk file. Install the apk file on the phone, and run the app.
 
 Running othello or any other console based game is done using Launcher class in Play package. Go to Play->Launcher.java and run it as java application. Below is how you run
 othello in console version where in place of X X you enter a valid number 3 4 etc. and if number is invalid you get an error saying that its invalid and enter again.
-
-
-
 ```
 
 Enter the game you want to play,
@@ -83,6 +87,33 @@ Load- Load will load the saved state of the game and the moves that can be undon
 
 4. Now in the test tab on the right, the field Test Class should read: testing.AllTests click apply then Run
 
+#### DESIGN DECISIONS AND REFACTORING 
+Some major refactoring was done to every game packages(othello,com.connect.four,tictactoe)
+GameBoard and BoardSpace are now in shared package, this gets rid of a lot of smell in ConnectFour and othello since they used the same idea, 
+TicTacTo was also changed to make use of the GameBoard and BoardSpace from the shared package.
+
+3 classes(GameBoardOth,GameBoardC4,GameBoardTic) were added to make sure that each game have their own unique GameBoards, each of these class inherit from GameBoard and they call the contructor and specify the size of the board. 
+
+Each game also had new functions added to them those functions are Redo,Undo,Save,Load
+
+Undo is done by creating a "stack" of GameBoards. Everytime the amove is made in a game a the board is added to the stack before the move is done so that every previous move is saved in the stack; When the function is called the GameBoard at the top of the stack is then made to be the current board and it is removed from the stack; Also everytime Redo is called it will place the redone board on top of the stack to ensure that no move is lost. 
+
+Redo is also used by creating a stack of GameBoards. Everytime undo is called the board that is undone is added to the stack. Everytime Redo is called the board on top is set to the current board and the board that is redone is placed in the undo stack. The stack is reset eveytime a move is made because or else it would create a tree of moves to redo and would cause complications .
+
+Save will save the current GameBoard as a serializable and it will aslo save the undoboard stack and redoboard stack to ensure that they are not lost when we load them back
+
+Load will load the last GameBoard state that was saved. It will read the serialized files in the dedicated folder in save, to ensure that games don't load from othe games when a file is saved it is given a code to specify which game was saved, this code is also used to make sure the right file is loaded.
+
+We also went trhough and got rid of all magic numbers and magic strings in our code to make it more understandable.
+
+
+Design Desicions for android port
+
+When porting othello to android we ran into various small problems dealing with the execution of the code on the android platform. The flexibility of our initial framework design made the intial setup of the android build quite easy. The core game mechanics were ported easily but problems occured when trying to run the game on a phones processor rather than a PC's. Our game contained many do while loops to keep the game running and waiting for user input. When the phone ran the code, it timed out and no game interface was displayed. We were trying to do too much in one block of code, and the phone was struggling to power through all the instructions given. To ease the strain on the processor, we created threads to run different parts of the game which let the phone run the game without timing out. The refactoring we had done made it easy to determine what parts of the code we could separate and run in a thread to speed up the processing. 
+
+Some new tests cases were added to test the new funcitons (undo,redo,save and load);
+
+They are no other major changes from the previous versions for more information look at the desicions in previous milestone of this application.
 
 ## Milestone 3
 
